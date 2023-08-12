@@ -162,7 +162,7 @@
 
 /* Form Component */
 .form_textarea {
-    @apply w-full flex rounded-lg h-[200px] mt-2 p-3 text-sm text-gray-500 outline-0;
+    @apply w-full flex rounded-lg h-[40px] mt-2 p-3 text-sm text-gray-500 outline-0;
 }
 
 .form_input {
