@@ -1,8 +1,16 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
 
 ## Getting Started
 
-First, run the development server:
+First, run the development pocketbase server:
+
+```bash
+cd /pocketbase_0.17.4_linux_amd64
+# then
+./pocketbase serve
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -12,6 +20,7 @@ yarn dev
 pnpm dev
 ```
 
+Pocketbase admin UI: [http://127.0.0.1:8090/_/](http://127.0.0.1:8090/_/) .
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
