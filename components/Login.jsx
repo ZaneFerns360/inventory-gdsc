@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { pb } from '@utils/pocketbase'
-
+import Image from 'next/image';
 
 const Login = () => {
   const router = useRouter();
@@ -25,17 +25,22 @@ const Login = () => {
   };
 
   return (
+    
     <section className='w-full max-w-full flex-start flex-col'>
       <h1 className='head_text text-left'></h1>
       {error && <p className='text-red-500'>{error}</p>}
       <form onSubmit={handleSubmit} className='mt-10 w-full max-w-2xl flex flex-col gap-7 glassmorphism'>
+      <div className='flex justify-center items-center'>
+  <Image src='/assets/FRCRCE.png' width={120} height={200} alt='Father Agnel'/>
+      </div>
+
         <label>
-          <span className='font-satoshi font-semibold text-base text-gray-700'>Username or Email</span>
+          <span className='font-satoshi font-semibold text-base text-gray-700'>Faculty Email</span>
           <input
             type='text'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder='Username or Email'
+            placeholder='Email'
             required
             className='form_input'
           />

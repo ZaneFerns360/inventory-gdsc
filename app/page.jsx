@@ -1,10 +1,18 @@
 import Image from 'next/image'
 import Login from '@components/Login'
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    <Login/>
-    </main>
-
-  )
+    <>
+      <div className='h-32 w-full bg-sky-950'>
+      <div className='flex justify-center items-center pt-4'>
+  <Image src='/assets/Fr.CRCE_name.png' width={170} height={200} alt='Father Agnel'/>
+      </div>
+      </div>
+      
+      <main className='flex min-h-screen flex-col items-center justify-between '>
+        <Login />
+      </main>
+    </>
+  );
 }
