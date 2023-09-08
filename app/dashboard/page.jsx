@@ -35,11 +35,15 @@ const Page = () => {
 
   return (
     <div>
-      <p className="pt-64">Is Valid: {pb.authStore.isValid ? 'Yes' : 'No'}</p>
-      <p>Token: {pb.authStore.token}</p>
-      <p>User ID: {pb.authStore.model.id}</p>
-      <p>Username: {username}</p>
+      {
+        /*
+        <p className="pt-64">Is Valid: {pb.authStore.isValid ? 'Yes' : 'No'}</p>
+        <p>Token: {pb.authStore.token}</p>
+        <p>User ID: {pb.authStore.model.id}</p>
+        <p>Username: {username}</p>
       <p>Of Type: {ofType}</p>
+        */
+      }
     </div>
   )
 }
