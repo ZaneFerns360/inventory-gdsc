@@ -21,7 +21,7 @@ const Header = () => {
               />
             </Link>
             <div className='w-full items-center justify-items-center'>
-            <span className="hidden lg:inline lg:text-3xl text-white mx-auto lg:mx-28 space-x-32 items-center justify-center ">Inventory Management</span>
+            <span className="hidden lg:inline lg:text-3xl text-white mx-10  items-center justify-center ">Inventory Management</span>
             </div>
           </a>
         </div>
