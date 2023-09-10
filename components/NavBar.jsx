@@ -52,16 +52,22 @@ const NavBar = () => {
         <div className={`sm:flex ${isOpen ? 'block' : 'hidden'} text-center items-center mx-auto`}>
           <ul className="sm:flex lg:space-x-16 my-2 lg:my-0">
             <li>
-              <Link href="/dashboard">Home</Link>
+              <Link href="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link href="/about">About</Link>
+              <Link href="/equipment">Equipment</Link>
             </li>
             <li>
-              <Link href="/services">Services</Link>
+              <Link href="/loans">Loans</Link>
             </li>
             <li>
-              <Link href="/contact">Contact</Link>
+              <Link href="/rooms">Rooms</Link>
+            </li>
+            <li>
+              <Link href="/distribution">Distribution</Link>
+            </li>
+            <li>
+              <Link href="/inventory">Inventory</Link>
             </li>
           </ul>
         </div>
