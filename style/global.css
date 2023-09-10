@@ -6,13 +6,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
-@media screen and (max-width: 640px) {
-    .main {
-        padding: 0;
-        margin:0;
-    }
-}
 
 @layer base {
     :root {
@@ -34,11 +27,9 @@
           font-family: "Poppins", sans-serif;
       }
     }
- */
-  /*
+  
     .d-shadow-red {
         /* Main Styles */
-        /*
         border-radius: 10px;
         box-shadow: hsl(var(--border)) 0px 0px 0px var(--border-size) inset,
           hsl(var(--gdsc-red)) 0px var(--border-offset) 0px calc(var(--border-size) * -1),
@@ -103,10 +94,8 @@
       
   }
   
-*/
 
 /* Tailwind Styles */
-/*
 
 .app {
     @apply relative z-10 flex justify-center items-center flex-col;
@@ -159,19 +148,13 @@
 .prompt_layout {
     @apply space-y-6 py-8 sm:columns-2 sm:gap-6 xl:columns-3;
 }
-*/
 
 /* Feed Component */
-/*
 .feed {
     @apply mt-16 mx-auto w-full max-w-xl flex justify-center items-center flex-col gap-2;
 }
-*/
 
 /* Form Component */
-
-/*
-
 .form_textarea {
     @apply w-full flex rounded-lg h-[40px] mt-2 p-3 text-sm text-gray-500 outline-0;
 }
@@ -179,12 +162,8 @@
 .form_input {
     @apply w-full flex rounded-lg mt-2 p-3 text-sm text-gray-500 outline-0;
 }
-*/
 
 /* Nav Component */
-
-/*
-
 .logo_text {
     @apply max-sm:hidden font-satoshi font-semibold text-lg text-black tracking-wide;
 }
@@ -200,10 +179,8 @@
 .dropdown_link {
     @apply text-sm font-inter text-gray-700 hover:text-gray-500 font-medium;
 }
-*/
 
 /* PromptCard Component */
-/*
 .prompt_card {
     @apply flex-1 break-inside-avoid rounded-lg border border-gray-300 bg-white/20 bg-clip-padding p-6 pb-4 backdrop-blur-lg backdrop-filter md:w-[360px] w-full h-fit;
 }
@@ -237,5 +214,3 @@
   .google_gradient {
     @apply bg-gradient-to-r from-red-600 to-green-600 via-yellow-500 bg-clip-text text-transparent;
   }
-
-  */
