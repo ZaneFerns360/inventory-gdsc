@@ -1,14 +1,17 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useLayoutEffect } from 'react'
 import { pb } from '@utils/pocketbase'
+import Cards from '@components/Cards'
+import Header from '@components/Header'
+import Navbar from '@components/NavBar'
 
 const Page = () => {
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [ofType, setOfType] = useState('')
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchUserData = async () => {
       if (!pb.authStore.isValid) {
         router.push('/')
@@ -34,15 +37,15 @@ const Page = () => {
 
   return (
     <div>
-      {
-        /*
+      {/*
         <p className="pt-64">Is Valid: {pb.authStore.isValid ? 'Yes' : 'No'}</p>
         <p>Token: {pb.authStore.token}</p>
         <p>User ID: {pb.authStore.model.id}</p>
         <p>Username: {username}</p>
       <p>Of Type: {ofType}</p>
-        */
-      }
+        */}
+              <Cards />
+
     </div>
   )
 }

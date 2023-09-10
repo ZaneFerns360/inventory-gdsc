@@ -27,7 +27,7 @@ const Login = () => {
   }
 
   return (
-    <section className="flex-start w-full max-w-full flex-col">
+    <section className="flex-center max-w-full flex-col">
       <h1 className="head_text text-left"></h1>
       {error && <p className="text-red-500">{error}</p>}
       <form

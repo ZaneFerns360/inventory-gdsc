@@ -23,7 +23,7 @@ const Cards = () => {
               <span>Logo</span>
             </div>
             <h2 className="card-title">4</h2>
-            <p>Total Departments</p>
+            <p>Total Rooms</p>
           </div>
         </div>
 
@@ -34,7 +34,7 @@ const Cards = () => {
               <span>Logo</span>
             </div>
             <h2 className="card-title">4</h2>
-            <p>Total Departments</p>
+            <p>Total Equipment</p>
           </div>
         </div>
 
@@ -45,7 +45,7 @@ const Cards = () => {
               <span>Logo</span>
             </div>
             <h2 className="card-title">4</h2>
-            <p>Total Departments</p>
+            <p>Total Loans</p>
           </div>
         </div>
       </div>

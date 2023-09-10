@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -51,7 +52,7 @@ const NavBar = () => {
         <div className={`sm:flex ${isOpen ? 'block' : 'hidden'} text-center items-center mx-auto`}>
           <ul className="sm:flex lg:space-x-16 my-2 lg:my-0">
             <li>
-              <Link href="/">Home</Link>
+              <Link href="/dashboard">Home</Link>
             </li>
             <li>
               <Link href="/about">About</Link>

@@ -9,7 +9,7 @@ const Header = () => {
       <div className="md:h-16 h-28 mx-auto md:px-4 container flex items-center justify-between flex-wrap md:flex-nowrap">
         {/* Logo */}
         <div className="md:order-1">
-          <a className="flex title-font font-medium items-center mx-2 text-gray-900 mb-4 md:mb-0">
+          <div className="flex title-font font-medium items-center mx-2 text-gray-900 mb-4 md:mb-0">
             <Link href="/">
               <Image
                 src={Logo}
@@ -23,7 +23,7 @@ const Header = () => {
             <div className='w-full items-center justify-items-center'>
             <span className="hidden lg:inline lg:text-3xl text-white mx-10  items-center justify-center ">Inventory Management</span>
             </div>
-          </a>
+          </div>
         </div>
 
         <div className="order-2 md:order-3">
