@@ -1,5 +1,6 @@
 import '@style/global.css'
 import { Inter, Poppins } from 'next/font/google'
+import Router from '@components/Router'
 
 export const metadata = {
   title: 'Inventory Management',
@@ -13,7 +14,9 @@ const RootLayout = ({ children }) => {
         <div className="">
           <div className="" />
         </div>
-        <main className="">{children}</main>
+        <main className="">
+          <Router>{children}</Router>
+        </main>
       </body>
     </html>
   )

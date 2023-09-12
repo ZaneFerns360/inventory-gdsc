@@ -1,19 +1,18 @@
-"use client"
-import React from 'react';
-import Link from 'next/link';
-import { useState } from 'react';
+'use client'
+import React from 'react'
+import Link from 'next/link'
+import { useState } from 'react'
 
 const NavBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   return (
     <nav className="bg-[#0B3568] text-white">
-      <div className="container mx-auto flex items-center justify-between py-4 px-4 sm:px-8">
-
+      <div className="container mx-auto flex items-center justify-between px-4 py-4 sm:px-8">
         {/* Hamburger Menu */}
         <div className="sm:hidden">
           <button
@@ -22,7 +21,7 @@ const NavBar = () => {
           >
             {isOpen ? (
               <svg
-                className="w-6 h-6 fill-current"
+                className="h-6 w-6 fill-current"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -34,7 +33,7 @@ const NavBar = () => {
               </svg>
             ) : (
               <svg
-                className="w-6 h-6 fill-current"
+                className="h-6 w-6 fill-current"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -49,13 +48,17 @@ const NavBar = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className={`sm:flex ${isOpen ? 'block' : 'hidden'} text-center items-center mx-auto`}>
-          <ul className="sm:flex lg:space-x-16 my-2 lg:my-0">
+        <div
+          className={`sm:flex ${
+            isOpen ? 'block' : 'hidden'
+          } mx-auto items-center text-center`}
+        >
+          <ul className="my-2 sm:flex lg:my-0 lg:space-x-16">
             <li>
               <Link href="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <Link href="/equipment">Equipment</Link>
+              <Link href="/dashboard/equipment">Equipment</Link>
             </li>
             <li>
               <Link href="/loans">Loans</Link>
@@ -73,7 +76,7 @@ const NavBar = () => {
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar

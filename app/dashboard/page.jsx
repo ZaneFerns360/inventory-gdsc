@@ -13,7 +13,7 @@ const Page = () => {
 
   useLayoutEffect(() => {
     const fetchUserData = async () => {
-      if (!pb.authStore.isValid) {
+             if (!pb.authStore.isValid) {
         router.push('/')
       } else {
         try {
