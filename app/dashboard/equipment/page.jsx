@@ -22,17 +22,18 @@ const Page = () => {
     },
   ])
 
+  const [searchTerm, setSearchTerm] = useState('')
+
   useEffect(() => {
     const fetchEquipment = async () => {
-      const records = await pb.collection('equipment').getFullList({
-        sort: 'created',
-      })
-      console.log(records)
+      const filter = searchTerm ? `item_name ~ "${searchTerm}"` : ''
+      const records = await pb.collection('equipment').getFullList({ filter })
+
       setEquipmentList(records)
     }
 
     fetchEquipment()
-  }, [])
+  }, [searchTerm])
 
   return (
     <div>
