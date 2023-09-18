@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { pb } from '@utils/pocketbase'
 import Image from 'next/image'
@@ -9,6 +9,10 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
+
+  useLayoutEffect(() => {
+    if (pb.authStore.isValid) router.push('/dashboard')
+  }, [router])
 
   const handleSubmit = async (event) => {
     event.preventDefault()

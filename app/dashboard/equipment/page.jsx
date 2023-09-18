@@ -49,7 +49,7 @@ const Page = () => {
           className="mb-2 flex flex-col rounded border-2 p-2"
         >
           <h2 className="mb-2 text-lg font-bold">{equipment.item_name}</h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-5 gap-4">
             <div>
               <h3 className="font-semibold">Brand:</h3>
               <p>{equipment.brand}</p>
@@ -77,6 +77,15 @@ const Page = () => {
             <div>
               <h3 className="font-semibold">Loaned:</h3>
               <p>{equipment.isLoaned ? 'Yes' : 'No'}</p>
+            </div>
+            <div>
+              <h3 className="font-semibold">In Date:</h3>
+              {/* Check if 'equipment.date' is a valid date before formatting */}
+              <p>
+                {!isNaN(Date.parse(equipment.date))
+                  ? new Date(equipment.date).toISOString().split('T')[0]
+                  : 'Invalid date'}
+              </p>
             </div>
           </div>
         </div>
