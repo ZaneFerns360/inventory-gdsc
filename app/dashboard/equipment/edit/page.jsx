@@ -14,11 +14,22 @@ const Form = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
+    const rooms = await pb
+      .collection('room')
+      .getFullList({ filter: `room_name = "${room}"` })
+
+    // Check if a room with the entered room_name exists
+    if (rooms.length === 0) {
+      setError('Invalid room')
+      return
+    }
+
     const data = {
       item_name: itemName,
       brand: brand,
       department: department,
-      room: room,
+      room: rooms[0].id,
       quantity: quantity,
       isScrapped: false,
       isLoaned: false,
@@ -131,14 +142,13 @@ const Form = () => {
             <input
               className="block w-full rounded border border-gray-500 px-4 py-2 font-mono text-black"
               id="entry6"
-              type="number"
+              type="text"
               value={room}
               onChange={(e) => setRoom(e.target.value)}
             />
           </div>
         </div>
         <div className="flex justify-center">
-          {error && <p>{error}</p>}
           <button
             className="bg-072140 mt-4 rounded border border-black px-4 py-2 font-bold text-white hover:bg-blue-700"
             type="submit"
@@ -146,6 +156,7 @@ const Form = () => {
             Submit
           </button>
         </div>
+        {error && <p className="text-red-700">{error}</p>}
       </form>
     </div>
   )
