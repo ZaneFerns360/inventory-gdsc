@@ -1,48 +1,57 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { pb } from '@utils/pocketbase'
+import Link from 'next/link'
 
 const Page = () => {
-  const [equipmentList, setEquipmentList] = useState([
-    {
-      id: '',
-      collectionId: '',
-      collectionName: '',
-      created: '',
-      updated: '',
-      item_name: '',
-      brand: '',
-      quantity: 0,
-      department: '',
-      room: 0,
-      status: '',
-      isScrapped: false,
-      isLoaned: false,
-      date: '',
-    },
-  ])
+  const [equipmentList, setEquipmentList] = useState([])
 
   const [searchTerm, setSearchTerm] = useState('')
+  const [roomNumber, setRoomNumber] = useState('')
+  const [roomName, setRoomName] = useState('')
 
   useEffect(() => {
     const fetchEquipment = async () => {
-      const filter = searchTerm ? `item_name ~ "${searchTerm}"` : ''
-      const records = await pb.collection('equipment').getFullList({ filter })
+      let filter = ''
+      if (searchTerm) {
+        filter += `item_name ~ "${searchTerm}"`
+      }
+      if (roomName) {
+        filter += filter
+          ? ` && room.room_name ~ "${roomName}"`
+          : `room.room_name ~ "${roomName}"`
+      }
+      const records = await pb
+        .collection('equipment')
+        .getFullList({ filter, expand: 'room' })
 
       setEquipmentList(records)
     }
 
     fetchEquipment()
-  }, [searchTerm])
+  }, [searchTerm, roomName])
 
   return (
     <div className="flex flex-col">
-      <input
-        type="text"
-        placeholder="Search by item name"
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-4 rounded border-2 p-2"
-      />
+      <div className="flex flex-row items-center justify-center">
+        <div className="pr-8 pt-4">
+          <input
+            type="text"
+            placeholder="Search by item name"
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="mb-4 rounded border-2 p-2"
+          />
+        </div>
+        <div className="pt-4">
+          <input
+            type="text"
+            placeholder="Search by room number"
+            onChange={(e) => setRoomName(e.target.value)}
+            className="mb-4 rounded border-2 p-2"
+          />
+        </div>
+      </div>
+
       {equipmentList.map((equipment) => (
         <div
           key={equipment.id}
@@ -64,7 +73,7 @@ const Page = () => {
             </div>
             <div>
               <h3 className="font-semibold">Room:</h3>
-              <p>{equipment.room}</p>
+              <p>{equipment.expand.room.room_name}</p>
             </div>
             <div>
               <h3 className="font-semibold">Status:</h3>
@@ -86,6 +95,14 @@ const Page = () => {
                   ? new Date(equipment.date).toISOString().split('T')[0]
                   : 'Invalid date'}
               </p>
+            </div>
+            <div>
+              <Link
+                href={`/dashboard/${equipment.id}`}
+                className="bg-072140 mt-4 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white"
+              >
+                Loan
+              </Link>
             </div>
           </div>
         </div>
