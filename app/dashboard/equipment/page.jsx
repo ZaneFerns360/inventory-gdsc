@@ -50,6 +50,28 @@ const Page = () => {
             className="mb-4 rounded border-2 p-2"
           />
         </div>
+        <div className="pl-4">
+          {' '}
+          <Link
+            className="flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-gray-50 hover:bg-indigo-600"
+            href="/dashboard/equipment/edit"
+          >
+            {/* Heroicons - Plus Solid */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>Add Equipment</span>
+          </Link>
+        </div>
       </div>
 
       {equipmentList.map((equipment) => (
@@ -98,7 +120,7 @@ const Page = () => {
             </div>
             <div>
               <Link
-                href={`/dashboard/${equipment.id}`}
+                href={`/dashboard/loans/${equipment.id}`}
                 className="bg-072140 mt-4 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white"
               >
                 Loan

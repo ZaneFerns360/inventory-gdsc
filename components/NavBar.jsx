@@ -61,7 +61,7 @@ const NavBar = () => {
               <Link href="/dashboard/equipment">Equipment</Link>
             </li>
             <li>
-              <Link href="/loans">Loans</Link>
+              <Link href="/dashboard/loans">Loans</Link>
             </li>
             <li>
               <Link href="/rooms">Rooms</Link>
