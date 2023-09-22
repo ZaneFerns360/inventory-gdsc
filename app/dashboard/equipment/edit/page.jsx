@@ -7,7 +7,6 @@ const Form = () => {
   const [error, setError] = useState('')
   const [itemName, setItemName] = useState('')
   const [brand, setBrand] = useState('')
-  const [department, setDepartment] = useState('Computers') // Set the default value
   const [inDate, setInDate] = useState('')
   const [quantity, setQuantity] = useState('')
   const [room, setRoom] = useState('')
@@ -28,12 +27,10 @@ const Form = () => {
     const data = {
       item_name: itemName,
       brand: brand,
-      department: department,
       room: rooms[0].id,
       quantity: quantity,
       isScrapped: false,
       isLoaned: false,
-      department: department,
       date: inDate + 'T00:00:00.000Z',
       status: 'none',
     }
@@ -44,7 +41,6 @@ const Form = () => {
       // Reset form values to empty strings
       setItemName('')
       setBrand('')
-      setDepartment('Computers')
       setInDate('')
       setQuantity('')
       setRoom('')
@@ -88,23 +84,6 @@ const Form = () => {
               value={brand}
               onChange={(e) => setBrand(e.target.value)}
             />
-            <label
-              className="text-072140 mb-2 block font-mono font-bold"
-              htmlFor="entry3"
-            >
-              Department
-            </label>
-            <select
-              className="block w-full rounded border border-black px-4 py-2 font-mono text-black"
-              id="entry3"
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-            >
-              <option value="Computers">Computer</option>
-              <option value="ECS">Ecs</option>
-              <option value="Mechanical">Mechanical</option>
-              <option value="AIDS">Ai&Ds</option>
-            </select>
           </div>
           <div>
             <label

@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
-
+const ITEMS_PER_PAGE = 20
 const Page = () => {
   const [equipmentList, setEquipmentList] = useState([])
 
   const [searchTerm, setSearchTerm] = useState('')
-  const [roomNumber, setRoomNumber] = useState('')
   const [roomName, setRoomName] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -23,16 +23,67 @@ const Page = () => {
       }
       const records = await pb
         .collection('equipment')
-        .getFullList({ filter, expand: 'room' })
+        .getFullList({ filter, expand: 'room,room.department' })
 
       setEquipmentList(records)
     }
 
     fetchEquipment()
   }, [searchTerm, roomName])
+  const numPages = Math.ceil(equipmentList.length / ITEMS_PER_PAGE)
 
+  // Get the equipment for the current page
+  const currentEquipment = equipmentList.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
   return (
     <div className="flex flex-col">
+      <div className="flex items-center justify-center pt-8">
+        <button
+          onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
+          className="mr-3 flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <svg
+            className="mr-2 h-3.5 w-3.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 10"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 5H1m0 0 4 4M1 5l4-4"
+            />
+          </svg>
+          Previous
+        </button>
+        <button
+          onClick={() => setCurrentPage((old) => Math.min(old + 1, numPages))}
+          className="flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          Next
+          <svg
+            className="ml-2 h-3.5 w-3.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 10"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M1 5h12m0 0L9 1m4 4L9 9"
+            />
+          </svg>
+        </button>
+      </div>
+
       <div className="flex flex-row items-center justify-center">
         <div className="pr-8 pt-4">
           <input
@@ -74,7 +125,7 @@ const Page = () => {
         </div>
       </div>
 
-      {equipmentList.map((equipment) => (
+      {currentEquipment.map((equipment) => (
         <div
           key={equipment.id}
           className="mb-2 flex flex-col rounded border-2 p-2"
@@ -91,7 +142,7 @@ const Page = () => {
             </div>
             <div>
               <h3 className="font-semibold">Department:</h3>
-              <p>{equipment.department}</p>
+              <p>{equipment.expand.room.expand.department.dep_name}</p>
             </div>
             <div>
               <h3 className="font-semibold">Room:</h3>
