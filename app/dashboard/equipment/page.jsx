@@ -9,7 +9,7 @@ const Page = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [roomName, setRoomName] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-
+  pb.autoCancellation(false)
   useEffect(() => {
     const fetchEquipment = async () => {
       let filter = ''
