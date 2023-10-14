@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
 const ITEMS_PER_PAGE = 20
@@ -8,7 +8,9 @@ const Page = () => {
 
   const [searchTerm, setSearchTerm] = useState('')
   const [roomName, setRoomName] = useState('')
+  const [department, setDepartment] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+
   pb.autoCancellation(false)
   useEffect(() => {
     const fetchEquipment = async () => {
@@ -21,15 +23,25 @@ const Page = () => {
           ? ` && room.room_id ~ "${roomName}"`
           : `room.room_id ~ "${roomName}"`
       }
-      const records = await pb
-        .collection('equipment')
-        .getFullList({ filter, expand: 'room,room.department' })
-
-      setEquipmentList(records)
+      if (department) {
+        filter += filter
+          ? ` && room.department.dep_name ~ "${department}"`
+          : `room.department.dep_name ~ "${department}"`
+      }
+      try {
+        const records = await pb
+          .collection('equipment')
+          .getFullList({ filter, expand: 'room,room.department' })
+        setEquipmentList(records)
+      } catch (err) {
+        console.error(err)
+        // Handle the error appropriately for your application
+      }
     }
 
     fetchEquipment()
-  }, [searchTerm, roomName])
+  }, [searchTerm, roomName, department])
+
   const numPages = Math.ceil(equipmentList.length / ITEMS_PER_PAGE)
 
   // Get the equipment for the current page
@@ -98,6 +110,14 @@ const Page = () => {
             type="text"
             placeholder="Search by room number"
             onChange={(e) => setRoomName(e.target.value)}
+            className="mb-4 rounded border-2 p-2"
+          />
+        </div>
+        <div className="pl-4 pt-4">
+          <input
+            type="text"
+            placeholder="Search by Department"
+            onChange={(e) => setDepartment(e.target.value)}
             className="mb-4 rounded border-2 p-2"
           />
         </div>
