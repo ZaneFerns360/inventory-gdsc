@@ -18,8 +18,8 @@ const Page = () => {
       }
       if (roomName) {
         filter += filter
-          ? ` && room.room_name ~ "${roomName}"`
-          : `room.room_name ~ "${roomName}"`
+          ? ` && room.room_id ~ "${roomName}"`
+          : `room.room_id ~ "${roomName}"`
       }
       const records = await pb
         .collection('equipment')
@@ -146,7 +146,7 @@ const Page = () => {
             </div>
             <div>
               <h3 className="font-semibold">Room:</h3>
-              <p>{equipment.expand.room.room_name}</p>
+              <p>{equipment.expand.room.room_id}</p>
             </div>
             <div>
               <h3 className="font-semibold">Status:</h3>

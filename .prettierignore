@@ -10,4 +10,4 @@ node_modules
 .next
 build
 .contentlayer
-pocketbase_0.17.4_linux_amd64
+pocketbase_0.18.10_linux_amd64

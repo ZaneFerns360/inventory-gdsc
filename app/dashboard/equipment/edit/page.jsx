@@ -16,9 +16,9 @@ const Form = () => {
 
     const rooms = await pb
       .collection('room')
-      .getFullList({ filter: `room_name = "${room}"` })
+      .getFullList({ filter: `room_id = "${room}"` })
 
-    // Check if a room with the entered room_name exists
+    // Check if a room with the entered room_id exists
     if (rooms.length === 0) {
       setError('Invalid room')
       return

@@ -5,7 +5,7 @@
 First, run the development pocketbase server:
 
 ```bash
-cd /pocketbase_0.17.4_linux_amd64
+cd /pocketbase_0.18.10_linux_amd64
 # then
 ./pocketbase serve
 ```
@@ -20,7 +20,7 @@ yarn dev
 pnpm dev
 ```
 
-Pocketbase admin UI: [http://127.0.0.1:8090/_/](http://127.0.0.1:8090/_/) .
+Pocketbase admin UI: [http://127.0.0.1:8090/\_/](http://127.0.0.1:8090/_/) .
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
