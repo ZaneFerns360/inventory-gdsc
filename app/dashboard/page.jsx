@@ -13,7 +13,7 @@ const Page = () => {
 
   useLayoutEffect(() => {
     const fetchUserData = async () => {
-             if (!pb.authStore.isValid) {
+      if (!pb.authStore.isValid) {
         router.push('/')
       } else {
         try {
@@ -21,7 +21,7 @@ const Page = () => {
             .collection('users')
             .getOne(pb.authStore.model.id)
           setUsername(user.username)
-          setOfType(user.ofType)
+          setOfType(user.role)
         } catch (err) {
           if (err.isAbort) {
             // Ignore the error if it is an auto-cancellation error
@@ -44,8 +44,7 @@ const Page = () => {
         <p>Username: {username}</p>
       <p>Of Type: {ofType}</p>
         */}
-              <Cards />
-
+      <Cards />
     </div>
   )
 }
