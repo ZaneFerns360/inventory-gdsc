@@ -170,7 +170,7 @@ const Page = () => {
             </div>
             <div>
               <h3 className="font-semibold">Status:</h3>
-              <p>{equipment.status}</p>
+              <p>{equipment.Status}</p>
             </div>
             <div>
               <h3 className="font-semibold">Scrapped:</h3>
