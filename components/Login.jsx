@@ -31,12 +31,12 @@ const Login = () => {
   }
 
   return (
-    <section className="flex-center max-w-full flex-col">
+    <section className="flex-center lg:w-[400px] min-w-max px-2 flex-col">
       <h1 className="head_text text-left"></h1>
       {error && <p className="text-red-500">{error}</p>}
       <form
         onSubmit={handleSubmit}
-        className="glassmorphism mt-10 flex w-full max-w-2xl flex-col gap-7"
+        className="glassmorphism mt-10 flex w-full flex-col gap-4 px-3"
       >
         <div className="flex items-center justify-center">
           <Image
@@ -57,7 +57,7 @@ const Login = () => {
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Email"
             required
-            className="form_input"
+            className="form_input focus:border-2 focus:border-blue-400"
           />
         </label>
         <label>
@@ -70,12 +70,12 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             required
-            className="form_input"
+            className="form_input focus:border-2 focus:border-blue-400"
           />
         </label>
         <button
           type="submit"
-          className="rounded-full bg-sky-950 px-5 py-1.5 text-lg text-white"
+          className="rounded-full bg-sky-950 px-5 py-1.5 text-lg text-white focus:border-2 focus:border-blue-200 hover:bg-sky-600"
         >
           Submit
         </button>
