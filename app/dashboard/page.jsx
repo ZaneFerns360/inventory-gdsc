@@ -44,14 +44,6 @@ const Page = () => {
   }
 
   return (
-<<<<<<< HEAD
-    <div>
-      {/* <p className="pt-64">Is Valid: {pb.authStore.isValid ? 'Yes' : 'No'}</p>
-      <p>Token: {pb.authStore.token}</p>
-      <p>Username: {username}</p>
-      <p>Of Type: {dep.dep_name}</p>
-  */}
-=======
     <div className='bg-[#d9d9d9] py-5'>
       {/*
         <p className="pt-64">Is Valid: {pb.authStore.isValid ? 'Yes' : 'No'}</p>
@@ -60,7 +52,6 @@ const Page = () => {
         <p>Username: {username}</p>
       <p>Of Type: {ofType}</p>
         */}
->>>>>>> f871c4a (svg)
       <Cards />
     </div>
   )
