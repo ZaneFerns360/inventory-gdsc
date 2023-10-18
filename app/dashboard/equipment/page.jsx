@@ -178,21 +178,18 @@ const Page = () => {
                 ? new Date(equipment.date).toISOString().split('T')[0]
                 : 'Invalid date'}</p>
               {/* Check if 'equipment.date' is a valid date before formatting */}
-              <p>
-                
-              </p>
             </div>
             <div>
+              <button className="bg-072140 rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white">
               <Link
-                href={`/dashboard/loans/${equipment.id}`}
-                className="bg-072140 mt-4 rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white"
-              >
-                Loan
-              </Link>
+              href={`/dashboard/loans/${equipment.id}`}
+            >
+              Loan
+            </Link></button>
             </div>
- <div>
+            <div>
               <button
-                className="bg-072140 mt-0 rounded border border-black bg-red-700 px-4 py-1 font-bold text-white"
+                className="bg-072140 rounded border border-black bg-red-700 px-4 py-1 font-bold text-white"
               >
                 Scrap
               </button>
