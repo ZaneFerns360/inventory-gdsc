@@ -190,6 +190,14 @@ const Page = () => {
                 Loan
               </Link>
             </div>
+ <div>
+              <button
+                className="bg-072140 mt-0 rounded border border-black bg-red-700 px-4 py-1 font-bold text-white"
+              >
+                Scrap
+              </button>
+            </div>
+
           </div>
         </div>
       ))}
