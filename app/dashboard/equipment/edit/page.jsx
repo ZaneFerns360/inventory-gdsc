@@ -54,7 +54,7 @@ const Form = () => {
   }
 
   return (
-    <div className="mt-12 flex justify-center">
+    <div className="my-5 flex justify-center">
       <form
         className="rounded border border-black bg-white p-8"
         onSubmit={handleSubmit}
@@ -88,7 +88,7 @@ const Form = () => {
               onChange={(e) => setBrand(e.target.value)}
             />
             <label
-              className="mb-2 text-072140 mb-2 block font-mono font-bold"
+              className="mb-2 text-072140 block font-mono font-bold"
               htmlFor="select"
             >
               Item-Category
@@ -114,7 +114,7 @@ const Form = () => {
           </div>
           <div>
             <label
-              className="mb-2 text-072140 mb-2 block font-mono font-bold"
+              className="mb-2 text-072140 block font-mono font-bold"
               htmlFor="entry4"
             >
               In-Date
@@ -127,7 +127,7 @@ const Form = () => {
               onChange={(e) => setInDate(e.target.value)}
             />
             <label
-              className="mb-2 text-072140 mb-2 block font-mono font-bold"
+              className="mb-2 text-072140  block font-mono font-bold"
               htmlFor="entry5"
             >
               Quantity
@@ -140,7 +140,7 @@ const Form = () => {
               onChange={(e) => setQuantity(e.target.value)}
             />
             <label
-              className="mb-2 text-072140 mb-2 block font-mono font-bold"
+              className="mb-2 text-072140 block font-mono font-bold"
               htmlFor="entry6"
             >
               Room

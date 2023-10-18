@@ -97,7 +97,7 @@ const Page = () => {
       </div>
 
       <div className="flex flex-row items-center justify-center border-2 rounded mx-4 mt-2">
-        <div className="pr-8 pt-4">
+        <div className="px-4 pt-4">
           <input
             type="text"
             placeholder="Search by item name"
@@ -105,7 +105,7 @@ const Page = () => {
             className="mb-4 rounded border-2 p-2"
           />
         </div>
-        <div className="pt-4">
+        <div className="pt-4 px-4">
           <input
             type="text"
             placeholder="Search by room number"
@@ -113,7 +113,7 @@ const Page = () => {
             className="mb-4 rounded border-2 p-2"
           />
         </div>
-        <div className="pl-4 pt-4">
+        <div className="px-4 pt-4">
           <input
             type="text"
             placeholder="Search by Department"
@@ -121,7 +121,7 @@ const Page = () => {
             className="mb-4 rounded border-2 p-2"
           />
         </div>
-        <div className="pl-4">
+        <div className="px-4">
           {' '}
           <Link
             className="flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-gray-50 hover:bg-indigo-600"
@@ -148,51 +148,44 @@ const Page = () => {
       {currentEquipment.map((equipment) => (
         <div
           key={equipment.id}
-          className="mb-2 flex flex-col rounded border-2 p-2 mx-4"
+          className="flex flex-col rounded border-2 p-4 mx-4 my-2"
         >
           <h2 className="mb-2 text-lg font-bold">{equipment.item_name}</h2>
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-5 gap-3">
             <div>
-              <h3 className="font-semibold">Brand:</h3>
-              <p>{equipment.brand}</p>
+              <p className="font-semibold">Brand: {equipment.brand}</p>
             </div>
             <div>
-              <h3 className="font-semibold">Quantity:</h3>
-              <p>{equipment.quantity}</p>
+              <p className="font-semibold">Quantity: {equipment.quantity}</p>
             </div>
             <div>
-              <h3 className="font-semibold">Department:</h3>
-              <p>{equipment.expand.room.expand.department.dep_name}</p>
+              <p className="font-semibold">Department: {equipment.expand.room.expand.department.dep_name}</p>
             </div>
             <div>
-              <h3 className="font-semibold">Room:</h3>
-              <p>{equipment.expand.room.room_id}</p>
+              <p className="font-semibold">Room: {equipment.expand.room.room_id}</p>
             </div>
             <div>
-              <h3 className="font-semibold">Status:</h3>
-              <p>{equipment.Status}</p>
+              <p className="font-semibold">Status: {equipment.Status}</p>
             </div>
             <div>
-              <h3 className="font-semibold">Scrapped:</h3>
-              <p>{equipment.isScrapped ? 'Yes' : 'No'}</p>
+              <p className="font-semibold">Scrapped: {equipment.isScrapped ? 'Yes' : 'No'}</p>
             </div>
             <div>
-              <h3 className="font-semibold">Loaned:</h3>
-              <p>{equipment.isLoaned ? 'Yes' : 'No'}</p>
+              <p className="font-semibold">Loaned: {equipment.isLoaned ? 'Yes' : 'No'}</p>
             </div>
             <div>
-              <h3 className="font-semibold">In Date:</h3>
+              <p className="font-semibold">In Date: {!isNaN(Date.parse(equipment.date))
+                ? new Date(equipment.date).toISOString().split('T')[0]
+                : 'Invalid date'}</p>
               {/* Check if 'equipment.date' is a valid date before formatting */}
               <p>
-                {!isNaN(Date.parse(equipment.date))
-                  ? new Date(equipment.date).toISOString().split('T')[0]
-                  : 'Invalid date'}
+                
               </p>
             </div>
             <div>
               <Link
                 href={`/dashboard/loans/${equipment.id}`}
-                className="bg-072140 mt-4 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white"
+                className="bg-072140 mt-4 rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white"
               >
                 Loan
               </Link>
