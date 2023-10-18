@@ -96,7 +96,7 @@ const Page = () => {
         </button>
       </div>
 
-      <div className="flex flex-row items-center justify-center">
+      <div className="flex flex-row items-center justify-center border-2 rounded mx-4 mt-2">
         <div className="pr-8 pt-4">
           <input
             type="text"
@@ -148,7 +148,7 @@ const Page = () => {
       {currentEquipment.map((equipment) => (
         <div
           key={equipment.id}
-          className="mb-2 flex flex-col rounded border-2 p-2"
+          className="mb-2 flex flex-col rounded border-2 p-2 mx-4"
         >
           <h2 className="mb-2 text-lg font-bold">{equipment.item_name}</h2>
           <div className="grid grid-cols-5 gap-4">
