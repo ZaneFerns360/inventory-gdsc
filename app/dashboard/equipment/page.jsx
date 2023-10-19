@@ -96,7 +96,7 @@ const Page = () => {
         </button>
       </div>
 
-      <div className="flex flex-row items-center justify-center border-2 rounded mx-4 mt-2">
+      <div className="mx-4 mt-2 flex flex-row items-center justify-center rounded border-2">
         <div className="px-4 pt-4">
           <input
             type="text"
@@ -105,7 +105,7 @@ const Page = () => {
             className="mb-4 rounded border-2 p-2"
           />
         </div>
-        <div className="pt-4 px-4">
+        <div className="px-4 pt-4">
           <input
             type="text"
             placeholder="Search by room number"
@@ -148,7 +148,7 @@ const Page = () => {
       {currentEquipment.map((equipment) => (
         <div
           key={equipment.id}
-          className="flex flex-col rounded border-2 p-4 mx-4 my-2"
+          className="mx-4 my-2 flex flex-col rounded border-2 p-4"
         >
           <h2 className="mb-2 text-lg font-bold">{equipment.item_name}</h2>
           <div className="grid grid-cols-5 gap-3">
@@ -159,42 +159,49 @@ const Page = () => {
               <p className="font-semibold">Quantity: {equipment.quantity}</p>
             </div>
             <div>
-              <p className="font-semibold">Department: {equipment.expand.room.expand.department.dep_name}</p>
+              <p className="font-semibold">
+                Department: {equipment.expand.room.expand.department.dep_name}
+              </p>
             </div>
             <div>
-              <p className="font-semibold">Room: {equipment.expand.room.room_id}</p>
+              <p className="font-semibold">
+                Room: {equipment.expand.room.room_id}
+              </p>
             </div>
             <div>
               <p className="font-semibold">Status: {equipment.Status}</p>
             </div>
             <div>
-              <p className="font-semibold">Scrapped: {equipment.isScrapped ? 'Yes' : 'No'}</p>
+              <p className="font-semibold">
+                Scrapped: {equipment.isScrapped ? 'Yes' : 'No'}
+              </p>
             </div>
             <div>
-              <p className="font-semibold">Loaned: {equipment.isLoaned ? 'Yes' : 'No'}</p>
+              <p className="font-semibold">
+                Loaned: {equipment.isLoaned ? 'Yes' : 'No'}
+              </p>
             </div>
             <div>
-              <p className="font-semibold">In Date: {!isNaN(Date.parse(equipment.date))
-                ? new Date(equipment.date).toISOString().split('T')[0]
-                : 'Invalid date'}</p>
+              <p className="font-semibold">
+                In Date:{' '}
+                {!isNaN(Date.parse(equipment.date))
+                  ? new Date(equipment.date).toISOString().split('T')[0]
+                  : 'Invalid date'}
+              </p>
               {/* Check if 'equipment.date' is a valid date before formatting */}
             </div>
             <div>
               <button className="bg-072140 rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white">
-              <Link
-              href={`/dashboard/loans/${equipment.id}`}
-            >
-              Loan
-            </Link></button>
+                <Link href={`/dashboard/loans/pending/${equipment.id}`}>
+                  Loan
+                </Link>
+              </button>
             </div>
             <div>
-              <button
-                className="bg-072140 rounded border border-black bg-red-700 px-4 py-1 font-bold text-white"
-              >
+              <button className="bg-072140 rounded border border-black bg-red-700 px-4 py-1 font-bold text-white">
                 Scrap
               </button>
             </div>
-
           </div>
         </div>
       ))}
