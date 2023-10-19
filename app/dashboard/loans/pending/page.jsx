@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
+
 const ITEMS_PER_PAGE = 20
 const Page = () => {
   const [equipmentList, setEquipmentList] = useState([])
@@ -24,6 +25,34 @@ const Page = () => {
 
     fetchEquipment()
   }, [])
+
+  const handleApproveLoan = async (pendingItem) => {
+    // Copy the data from the pending item
+    const data = {
+      equipment: pendingItem.equipment,
+      from: pendingItem.from,
+      to: pendingItem.to,
+      Loaned_from: pendingItem.Loaned_from,
+      Loaned_to: pendingItem.Loaned_to,
+    }
+
+    try {
+      // Create a new loan record with the copied data
+      await pb.collection('loan').create(data)
+
+      // Optionally, delete the pending item
+      await pb.collection('pending').delete(pendingItem.id)
+
+      // Re-fetch the equipment list
+      const records = await pb.collection('pending').getFullList({
+        sort: 'created',
+        expand: 'from,to,equipment,equipment.room,equipment.room.department',
+      })
+      setEquipmentList(records)
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   const numPages = Math.ceil(equipmentList.length / ITEMS_PER_PAGE)
 
@@ -186,12 +215,12 @@ const Page = () => {
               </p>
             </div>
             <div>
-              <Link
-                href={`/dashboard/loans/pending/${equip.id}`}
-                className="bg-072140 mt-4 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white"
+              <button
+                className="bg-072140 mt-0 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white"
+                onClick={() => handleApproveLoan(equip)}
               >
                 Approve
-              </Link>
+              </button>
             </div>
           </div>
         </div>
