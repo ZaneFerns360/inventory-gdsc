@@ -1,41 +1,51 @@
-'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
+import { cookies } from 'next/headers' // Import cookies from next/headers
 const ITEMS_PER_PAGE = 20
-const Page = () => {
-  const [equipmentList, setEquipmentList] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
 
-  pb.autoCancellation(false)
-  useEffect(() => {
-    const fetchEquipment = async () => {
-      try {
-        const records = await pb.collection('loan').getFullList({
-          sort: 'created',
-          expand: 'from,to,equipment,equipment.room,equipment.room.department',
-        })
-        setEquipmentList(records)
-      } catch (err) {
-        console.error(err)
-        // Handle the error appropriately for your application
-      }
-    }
-
-    fetchEquipment()
-  }, [])
-
-  const numPages = Math.ceil(equipmentList.length / ITEMS_PER_PAGE)
-
-  // Get the equipment for the current page
-  const currentEquipment = equipmentList.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+async function getLoans() {
+  const res = await fetch(
+    'http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department',
+    { next: { revalidate: 3000 } }
   )
+  const data = await res.json()
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+
+  return data.items
+}
+
+async function getUserDepartment(userId) {
+  const res = await fetch(
+    `http://127.0.0.1:8090/api/collections/users/records/${userId}?sort=created&expand=department`
+  )
+  const data = await res.json()
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch user data')
+  }
+
+  return data.expand.department[0].dep_name
+}
+
+export default async function Page({ currentPage }) {
+  const equipmentList = await getLoans()
+  const nextCookies = cookies()
+
+  const pb_auth = nextCookies.get('pb_auth')
+
+  const pb_auth_value = JSON.parse(pb_auth.value)
+  const model_id = pb_auth_value.model.id
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-center pt-8">
-        <button
+        {/* <p>User ID: {pb_auth.value}</p> */}
+        <p>User ID: {model_id}</p>
+        {/* <button
           onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
           className="mr-3 flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         >
@@ -55,8 +65,8 @@ const Page = () => {
             />
           </svg>
           Previous
-        </button>
-        <button
+        </button> */}
+        {/* <button
           onClick={() => setCurrentPage((old) => Math.min(old + 1, numPages))}
           className="flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         >
@@ -76,7 +86,7 @@ const Page = () => {
               d="M1 5h12m0 0L9 1m4 4L9 9"
             />
           </svg>
-        </button>
+        </button> */}
       </div>
 
       <div className="flex flex-row items-center justify-center">
@@ -128,7 +138,7 @@ const Page = () => {
         </div>
       </div>
 
-      {currentEquipment.map((equip) => (
+      {equipmentList.map((equip) => (
         <div key={equip.id} className="mb-2 flex flex-col rounded border-2 p-2">
           <h2 className="mb-2 text-lg font-bold">
             {equip.expand.equipment.item_name}
@@ -199,5 +209,3 @@ const Page = () => {
     </div>
   )
 }
-
-export default Page

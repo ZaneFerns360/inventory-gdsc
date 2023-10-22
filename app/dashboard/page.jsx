@@ -20,6 +20,7 @@ const Page = () => {
           const user = await pb
             .collection('users')
             .getOne(pb.authStore.model.id, { expand: 'department' })
+          document.cookie = pb.authStore.exportToCookie({ httpOnly: false })
           setUsername(user.username)
           setLoading(false)
         } catch (err) {

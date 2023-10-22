@@ -21,6 +21,7 @@ const Login = () => {
         .collection('users')
         .authWithPassword(username, password)
       if (authData && pb.authStore.isValid) {
+        pb.authStore.exportToCookie()
         router.push('/dashboard')
       } else {
         setError('Invalid username or password')
@@ -31,7 +32,7 @@ const Login = () => {
   }
 
   return (
-    <section className="flex-center lg:w-[400px] min-w-max px-2 flex-col">
+    <section className="flex-center min-w-max flex-col px-2 lg:w-[400px]">
       <h1 className="head_text text-left"></h1>
       {error && <p className="text-red-500">{error}</p>}
       <form
@@ -75,7 +76,7 @@ const Login = () => {
         </label>
         <button
           type="submit"
-          className="rounded-full bg-sky-950 px-5 py-1.5 text-lg text-white focus:border-2 focus:border-blue-200 hover:bg-sky-600"
+          className="rounded-full bg-sky-950 px-5 py-1.5 text-lg text-white hover:bg-sky-600 focus:border-2 focus:border-blue-200"
         >
           Submit
         </button>
