@@ -10,7 +10,6 @@ const Page = () => {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const [username, setUsername] = useState('')
-  const [ofType, setOfType] = useState('')
   const [dep, setDep] = useState([])
   useLayoutEffect(() => {
     const fetchUserData = async () => {
@@ -22,9 +21,6 @@ const Page = () => {
             .collection('users')
             .getOne(pb.authStore.model.id, { expand: 'department' })
           setUsername(user.username)
-          setOfType(user.department)
-          const record = await pb.collection('department').getOne(ofType)
-          setDep(record)
           setLoading(false)
         } catch (err) {
           if (err.isAbort) {
@@ -37,14 +33,14 @@ const Page = () => {
       }
     }
     fetchUserData()
-  }, [router, ofType])
+  }, [router])
 
   if (loading) {
     return <div>Loading...</div>
   }
 
   return (
-    <div className='bg-[#d9d9d9] py-5'>
+    <div className="bg-[#d9d9d9] py-5">
       {/*
         <p className="pt-64">Is Valid: {pb.authStore.isValid ? 'Yes' : 'No'}</p>
         <p>Token: {pb.authStore.token}</p>
@@ -52,6 +48,7 @@ const Page = () => {
         <p>Username: {username}</p>
       <p>Of Type: {ofType}</p>
         */}
+      <p>Username: {username}</p>
       <Cards />
     </div>
   )
