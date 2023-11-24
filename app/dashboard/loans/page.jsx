@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { cookies } from 'next/headers' // Import cookies from next/headers
 const ITEMS_PER_PAGE = 20
 
-async function getLoans() {
+async function getLoans(dep) {
   const res = await fetch(
-    'http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department',
+    `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(equipment.room.department.dep_name='${dep}')`,
     { next: { revalidate: 3000 } }
   )
   const data = await res.json()
@@ -18,9 +18,17 @@ async function getLoans() {
   return data.items
 }
 
-async function getUserDepartment(userId) {
+async function getUserDepartment() {
+  const nextCookies = cookies()
+
+  const pb_auth = nextCookies.get('pb_auth')
+
+  const pb_auth_value = JSON.parse(pb_auth.value)
+
+  const model_id = pb_auth_value.model.id
+
   const res = await fetch(
-    `http://127.0.0.1:8090/api/collections/users/records/${userId}?sort=created&expand=department`
+    `http://127.0.0.1:8090/api/collections/users/records/${model_id}?sort=created&expand=department`
   )
   const data = await res.json()
 
@@ -32,7 +40,6 @@ async function getUserDepartment(userId) {
 }
 
 export default async function Page({ currentPage }) {
-  const equipmentList = await getLoans()
   const nextCookies = cookies()
 
   const pb_auth = nextCookies.get('pb_auth')
@@ -40,11 +47,16 @@ export default async function Page({ currentPage }) {
   const pb_auth_value = JSON.parse(pb_auth.value)
   const model_id = pb_auth_value.model.id
 
+  const dep = await getUserDepartment()
+  const equipmentList = await getLoans(dep)
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-center pt-8">
         {/* <p>User ID: {pb_auth.value}</p> */}
         <p>User ID: {model_id}</p>
+        <p>User ID: {dep}</p>
+
         {/* <button
           onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
           className="mr-3 flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
