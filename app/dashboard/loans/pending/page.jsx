@@ -1,23 +1,27 @@
+'use client'
+import { useEffect, useState } from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
-import { cookies } from 'next/headers'
 import { getUserDepartment } from '../page'
+import { getPendingLoans } from './api/action'
+import Router from '@components/Router'
+import { useRouter } from 'next/navigation'
 
-async function getLoans(dep) {
-  const res = await fetch(
-    `http://127.0.0.1:8090/api/collections/pending/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(to.department.dep_name='${dep}')`,
-    { next: { revalidate: 3000 } }
-  )
-  const data = await res.json()
+export default function Page({ currentPage }) {
+  const router = useRouter()
+  const [currentEquipments, setCurrentEquipment] = useState([])
+  const [department, setDepartment] = useState('')
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
+  useEffect(() => {
+    async function fetchData() {
+      const dep = await getUserDepartment()
+      setDepartment(dep)
+      const loans = await getPendingLoans(dep)
+      setCurrentEquipment(loans)
+    }
+    fetchData()
+  }, [])
 
-  return data.items
-}
-
-export default async function Page({ currentPage }) {
   pb.autoCancellation(false)
 
   const handleApproveLoan = async (pendingItem) => {
@@ -43,43 +47,17 @@ export default async function Page({ currentPage }) {
         expand: 'from,to,equipment,equipment.room,equipment.room.department',
       })
       setEquipmentList(records)
+      router.refresh()
     } catch (err) {
       console.error(err)
     }
   }
-  const dep = await getUserDepartment()
-
-  const currentEquipment = await getLoans(dep)
 
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-center pt-8"></div>
 
       <div className="flex flex-row items-center justify-center">
-        {/* <div className="pr-8 pt-4">
-          <input
-            type="text"
-            placeholder="Search by item name"
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="mb-4 rounded border-2 p-2"
-          />
-        </div>
-        <div className="pt-4">
-          <input
-            type="text"
-            placeholder="Search by room number"
-            onChange={(e) => setRoomName(e.target.value)}
-            className="mb-4 rounded border-2 p-2"
-          />
-        </div>
-        <div className="pl-4 pt-4">
-          <input
-            type="text"
-            placeholder="Search by Department"
-            onChange={(e) => setDepartment(e.target.value)}
-            className="mb-4 rounded border-2 p-2"
-          />
-        </div> */}
         <div className="py-4 pl-4">
           {' '}
           <Link
@@ -104,7 +82,7 @@ export default async function Page({ currentPage }) {
         </div>
       </div>
 
-      {currentEquipment.map((equip) => (
+      {currentEquipments.map((equip) => (
         <div key={equip.id} className="mb-2 flex flex-col rounded border-2 p-2">
           <h2 className="mb-2 text-lg font-bold">
             {equip.expand.equipment.item_name}
@@ -162,7 +140,10 @@ export default async function Page({ currentPage }) {
               </p>
             </div>
             <div>
-              <button className="bg-072140 mt-0 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white">
+              <button
+                className="bg-072140 mt-0 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white"
+                onClick={() => handleApproveLoan(equip)}
+              >
                 Approve
               </button>
             </div>
