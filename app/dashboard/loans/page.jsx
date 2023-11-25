@@ -5,6 +5,7 @@ import { cookies } from 'next/headers' // Import cookies from next/headers
 const ITEMS_PER_PAGE = 20
 
 async function getLoans(dep) {
+  'use server'
   const res = await fetch(
     `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(equipment.room.department.dep_name='${dep}')`,
     { next: { revalidate: 3000 } }
