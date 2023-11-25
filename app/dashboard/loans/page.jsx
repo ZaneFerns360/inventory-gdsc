@@ -18,7 +18,7 @@ async function getLoans(dep) {
   return data.items
 }
 
-async function getUserDepartment() {
+export async function getUserDepartment() {
   const nextCookies = cookies()
 
   const pb_auth = nextCookies.get('pb_auth')
