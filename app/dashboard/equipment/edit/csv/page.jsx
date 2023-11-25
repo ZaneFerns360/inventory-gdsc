@@ -20,7 +20,7 @@ const page = () => {
     }
 
     // Revalidate the path if the upload was successful
-    return revalidatePath('/')
+    return revalidatePath('/dashboard/equipment/edit/csv')
   }
 
   return (
