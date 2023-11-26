@@ -4,8 +4,8 @@ import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
 import { getUserDepartment } from '../page'
 import { getPendingLoans } from './api/action'
-import Router from '@components/Router'
 import { useRouter } from 'next/navigation'
+import action2 from './api/action2'
 
 export default function Page({ currentPage }) {
   const router = useRouter()
@@ -42,11 +42,8 @@ export default function Page({ currentPage }) {
       await pb.collection('pending').delete(pendingItem.id)
 
       // Re-fetch the equipment list
-      const records = await pb.collection('pending').getFullList({
-        sort: 'created',
-        expand: 'from,to,equipment,equipment.room,equipment.room.department',
-      })
-      setEquipmentList(records)
+      action2()
+
       router.refresh()
     } catch (err) {
       console.error(err)

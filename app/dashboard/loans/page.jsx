@@ -3,12 +3,13 @@ import React from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
 import { cookies } from 'next/headers' // Import cookies from next/headers
+
 const ITEMS_PER_PAGE = 20
 
 async function getLoans(dep) {
   const res = await fetch(
     `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(equipment.room.department.dep_name='${dep}')`,
-    { next: { revalidate: 3000 } }
+    { cache: 'no-store' }
   )
   const data = await res.json()
 
@@ -29,7 +30,8 @@ export async function getUserDepartment() {
   const model_id = pb_auth_value.model.id
 
   const res = await fetch(
-    `http://127.0.0.1:8090/api/collections/users/records/${model_id}?sort=created&expand=department`
+    `http://127.0.0.1:8090/api/collections/users/records/${model_id}?sort=created&expand=department`,
+    { next: { revalidate: 0 } }
   )
   const data = await res.json()
 

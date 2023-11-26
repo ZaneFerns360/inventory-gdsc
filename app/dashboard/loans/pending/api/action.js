@@ -5,7 +5,7 @@ export async function getPendingLoans(dep) {
 
     const res = await fetch(
       `http://127.0.0.1:8090/api/collections/pending/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(to.department.dep_name='${dep}')`,
-      { next: { revalidate: 1 } }
+      { next: { revalidate: 3000,tags: ['pending'] } }
     )
     const data = await res.json()
   
