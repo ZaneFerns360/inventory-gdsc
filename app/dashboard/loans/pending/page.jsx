@@ -7,7 +7,7 @@ import { getPendingLoans } from './api/action'
 import { useRouter } from 'next/navigation'
 import action2 from './api/action2'
 
-export default function Page({ currentPage }) {
+export default function Page() {
   const router = useRouter()
   const [currentEquipments, setCurrentEquipment] = useState([])
   const [department, setDepartment] = useState('')

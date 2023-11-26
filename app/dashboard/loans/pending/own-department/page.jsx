@@ -96,7 +96,7 @@ export default async function Page({ currentPage }) {
             <div>
               <Link
                 className="bg-072140 mt-0 rounded border border-black bg-red-500 px-4 py-2 font-bold text-white"
-                href=""
+                href={`/dashboard/loans/pending/own-department/${equip.id}`}
               >
                 Cancel
               </Link>
