@@ -1,7 +1,7 @@
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
-import { getUserDepartment } from '../../page'
 import { getOwnPendingLoans } from './api/action4'
+import { getUserDepartment } from '@app/api/userDepartment'
 
 export default async function Page({ currentPage }) {
   const dep = await getUserDepartment()

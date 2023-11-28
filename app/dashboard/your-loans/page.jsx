@@ -4,13 +4,12 @@ import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
 import { cookies } from 'next/headers' // Import cookies from next/headers
 import { getUserDepartment } from '@app/api/userDepartment'
-
 const ITEMS_PER_PAGE = 20
 
-async function getLoans(dep) {
+async function getOwnLoans(dep) {
   const res = await fetch(
-    `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(equipment.room.department.dep_name='${dep}')`,
-    { cache: 'no-store' }
+    `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(to.department.dep_name='${dep}')`,
+    { next: { revalidate: 300 } }
   )
   const data = await res.json()
 
@@ -30,7 +29,7 @@ export default async function Page({ currentPage }) {
   const model_id = pb_auth_value.model.id
 
   const dep = await getUserDepartment()
-  const equipmentList = await getLoans(dep)
+  const equipmentList = await getOwnLoans(dep)
 
   return (
     <div className="flex flex-col">
@@ -194,7 +193,7 @@ export default async function Page({ currentPage }) {
                 href={`/dashboard/loans/${equip.id}`}
                 className="bg-072140 mt-4 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white"
               >
-                Loan
+                Return
               </Link>
             </div>
           </div>

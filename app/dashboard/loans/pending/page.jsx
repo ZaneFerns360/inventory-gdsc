@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
-import { getUserDepartment } from '../page'
 import { getPendingLoans } from './api/action'
 import { useRouter } from 'next/navigation'
 import action2 from './api/action2'
+import { getUserDepartment } from '@app/api/userDepartment'
 
 export default function Page() {
   const router = useRouter()
