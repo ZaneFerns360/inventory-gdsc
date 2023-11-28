@@ -4,6 +4,7 @@ import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
 import { cookies } from 'next/headers' // Import cookies from next/headers
 import { getUserDepartment } from '@app/api/userDepartment'
+import { getUserType } from '@app/api/userType'
 
 const ITEMS_PER_PAGE = 20
 
@@ -31,13 +32,14 @@ export default async function Page({ currentPage }) {
 
   const dep = await getUserDepartment()
   const equipmentList = await getLoans(dep)
-
+  const type = await getUserType()
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-center pt-8">
         {/* <p>User ID: {pb_auth.value}</p> */}
         <p>User ID: {model_id}</p>
-        <p>User ID: {dep}</p>
+        <p>User Department: {dep}</p>
+        <p>User Type: {type}</p>
 
         {/* <button
           onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
