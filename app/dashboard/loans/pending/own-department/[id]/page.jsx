@@ -1,9 +1,9 @@
 'use client'
-import { getCancelPendingLoans } from './api/action6'
-import { deletePending } from './api/action7'
+import { getCancelPendingLoans } from './api/getCancelPending'
+import { deletePending } from './api/cancelPending'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import action5 from '../api/action5'
+import action5 from '../api/reval-own-pending'
 import Link from 'next/link'
 
 export default function Page({ params }) {

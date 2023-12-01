@@ -1,6 +1,6 @@
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
-import { getOwnPendingLoans } from './api/action4'
+import { getOwnPendingLoans } from './api/getOwnPending'
 import { getUserDepartment } from '@app/api/userDepartment'
 
 export default async function Page({ currentPage }) {
