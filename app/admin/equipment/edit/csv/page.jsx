@@ -1,18 +1,9 @@
-'use client'
 import { sendCSV } from './api/sendCSV'
-import { useFormState, useFormStatus } from 'react-dom'
 
-const initialState = {
-  message: null,
-}
-
-export default function Page() {
-  const [state, formAction] = useFormState(sendCSV, initialState)
-  const { pending } = useFormStatus()
-
+const page = () => {
   return (
     <div className="flex-col items-center justify-center justify-items-center">
-      <form action={formAction}>
+      <form action={sendCSV}>
         <label
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
           htmlFor="file_input"
@@ -25,7 +16,6 @@ export default function Page() {
           id="file_input"
           type="file"
           name="file"
-          disabled={pending}
         />
         <p
           className="mt-1 text-sm text-gray-500 dark:text-gray-300"
@@ -33,11 +23,10 @@ export default function Page() {
         >
           Filetype- .xlsx (MAX. 10MB)
         </p>
-        <button type="submit" disabled={pending}>
-          {pending ? 'Uploading...' : 'Upload'}
-        </button>
-        {state?.message}
+        <button type="submit">Upload</button>
       </form>
     </div>
   )
 }
+
+export default page

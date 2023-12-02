@@ -1,14 +1,17 @@
 'use server'
 import React from 'react'
+import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
 import { cookies } from 'next/headers' // Import cookies from next/headers
 import { getUserDepartment } from '@app/api/userDepartment'
+import { getUserType } from '@app/api/userType'
+
 const ITEMS_PER_PAGE = 20
 
-async function getOwnLoans(dep) {
+async function getLoans(dep) {
   const res = await fetch(
-    `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(to.department.dep_name='${dep}')`,
-    { next: { revalidate: 300 } }
+    `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(equipment.room.department.dep_name='${dep}')`,
+    { cache: 'no-store' }
   )
   const data = await res.json()
 
@@ -28,14 +31,15 @@ export default async function Page({ currentPage }) {
   const model_id = pb_auth_value.model.id
 
   const dep = await getUserDepartment()
-  const equipmentList = await getOwnLoans(dep)
-
+  const equipmentList = await getLoans(dep)
+  const type = await getUserType()
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-center pt-8">
         {/* <p>User ID: {pb_auth.value}</p> */}
         <p>User ID: {model_id}</p>
-        <p>User ID: {dep}</p>
+        <p>User Department: {dep}</p>
+        <p>User Type: {type}</p>
 
         {/* <button
           onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
@@ -189,10 +193,10 @@ export default async function Page({ currentPage }) {
             </div>
             <div>
               <Link
-                href={`/dashboard/your-loans/${equip.id}`}
+                href={`/dashboard/loans/${equip.id}`}
                 className="bg-072140 mt-4 rounded border border-black bg-blue-700 px-4 py-2 font-bold text-white"
               >
-                Return
+                Loan
               </Link>
             </div>
           </div>

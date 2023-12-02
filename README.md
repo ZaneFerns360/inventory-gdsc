@@ -14,6 +14,10 @@ Then setup git-lfs with the command:
 ```bash
 git lfs install
 ```
+Then check if git-lfs is installed correctly by running:
+```bash
+git lfs
+```
 
 ## Getting Started
 

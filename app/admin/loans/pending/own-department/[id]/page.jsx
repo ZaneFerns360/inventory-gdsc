@@ -1,9 +1,9 @@
 'use client'
-import { getYourLoans } from '../api/yourLoan'
+import { getCancelPendingLoans } from './api/getCancelPending'
+import { deletePending } from './api/cancelPending'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { returnLoan } from '../api/returnLoan'
-import revalYourLoans from '../api/reval-your'
+import action5 from '../api/reval-own-pending'
 import Link from 'next/link'
 
 export default function Page({ params }) {
@@ -13,7 +13,7 @@ export default function Page({ params }) {
 
   useEffect(() => {
     async function fetchData() {
-      const loanData = await getYourLoans(id)
+      const loanData = await getCancelPendingLoans(id)
       setLoan(loanData)
     }
     fetchData()
@@ -22,8 +22,8 @@ export default function Page({ params }) {
   const handleDelete = async () => {
     await deletePending(id)
     setLoan(null) // Clear the loan data after deleting
-    revalYourLoans()
-    router.push('/dashboard/your-loans')
+    action5()
+    router.push('/dashboard/loans/pending/own-department')
   }
 
   if (!loan) {
@@ -94,7 +94,7 @@ export default function Page({ params }) {
                 className="bg-072140 mt-0 rounded border border-black bg-red-500 px-4 py-2 font-bold text-white"
                 onClick={handleDelete}
               >
-                Return
+                Delete
               </button>
             </div>
           </div>
