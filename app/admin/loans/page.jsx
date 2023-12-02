@@ -10,7 +10,7 @@ const ITEMS_PER_PAGE = 20
 
 async function getLoans(dep) {
   const res = await fetch(
-    `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(equipment.room.department.dep_name='${dep}')`,
+    `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department)`,
     { cache: 'no-store' }
   )
   const data = await res.json()

@@ -10,13 +10,10 @@ import { getUserDepartment } from '@app/api/userDepartment'
 export default function Page() {
   const router = useRouter()
   const [currentEquipments, setCurrentEquipment] = useState([])
-  const [department, setDepartment] = useState('')
 
   useEffect(() => {
     async function fetchData() {
-      const dep = await getUserDepartment()
-      setDepartment(dep)
-      const loans = await getPendingLoans(dep)
+      const loans = await getPendingLoans()
       setCurrentEquipment(loans)
     }
     fetchData()

@@ -1,10 +1,10 @@
 "use server"
 
  
-export async function getPendingLoans(dep) {
+export async function getPendingLoans() {
 
     const res = await fetch(
-      `http://127.0.0.1:8090/api/collections/pending/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(to.department.dep_name='${dep}')`,
+      `http://127.0.0.1:8090/api/collections/pending/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department)`,
       { next: { revalidate: 1,tags: ['pending'] } }
     )
     const data = await res.json()
