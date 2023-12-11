@@ -20,7 +20,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [require("flowbite/plugin","daisy")],
   daisyui: {
     themes: ["light","flowbite/plugin"],
   },
