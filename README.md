@@ -4,20 +4,6 @@
 
 - [Node Js](https://nodejs.org/en/)
 - [Linux or WSL](https://learn.microsoft.com/en-us/windows/wsl/install)
-- [Git LFS Plugin](https://git-lfs.com/)
-
-It is recommended to install Git Large File Storage plugin (WSL also):
-- [Download for Ubuntu/Debian](https://github.com/git-lfs/git-lfs/blob/main/INSTALLING.md)
-- [Download for Windows](https://github.com/git-lfs/git-lfs/releases/download/v3.4.0/git-lfs-windows-v3.4.0.exe)
-  
-Then setup git-lfs with the command:
-```bash
-git lfs install
-```
-Then check if git-lfs is installed correctly by running:
-```bash
-git lfs
-```
 
 ## Getting Started
 
