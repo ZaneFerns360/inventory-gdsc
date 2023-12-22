@@ -1,4 +1,1 @@
 pocketbase_linux_amd64/pb_data/backups/@update_v0.20.1.zip
-pocketbase_linux_amd64/pb_data/data.db
-pocketbase_linux_amd64/pb_data/logs.db
-pocketbase_linux_amd64/pocketbase
