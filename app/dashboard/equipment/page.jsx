@@ -2,6 +2,10 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
+import { PiPlusCircleBold } from "react-icons/pi";
+import { GrLinkPrevious, GrLinkNext } from "react-icons/gr";
+import { FaExchangeAlt, FaRegTrashAlt } from "react-icons/fa";
+
 const ITEMS_PER_PAGE = 20
 const Page = () => {
   const [equipmentList, setEquipmentList] = useState([])
@@ -50,96 +54,56 @@ const Page = () => {
     currentPage * ITEMS_PER_PAGE
   )
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-center pt-8">
+    <div className="flex flex-col bg-slate-50 py-8">
+      <div className="flex items-center justify-center py-2">
         <button
           onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
-          className="mr-3 flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          className="mx-3 flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         >
-          <svg
-            className="mr-2 h-3.5 w-3.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 10"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 5H1m0 0 4 4M1 5l4-4"
-            />
-          </svg>
+          <GrLinkPrevious className='mx-2' />
           Previous
         </button>
         <button
           onClick={() => setCurrentPage((old) => Math.min(old + 1, numPages))}
-          className="flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          className="mx-3 flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
         >
           Next
-          <svg
-            className="ml-2 h-3.5 w-3.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 10"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M1 5h12m0 0L9 1m4 4L9 9"
-            />
-          </svg>
+          <GrLinkNext className='mx-2' />
         </button>
       </div>
 
-      <div className="mx-4 mt-2 flex flex-row items-center justify-center rounded border-2">
-        <div className="px-4 pt-4">
+      <div className="mx-4 my-2 flex flex-col items-center justify-center sm:flex-row rounded-xl border-2 bg-slate-100">
+        <div className="px-4 py-2 sm:mr-4">
           <input
             type="text"
             placeholder="Search by item name"
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="mb-4 rounded border-2 p-2"
+            className="my-2 rounded-xl border-2 px-4 py-2"
           />
         </div>
-        <div className="px-4 pt-4">
+        <div className="px-4 py-2 sm:mr-4">
           <input
             type="text"
             placeholder="Search by room number"
             onChange={(e) => setRoomName(e.target.value)}
-            className="mb-4 rounded border-2 p-2"
+            className="my-2 rounded-xl border-2 px-4 py-2"
           />
         </div>
-        <div className="px-4 pt-4">
+        <div className="px-4 py-2 sm:mr-4">
           <input
             type="text"
             placeholder="Search by Department"
             onChange={(e) => setDepartment(e.target.value)}
-            className="mb-4 rounded border-2 p-2"
+            className="my-2 rounded-xl border-2 px-4 py-2"
           />
         </div>
-        <div className="px-4">
-          {' '}
+        <div className="px-4 py-2">
           <Link
-            className="flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-gray-50 hover:bg-indigo-600"
+            className="flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600"
             href="/dashboard/equipment/edit"
           >
             {/* Heroicons - Plus Solid */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <PiPlusCircleBold className='h-5 w-5 text-white' />
             <span>Add Equipment</span>
           </Link>
         </div>
@@ -148,10 +112,10 @@ const Page = () => {
       {currentEquipment.map((equipment) => (
         <div
           key={equipment.id}
-          className="mx-4 my-2 flex flex-col rounded border-2 p-4"
+          className="mx-4 my-2 sm:flex flex-col rounded-xl border-2 p-4"
         >
           <h2 className="mb-2 text-lg font-bold">{equipment.item_name}</h2>
-          <div className="grid grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div>
               <p className="font-semibold">Brand: {equipment.brand}</p>
             </div>
@@ -188,23 +152,22 @@ const Page = () => {
                   ? new Date(equipment.date).toISOString().split('T')[0]
                   : 'Invalid date'}
               </p>
-              {/* Check if 'equipment.date' is a valid date before formatting */}
             </div>
-            <div>
-              <button className="bg-072140 rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white">
+            <div className="flex items-center">
+              <button className="flex bg-072140 rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white items-center hover:bg-blue-500">
+                <FaExchangeAlt className="mx-2" />
                 <Link href={`/dashboard/loans/pending/${equipment.id}`}>
                   Loan
                 </Link>
               </button>
-            </div>
-            <div>
-              <button className="bg-072140 rounded border border-black bg-red-700 px-4 py-1 font-bold text-white">
+              <button className="flex bg-072140 rounded border border-black bg-red-600 px-4 py-1 font-bold text-white items-center hover:bg-red-700 ml-4">
+                <FaRegTrashAlt className="mx-2" />
                 Scrap
               </button>
             </div>
           </div>
         </div>
-      ))}
+      ))}      
     </div>
   )
 }

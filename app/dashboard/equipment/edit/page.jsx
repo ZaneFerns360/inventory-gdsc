@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { pb } from '@utils/pocketbase'
 import Link from 'next/link'
 import './Form.css'
+import { FiUpload } from "react-icons/fi";
 
 const Form = () => {
   const [error, setError] = useState('')
@@ -55,24 +56,13 @@ const Form = () => {
   }
 
   return (
-    <div className="my-5 flex-col items-center justify-center justify-items-center">
+    <div className="flex-col py-8 items-center justify-center justify-items-center bg-slate-100">
       <div className="flex items-center justify-center justify-items-center">
         <Link
-          className="items-center rounded-xl bg-indigo-500 px-4 py-2 text-gray-50 hover:bg-indigo-600"
+          className="flex items-center rounded-xl bg-indigo-500 px-4 py-2 text-gray-50 hover:bg-indigo-600"
           href="/dashboard/equipment/edit/csv"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <FiUpload className='text-white mx-2' />
           <span>Add CSV</span>
         </Link>
       </div>

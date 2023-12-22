@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@icon-park/react": "^1.4.2",
+    "@icon-park/vue-next": "^1.4.2",
     "autoprefixer": "10.4.16",
     "daisy": "^0.2.0",
     "daisyui": "^4.4.6",

@@ -41,7 +41,7 @@ const Page = () => {
   }
 
   return (
-    <div className="bg-[#d9d9d9] py-5">
+    <div className="py-10 bg-[#d9d9d9]">
       {/*
         <p className="pt-64">Is Valid: {pb.authStore.isValid ? 'Yes' : 'No'}</p>
         <p>Token: {pb.authStore.token}</p>
@@ -49,7 +49,7 @@ const Page = () => {
         <p>Username: {username}</p>
       <p>Of Type: {ofType}</p>
         */}
-      <p>Username: {username}</p>
+      <p className='text-black text-xl px-5'>Username: {username}</p>
       <Cards />
     </div>
   )

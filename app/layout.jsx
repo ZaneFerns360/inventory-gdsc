@@ -11,9 +11,6 @@ const RootLayout = ({ children }) => {
   return (
     <html lang="en" className="scroll-smooth">
       <body>
-        <div className="">
-          <div className="" />
-        </div>
         <main className="">{children}</main>
       </body>
     </html>
