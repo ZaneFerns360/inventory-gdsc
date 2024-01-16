@@ -1,7 +1,7 @@
 // Server-side function
 export async function createDepartment(Data) {
     // Define the full URL
-    const url = `http://127.0.0.1:8090/api/collections/room/records`;
+    const url = `http://127.0.0.1:8090/api/collections/department/records`;
   
     // Define the request options
     const options = {
