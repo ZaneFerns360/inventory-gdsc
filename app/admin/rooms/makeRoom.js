@@ -1,7 +1,7 @@
 // Server-side function
 export async function createRoom(roomData) {
     // Define the full URL
-    const url = `http://127.0.0.1:8090/api/collections/department/records`;
+    const url = `http://127.0.0.1:8090/api/collections/room/records`;
   
     // Define the request options
     const options = {

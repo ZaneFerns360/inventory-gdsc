@@ -1,9 +1,9 @@
 'use client'
 import React, { useState, useLayoutEffect } from 'react'
 import { getDepartments } from './getDepartments'
+import { createRoom } from './makeRoom'
 
 const RoomForm = () => {
-  const [id, setId] = useState('')
   const [roomId, setRoomId] = useState('')
   const [name, setName] = useState('')
   const [department, setDepartment] = useState('')
@@ -25,16 +25,18 @@ const RoomForm = () => {
 
     // Create the room data object
     const roomData = {
-      id,
       room_id: roomId,
-      name,
-      department,
+      name: name,
+      department: department,
     }
 
     // Submit the room data
     try {
       const newRoom = await createRoom(roomData)
       console.log('Room created:', newRoom)
+      setRoomId('')
+      setName('')
+      setDepartment('')
     } catch (err) {
       console.error('Failed to create room:', err)
     }
@@ -52,19 +54,6 @@ const RoomForm = () => {
           >
             <div className="flex justify-between">
               <div className="mr-4">
-                <label
-                  className="text-072140 mb-2 block font-mono font-bold"
-                  htmlFor="id"
-                >
-                  ID
-                </label>
-                <input
-                  className="mb-2 block w-full rounded border border-gray-500 px-4 py-2 font-mono text-black"
-                  id="id"
-                  type="text"
-                  value={id}
-                  onChange={(e) => setId(e.target.value)}
-                />
                 <label
                   className="text-072140 mb-2 block font-mono font-bold"
                   htmlFor="roomId"
