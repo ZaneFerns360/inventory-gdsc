@@ -94,6 +94,8 @@ const Page = () => {
           key={equipment.id}
           className="mx-4 my-2 flex-col rounded-xl border-2 p-4 sm:flex"
         >
+          <h2 className="mb-2 text-lg font-bold">{equipment.id}</h2>
+
           <h2 className="mb-2 text-lg font-bold">{equipment.item_name}</h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
             <div>
@@ -134,12 +136,13 @@ const Page = () => {
               </p>
             </div>
             <div className="flex items-center">
-              <button className="bg-072140 flex items-center rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white hover:bg-blue-500">
+              <Link
+                href={`/dashboard/loans/${equipment.id}`}
+                className="bg-072140 flex items-center rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white hover:bg-blue-500"
+              >
                 <FaExchangeAlt className="mx-2" />
-                <Link href={`/dashboard/loans/pending/${equipment.id}`}>
-                  Loan
-                </Link>
-              </button>
+                Loan
+              </Link>
               <button className="bg-072140 ml-4 flex items-center rounded border border-black bg-red-600 px-4 py-1 font-bold text-white hover:bg-red-700">
                 <FaRegTrashAlt className="mx-2" />
                 Scrap

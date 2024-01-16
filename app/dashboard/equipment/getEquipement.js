@@ -1,5 +1,4 @@
 "use server"
-
 export async function getEquipment(page, name, room, department) {
   // Define the filter
   let filter = '';
@@ -17,7 +16,7 @@ export async function getEquipment(page, name, room, department) {
   const url = `http://127.0.0.1:8090/api/collections/equipment/records?page=${page}&perPage=15&filter=${encodeURIComponent(filter)}&expand=room,room.department`;
 
   // Fetch the data
-  const res = await fetch(url);
+  const res = await fetch(url, { next: { revalidate: 1 } });
   const data = await res.json();
 
   if (!res.ok) {
