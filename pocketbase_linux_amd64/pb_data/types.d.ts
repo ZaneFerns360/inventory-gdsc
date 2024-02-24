@@ -1,4 +1,4 @@
-// 1705137874
+// 1707578530
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // -------------------------------------------------------------------
@@ -962,6 +962,8 @@ declare namespace $apis {
   let activityLogger:            apis.activityLogger
   let requestInfo:               apis.requestInfo
   let recordAuthResponse:        apis.recordAuthResponse
+  let gzip:                      middleware.gzip
+  let bodyLimit:                 middleware.bodyLimit
   let enrichRecord:              apis.enrichRecord
   let enrichRecords:             apis.enrichRecords
 }
@@ -1642,8 +1644,8 @@ namespace os {
   * than ReadFrom. This is used to permit ReadFrom to call io.Copy
   * without leading to a recursive call to ReadFrom.
   */
- type _subcHris = File
- interface fileWithoutReadFrom extends _subcHris {
+ type _subDeTLW = File
+ interface fileWithoutReadFrom extends _subDeTLW {
  }
  interface fileWithoutReadFrom {
   /**
@@ -2300,8 +2302,8 @@ namespace os {
  /**
   * File represents an open file descriptor.
   */
- type _subGRNjc = file
- interface File extends _subGRNjc {
+ type _subRkTMD = file
+ interface File extends _subRkTMD {
  }
  /**
   * A FileInfo describes a file and is returned by Stat and Lstat.
@@ -2702,21 +2704,22 @@ namespace filepath {
  }
 }
 
-/**
- * Package validation provides configurable and extensible rules for validating data of various types.
- */
-namespace ozzo_validation {
- /**
-  * Error interface represents an validation error
-  */
- interface Error {
-  [key:string]: any;
-  error(): string
-  code(): string
-  message(): string
-  setMessage(_arg0: string): Error
-  params(): _TygojaDict
-  setParams(_arg0: _TygojaDict): Error
+namespace middleware {
+ interface bodyLimit {
+  /**
+   * BodyLimit returns a BodyLimit middleware.
+   * 
+   * BodyLimit middleware sets the maximum allowed size for a request body, if the size exceeds the configured limit, it
+   * sends "413 - Request Entity Too Large" response. The BodyLimit is determined based on both `Content-Length` request
+   * header and actual content read, which makes it super secure.
+   */
+  (limitBytes: number): echo.MiddlewareFunc
+ }
+ interface gzip {
+  /**
+   * Gzip returns a middleware which compresses HTTP response using gzip compression scheme.
+   */
+  (): echo.MiddlewareFunc
  }
 }
 
@@ -3056,14 +3059,14 @@ namespace dbx {
  /**
   * MssqlBuilder is the builder for SQL Server databases.
   */
- type _subYJQUw = BaseBuilder
- interface MssqlBuilder extends _subYJQUw {
+ type _subUQZEt = BaseBuilder
+ interface MssqlBuilder extends _subUQZEt {
  }
  /**
   * MssqlQueryBuilder is the query builder for SQL Server databases.
   */
- type _subRqxtt = BaseQueryBuilder
- interface MssqlQueryBuilder extends _subRqxtt {
+ type _subfSzYL = BaseQueryBuilder
+ interface MssqlQueryBuilder extends _subfSzYL {
  }
  interface newMssqlBuilder {
   /**
@@ -3134,8 +3137,8 @@ namespace dbx {
  /**
   * MysqlBuilder is the builder for MySQL databases.
   */
- type _subINUDw = BaseBuilder
- interface MysqlBuilder extends _subINUDw {
+ type _subTGuvM = BaseBuilder
+ interface MysqlBuilder extends _subTGuvM {
  }
  interface newMysqlBuilder {
   /**
@@ -3210,14 +3213,14 @@ namespace dbx {
  /**
   * OciBuilder is the builder for Oracle databases.
   */
- type _submDLhl = BaseBuilder
- interface OciBuilder extends _submDLhl {
+ type _subXzJXv = BaseBuilder
+ interface OciBuilder extends _subXzJXv {
  }
  /**
   * OciQueryBuilder is the query builder for Oracle databases.
   */
- type _subrdaEh = BaseQueryBuilder
- interface OciQueryBuilder extends _subrdaEh {
+ type _subHtJcZ = BaseQueryBuilder
+ interface OciQueryBuilder extends _subHtJcZ {
  }
  interface newOciBuilder {
   /**
@@ -3280,8 +3283,8 @@ namespace dbx {
  /**
   * PgsqlBuilder is the builder for PostgreSQL databases.
   */
- type _subXOwxq = BaseBuilder
- interface PgsqlBuilder extends _subXOwxq {
+ type _subVHvHG = BaseBuilder
+ interface PgsqlBuilder extends _subVHvHG {
  }
  interface newPgsqlBuilder {
   /**
@@ -3348,8 +3351,8 @@ namespace dbx {
  /**
   * SqliteBuilder is the builder for SQLite databases.
   */
- type _subvXRWA = BaseBuilder
- interface SqliteBuilder extends _subvXRWA {
+ type _subeKjtL = BaseBuilder
+ interface SqliteBuilder extends _subeKjtL {
  }
  interface newSqliteBuilder {
   /**
@@ -3448,8 +3451,8 @@ namespace dbx {
  /**
   * StandardBuilder is the builder that is used by DB for an unknown driver.
   */
- type _subaGcWO = BaseBuilder
- interface StandardBuilder extends _subaGcWO {
+ type _subtcocw = BaseBuilder
+ interface StandardBuilder extends _subtcocw {
  }
  interface newStandardBuilder {
   /**
@@ -3515,8 +3518,8 @@ namespace dbx {
   * DB enhances sql.DB by providing a set of DB-agnostic query building methods.
   * DB allows easier query building and population of data into Go variables.
   */
- type _subMttBP = Builder
- interface DB extends _subMttBP {
+ type _subAVDKa = Builder
+ interface DB extends _subAVDKa {
   /**
    * FieldMapper maps struct fields to DB columns. Defaults to DefaultFieldMapFunc.
    */
@@ -4320,8 +4323,8 @@ namespace dbx {
   * Rows enhances sql.Rows by providing additional data query methods.
   * Rows can be obtained by calling Query.Rows(). It is mainly used to populate data row by row.
   */
- type _subISyad = sql.Rows
- interface Rows extends _subISyad {
+ type _subgTgRl = sql.Rows
+ interface Rows extends _subgTgRl {
  }
  interface Rows {
   /**
@@ -4334,13 +4337,17 @@ namespace dbx {
  }
  interface Rows {
   /**
-   * ScanStruct populates the current row of data into a struct.
-   * The struct must be given as a pointer.
+   * ScanStruct populates the current row of data into a struct (must be a pointer).
    * 
-   * ScanStruct associates struct fields with DB table columns through a field mapping function.
-   * It populates a struct field with the data of its associated column.
-   * Note that only exported struct fields will be populated.
+   * Currently there are 2 supported mechanisms to populate the row of data into the struct.
    * 
+   * 1. If the struct implements the [ColumnValueMapper] interface, only
+   * the  explicitly returned ColumnValueMapper.ColumnValueMap() fields will
+   * be populated (this is usually useful if your struct has dynamic or unexported fields).
+   * 
+   * 2. Otherwise - ScanStruct associates struct fields with DB table
+   * columns through an auto field mapping function.
+   * Note that in this case only exported struct fields will be populated.
    * By default, DefaultFieldMapFunc() is used to map struct fields to table columns.
    * This function separates each word in a field name with a underscore and turns every letter into lower case.
    * For example, "LastName" is mapped to "last_name", "MyID" is mapped to "my_id", and so on.
@@ -4679,8 +4686,8 @@ namespace dbx {
   }): string }
  interface structInfo {
  }
- type _subHwQTk = structInfo
- interface structValue extends _subHwQTk {
+ type _subJnsVc = structInfo
+ interface structValue extends _subJnsVc {
  }
  interface fieldInfo {
  }
@@ -4697,6 +4704,20 @@ namespace dbx {
    * the loaded data.
    */
   postScan(): void
+ }
+ /**
+  * ColumnValueMapper is an optional interface used by ScanStruct to
+  * dynamically specify the fields to populate when scanning the fetched row data.
+  */
+ interface ColumnValueMapper {
+  [key:string]: any;
+  /**
+   * ColumnValueMap returns a map with explicitly defined fields to populate.
+   * The keys of the map represents the db column names.
+   * The values of the map can be any pointer or value that implements sql.Scanner
+   * (including non-exported or even non-struct fields).
+   */
+  columnValueMap(): _TygojaDict
  }
  interface defaultFieldMapFunc {
   /**
@@ -4719,8 +4740,8 @@ namespace dbx {
  /**
   * Tx enhances sql.Tx with additional querying methods.
   */
- type _subfnZWR = Builder
- interface Tx extends _subfnZWR {
+ type _subBMzqq = Builder
+ interface Tx extends _subBMzqq {
  }
  interface Tx {
   /**
@@ -4733,6 +4754,24 @@ namespace dbx {
    * Rollback aborts the transaction.
    */
   rollback(): void
+ }
+}
+
+/**
+ * Package validation provides configurable and extensible rules for validating data of various types.
+ */
+namespace ozzo_validation {
+ /**
+  * Error interface represents an validation error
+  */
+ interface Error {
+  [key:string]: any;
+  error(): string
+  code(): string
+  message(): string
+  setMessage(_arg0: string): Error
+  params(): _TygojaDict
+  setParams(_arg0: _TygojaDict): Error
  }
 }
 
@@ -5005,7 +5044,7 @@ namespace filesystem {
  /**
   * File defines a single file [io.ReadSeekCloser] resource.
   * 
-  * The file could be from a local path, multipipart/formdata header, etc.
+  * The file could be from a local path, multipart/form-data header, etc.
   */
  interface File {
   reader: FileReader
@@ -5083,8 +5122,8 @@ namespace filesystem {
    */
   open(): io.ReadSeekCloser
  }
- type _subRZyID = bytes.Reader
- interface bytesReadSeekCloser extends _subRZyID {
+ type _subcrYmK = bytes.Reader
+ interface bytesReadSeekCloser extends _subcrYmK {
  }
  interface bytesReadSeekCloser {
   /**
@@ -5291,7 +5330,7 @@ namespace mails {
  }
  interface sendRecordChangeEmail {
   /**
-   * SendUserChangeEmail sends a change email confirmation email to the specified user.
+   * SendRecordChangeEmail sends a change email confirmation email to the specified user.
    */
   (app: CoreApp, record: models.Record, newEmail: string): void
  }
@@ -5974,7 +6013,7 @@ namespace forms {
   /**
    * Validate makes the form validatable by implementing [validation.Validatable] interface.
    * 
-   * This method doesn't checks whether auth record with `form.Email` exists (this is done on Submit).
+   * This method doesn't check whether auth record with `form.Email` exists (this is done on Submit).
    */
   validate(): void
  }
@@ -6092,10 +6131,10 @@ namespace forms {
    * 
    * ```
    * 	// mark only only 2 files for removal
-   * 	form.AddFiles("documents", "file1_aw4bdrvws6.txt", "file2_xwbs36bafv.txt")
+   * 	form.RemoveFiles("documents", "file1_aw4bdrvws6.txt", "file2_xwbs36bafv.txt")
    * 
    * 	// mark all "documents" files for removal
-   * 	form.AddFiles("documents")
+   * 	form.RemoveFiles("documents")
    * ```
    */
   removeFiles(key: string, ...toDelete: string[]): void
@@ -6214,8 +6253,8 @@ namespace forms {
  /**
   * SettingsUpsert is a [settings.Settings] upsert (create/update) form.
   */
- type _subNECEZ = settings.Settings
- interface SettingsUpsert extends _subNECEZ {
+ type _subhTSjs = settings.Settings
+ interface SettingsUpsert extends _subhTSjs {
  }
  interface newSettingsUpsert {
   /**
@@ -6305,6 +6344,111 @@ namespace forms {
 }
 
 /**
+ * Package template is a thin wrapper around the standard html/template
+ * and text/template packages that implements a convenient registry to
+ * load and cache templates on the fly concurrently.
+ * 
+ * It was created to assist the JSVM plugin HTML rendering, but could be used in other Go code.
+ * 
+ * Example:
+ * 
+ * ```
+ * 	registry := template.NewRegistry()
+ * 
+ * 	html1, err := registry.LoadFiles(
+ * 		// the files set wil be parsed only once and then cached
+ * 		"layout.html",
+ * 		"content.html",
+ * 	).Render(map[string]any{"name": "John"})
+ * 
+ * 	html2, err := registry.LoadFiles(
+ * 		// reuse the already parsed and cached files set
+ * 		"layout.html",
+ * 		"content.html",
+ * 	).Render(map[string]any{"name": "Jane"})
+ * ```
+ */
+namespace template {
+ interface newRegistry {
+  /**
+   * NewRegistry creates and initializes a new templates registry with
+   * some defaults (eg. global "raw" template function for unescaped HTML).
+   * 
+   * Use the Registry.Load* methods to load templates into the registry.
+   */
+  (): (Registry)
+ }
+ /**
+  * Registry defines a templates registry that is safe to be used by multiple goroutines.
+  * 
+  * Use the Registry.Load* methods to load templates into the registry.
+  */
+ interface Registry {
+ }
+ interface Registry {
+  /**
+   * AddFuncs registers new global template functions.
+   * 
+   * The key of each map entry is the function name that will be used in the templates.
+   * If a function with the map entry name already exists it will be replaced with the new one.
+   * 
+   * The value of each map entry is a function that must have either a
+   * single return value, or two return values of which the second has type error.
+   * 
+   * Example:
+   * 
+   *  r.AddFuncs(map[string]any{
+   * ```
+   *    "toUpper": func(str string) string {
+   *        return strings.ToUppser(str)
+   *    },
+   *    ...
+   * ```
+   *  })
+   */
+  addFuncs(funcs: _TygojaDict): (Registry)
+ }
+ interface Registry {
+  /**
+   * LoadFiles caches (if not already) the specified filenames set as a
+   * single template and returns a ready to use Renderer instance.
+   * 
+   * There must be at least 1 filename specified.
+   */
+  loadFiles(...filenames: string[]): (Renderer)
+ }
+ interface Registry {
+  /**
+   * LoadString caches (if not already) the specified inline string as a
+   * single template and returns a ready to use Renderer instance.
+   */
+  loadString(text: string): (Renderer)
+ }
+ interface Registry {
+  /**
+   * LoadFS caches (if not already) the specified fs and globPatterns
+   * pair as single template and returns a ready to use Renderer instance.
+   * 
+   * There must be at least 1 file matching the provided globPattern(s)
+   * (note that most file names serves as glob patterns matching themselves).
+   */
+  loadFS(fsys: fs.FS, ...globPatterns: string[]): (Renderer)
+ }
+ /**
+  * Renderer defines a single parsed template.
+  */
+ interface Renderer {
+ }
+ interface Renderer {
+  /**
+   * Render executes the template with the specified data as the dot object
+   * and returns the result as plain string.
+   */
+  render(data: any): string
+ }
+}
+
+/**
  * Package apis implements the default PocketBase api services and middlewares.
  */
 namespace apis {
@@ -6390,8 +6534,8 @@ namespace apis {
  interface healthApi {
  }
  interface healthCheckResponse {
-  code: number
   message: string
+  code: number
   data: {
    canBackup: boolean
   }
@@ -6537,6 +6681,11 @@ namespace apis {
   codeChallenge: string
   codeChallengeMethod: string
  }
+ interface oauth2EventMessage {
+  state: string
+  code: string
+  error: string
+ }
  interface recordApi {
  }
  interface requestData {
@@ -6565,7 +6714,7 @@ namespace apis {
    * ```
    *   - expands relations (if defaultExpands and/or ?expand query param is set)
    *   - ensures that the emails of the auth record and its expanded auth relations
-   *     are visibe only for the current logged admin, record owner or record with manage access
+   *     are visible only for the current logged admin, record owner or record with manage access
    * ```
    */
   (c: echo.Context, dao: daos.Dao, record: models.Record, ...defaultExpands: string[]): void
@@ -6576,7 +6725,7 @@ namespace apis {
    * ```
    *   - expands relations (if defaultExpands and/or ?expand query param is set)
    *   - ensures that the emails of the auth records and their expanded auth relations
-   *     are visibe only for the current logged admin, record owner or record with manage access
+   *     are visible only for the current logged admin, record owner or record with manage access
    * ```
    */
   (c: echo.Context, dao: daos.Dao, records: Array<(models.Record | undefined)>, ...defaultExpands: string[]): void
@@ -6637,117 +6786,12 @@ namespace apis {
  }
 }
 
-/**
- * Package template is a thin wrapper around the standard html/template
- * and text/template packages that implements a convenient registry to
- * load and cache templates on the fly concurrently.
- * 
- * It was created to assist the JSVM plugin HTML rendering, but could be used in other Go code.
- * 
- * Example:
- * 
- * ```
- * 	registry := template.NewRegistry()
- * 
- * 	html1, err := registry.LoadFiles(
- * 		// the files set wil be parsed only once and then cached
- * 		"layout.html",
- * 		"content.html",
- * 	).Render(map[string]any{"name": "John"})
- * 
- * 	html2, err := registry.LoadFiles(
- * 		// reuse the already parsed and cached files set
- * 		"layout.html",
- * 		"content.html",
- * 	).Render(map[string]any{"name": "Jane"})
- * ```
- */
-namespace template {
- interface newRegistry {
-  /**
-   * NewRegistry creates and initializes a new templates registry with
-   * some defaults (eg. global "raw" template function for unescaped HTML).
-   * 
-   * Use the Registry.Load* methods to load templates into the registry.
-   */
-  (): (Registry)
- }
- /**
-  * Registry defines a templates registry that is safe to be used by multiple goroutines.
-  * 
-  * Use the Registry.Load* methods to load templates into the registry.
-  */
- interface Registry {
- }
- interface Registry {
-  /**
-   * AddFuncs registers new global template functions.
-   * 
-   * The key of each map entry is the function name that will be used in the templates.
-   * If a function with the map entry name already exists it will be replaced with the new one.
-   * 
-   * The value of each map entry is a function that must have either a
-   * single return value, or two return values of which the second has type error.
-   * 
-   * Example:
-   * 
-   *  r.AddFuncs(map[string]any{
-   * ```
-   *    "toUpper": func(str string) string {
-   *        return strings.ToUppser(str)
-   *    },
-   *    ...
-   * ```
-   *  })
-   */
-  addFuncs(funcs: _TygojaDict): (Registry)
- }
- interface Registry {
-  /**
-   * LoadFiles caches (if not already) the specified filenames set as a
-   * single template and returns a ready to use Renderer instance.
-   * 
-   * There must be at least 1 filename specified.
-   */
-  loadFiles(...filenames: string[]): (Renderer)
- }
- interface Registry {
-  /**
-   * LoadString caches (if not already) the specified inline string as a
-   * single template and returns a ready to use Renderer instance.
-   */
-  loadString(text: string): (Renderer)
- }
- interface Registry {
-  /**
-   * LoadFS caches (if not already) the specified fs and globPatterns
-   * pair as single template and returns a ready to use Renderer instance.
-   * 
-   * There must be at least 1 file matching the provided globPattern(s)
-   * (note that most file names serves as glob patterns matching themselves).
-   */
-  loadFS(fsys: fs.FS, ...globPatterns: string[]): (Renderer)
- }
- /**
-  * Renderer defines a single parsed template.
-  */
- interface Renderer {
- }
- interface Renderer {
-  /**
-   * Render executes the template with the specified data as the dot object
-   * and returns the result as plain string.
-   */
-  render(data: any): string
- }
-}
-
 namespace pocketbase {
  /**
   * appWrapper serves as a private CoreApp instance wrapper.
   */
- type _subgxstY = CoreApp
- interface appWrapper extends _subgxstY {
+ type _subvKoDp = CoreApp
+ interface appWrapper extends _subvKoDp {
  }
  /**
   * PocketBase defines a PocketBase app launcher.
@@ -6755,8 +6799,8 @@ namespace pocketbase {
   * It implements [CoreApp] via embedding and all of the app interface methods
   * could be accessed directly through the instance (eg. PocketBase.DataDir()).
   */
- type _subGGohF = appWrapper
- interface PocketBase extends _subGGohF {
+ type _subdXron = appWrapper
+ interface PocketBase extends _subdXron {
   /**
    * RootCmd is the main console command
    */
@@ -9149,7 +9193,7 @@ namespace auth {
  interface Provider {
   [key:string]: any;
   /**
-   * Scopes returns the context associated with the provider (if any).
+   * Context returns the context associated with the provider (if any).
    */
   context(): context.Context
   /**
@@ -11127,6 +11171,7 @@ namespace settings {
   yandexAuth: AuthProviderConfig
   patreonAuth: AuthProviderConfig
   mailcowAuth: AuthProviderConfig
+  bitbucketAuth: AuthProviderConfig
  }
  interface Settings {
   /**
@@ -11265,6 +11310,1199 @@ namespace schema {
    * into the current Schema instance.
    */
   scan(value: any): void
+ }
+}
+
+/**
+ * Package models implements all PocketBase DB models and DTOs.
+ */
+namespace models {
+ type _subzLkTo = BaseModel
+ interface Admin extends _subzLkTo {
+  avatar: number
+  email: string
+  tokenKey: string
+  passwordHash: string
+  lastResetSentAt: types.DateTime
+ }
+ interface Admin {
+  /**
+   * TableName returns the Admin model SQL table name.
+   */
+  tableName(): string
+ }
+ interface Admin {
+  /**
+   * ValidatePassword validates a plain password against the model's password.
+   */
+  validatePassword(password: string): boolean
+ }
+ interface Admin {
+  /**
+   * SetPassword sets cryptographically secure string to `model.Password`.
+   * 
+   * Additionally this method also resets the LastResetSentAt and the TokenKey fields.
+   */
+  setPassword(password: string): void
+ }
+ interface Admin {
+  /**
+   * RefreshTokenKey generates and sets new random token key.
+   */
+  refreshTokenKey(): void
+ }
+ // @ts-ignore
+ import validation = ozzo_validation
+ type _subOkgYl = BaseModel
+ interface Collection extends _subOkgYl {
+  name: string
+  type: string
+  system: boolean
+  schema: schema.Schema
+  indexes: types.JsonArray<string>
+  /**
+   * rules
+   */
+  listRule?: string
+  viewRule?: string
+  createRule?: string
+  updateRule?: string
+  deleteRule?: string
+  options: types.JsonMap
+ }
+ interface Collection {
+  /**
+   * TableName returns the Collection model SQL table name.
+   */
+  tableName(): string
+ }
+ interface Collection {
+  /**
+   * BaseFilesPath returns the storage dir path used by the collection.
+   */
+  baseFilesPath(): string
+ }
+ interface Collection {
+  /**
+   * IsBase checks if the current collection has "base" type.
+   */
+  isBase(): boolean
+ }
+ interface Collection {
+  /**
+   * IsAuth checks if the current collection has "auth" type.
+   */
+  isAuth(): boolean
+ }
+ interface Collection {
+  /**
+   * IsView checks if the current collection has "view" type.
+   */
+  isView(): boolean
+ }
+ interface Collection {
+  /**
+   * MarshalJSON implements the [json.Marshaler] interface.
+   */
+  marshalJSON(): string|Array<number>
+ }
+ interface Collection {
+  /**
+   * BaseOptions decodes the current collection options and returns them
+   * as new [CollectionBaseOptions] instance.
+   */
+  baseOptions(): CollectionBaseOptions
+ }
+ interface Collection {
+  /**
+   * AuthOptions decodes the current collection options and returns them
+   * as new [CollectionAuthOptions] instance.
+   */
+  authOptions(): CollectionAuthOptions
+ }
+ interface Collection {
+  /**
+   * ViewOptions decodes the current collection options and returns them
+   * as new [CollectionViewOptions] instance.
+   */
+  viewOptions(): CollectionViewOptions
+ }
+ interface Collection {
+  /**
+   * NormalizeOptions updates the current collection options with a
+   * new normalized state based on the collection type.
+   */
+  normalizeOptions(): void
+ }
+ interface Collection {
+  /**
+   * DecodeOptions decodes the current collection options into the
+   * provided "result" (must be a pointer).
+   */
+  decodeOptions(result: any): void
+ }
+ interface Collection {
+  /**
+   * SetOptions normalizes and unmarshals the specified options into m.Options.
+   */
+  setOptions(typedOptions: any): void
+ }
+ type _subBwOeu = BaseModel
+ interface ExternalAuth extends _subBwOeu {
+  collectionId: string
+  recordId: string
+  provider: string
+  providerId: string
+ }
+ interface ExternalAuth {
+  tableName(): string
+ }
+ type _subbCISc = BaseModel
+ interface Record extends _subbCISc {
+ }
+ interface Record {
+  /**
+   * TableName returns the table name associated to the current Record model.
+   */
+  tableName(): string
+ }
+ interface Record {
+  /**
+   * Collection returns the Collection model associated to the current Record model.
+   */
+  collection(): (Collection)
+ }
+ interface Record {
+  /**
+   * OriginalCopy returns a copy of the current record model populated
+   * with its ORIGINAL data state (aka. the initially loaded) and
+   * everything else reset to the defaults.
+   */
+  originalCopy(): (Record)
+ }
+ interface Record {
+  /**
+   * CleanCopy returns a copy of the current record model populated only
+   * with its LATEST data state and everything else reset to the defaults.
+   */
+  cleanCopy(): (Record)
+ }
+ interface Record {
+  /**
+   * Expand returns a shallow copy of the current Record model expand data.
+   */
+  expand(): _TygojaDict
+ }
+ interface Record {
+  /**
+   * SetExpand shallow copies the provided data to the current Record model's expand.
+   */
+  setExpand(expand: _TygojaDict): void
+ }
+ interface Record {
+  /**
+   * MergeExpand merges recursively the provided expand data into
+   * the current model's expand (if any).
+   * 
+   * Note that if an expanded prop with the same key is a slice (old or new expand)
+   * then both old and new records will be merged into a new slice (aka. a :merge: [b,c] => [a,b,c]).
+   * Otherwise the "old" expanded record will be replace with the "new" one (aka. a :merge: aNew => aNew).
+   */
+  mergeExpand(expand: _TygojaDict): void
+ }
+ interface Record {
+  /**
+   * SchemaData returns a shallow copy ONLY of the defined record schema fields data.
+   */
+  schemaData(): _TygojaDict
+ }
+ interface Record {
+  /**
+   * UnknownData returns a shallow copy ONLY of the unknown record fields data,
+   * aka. fields that are neither one of the base and special system ones,
+   * nor defined by the collection schema.
+   */
+  unknownData(): _TygojaDict
+ }
+ interface Record {
+  /**
+   * IgnoreEmailVisibility toggles the flag to ignore the auth record email visibility check.
+   */
+  ignoreEmailVisibility(state: boolean): void
+ }
+ interface Record {
+  /**
+   * WithUnknownData toggles the export/serialization of unknown data fields
+   * (false by default).
+   */
+  withUnknownData(state: boolean): void
+ }
+ interface Record {
+  /**
+   * Set sets the provided key-value data pair for the current Record model.
+   * 
+   * If the record collection has field with name matching the provided "key",
+   * the value will be further normalized according to the field rules.
+   */
+  set(key: string, value: any): void
+ }
+ interface Record {
+  /**
+   * Get returns a normalized single record model data value for "key".
+   */
+  get(key: string): any
+ }
+ interface Record {
+  /**
+   * GetBool returns the data value for "key" as a bool.
+   */
+  getBool(key: string): boolean
+ }
+ interface Record {
+  /**
+   * GetString returns the data value for "key" as a string.
+   */
+  getString(key: string): string
+ }
+ interface Record {
+  /**
+   * GetInt returns the data value for "key" as an int.
+   */
+  getInt(key: string): number
+ }
+ interface Record {
+  /**
+   * GetFloat returns the data value for "key" as a float64.
+   */
+  getFloat(key: string): number
+ }
+ interface Record {
+  /**
+   * GetTime returns the data value for "key" as a [time.Time] instance.
+   */
+  getTime(key: string): time.Time
+ }
+ interface Record {
+  /**
+   * GetDateTime returns the data value for "key" as a DateTime instance.
+   */
+  getDateTime(key: string): types.DateTime
+ }
+ interface Record {
+  /**
+   * GetStringSlice returns the data value for "key" as a slice of unique strings.
+   */
+  getStringSlice(key: string): Array<string>
+ }
+ interface Record {
+  /**
+   * ExpandedOne retrieves a single relation Record from the already
+   * loaded expand data of the current model.
+   * 
+   * If the requested expand relation is multiple, this method returns
+   * only first available Record from the expanded relation.
+   * 
+   * Returns nil if there is no such expand relation loaded.
+   */
+  expandedOne(relField: string): (Record)
+ }
+ interface Record {
+  /**
+   * ExpandedAll retrieves a slice of relation Records from the already
+   * loaded expand data of the current model.
+   * 
+   * If the requested expand relation is single, this method normalizes
+   * the return result and will wrap the single model as a slice.
+   * 
+   * Returns nil slice if there is no such expand relation loaded.
+   */
+  expandedAll(relField: string): Array<(Record | undefined)>
+ }
+ interface Record {
+  /**
+   * Retrieves the "key" json field value and unmarshals it into "result".
+   * 
+   * Example
+   * 
+   * ```
+   * 	result := struct {
+   * 	    FirstName string `json:"first_name"`
+   * 	}{}
+   * 	err := m.UnmarshalJSONField("my_field_name", &result)
+   * ```
+   */
+  unmarshalJSONField(key: string, result: any): void
+ }
+ interface Record {
+  /**
+   * BaseFilesPath returns the storage dir path used by the record.
+   */
+  baseFilesPath(): string
+ }
+ interface Record {
+  /**
+   * FindFileFieldByFile returns the first file type field for which
+   * any of the record's data contains the provided filename.
+   */
+  findFileFieldByFile(filename: string): (schema.SchemaField)
+ }
+ interface Record {
+  /**
+   * Load bulk loads the provided data into the current Record model.
+   */
+  load(data: _TygojaDict): void
+ }
+ interface Record {
+  /**
+   * ColumnValueMap implements [ColumnValueMapper] interface.
+   */
+  columnValueMap(): _TygojaDict
+ }
+ interface Record {
+  /**
+   * PublicExport exports only the record fields that are safe to be public.
+   * 
+   * For auth records, to force the export of the email field you need to set
+   * `m.IgnoreEmailVisibility(true)`.
+   */
+  publicExport(): _TygojaDict
+ }
+ interface Record {
+  /**
+   * MarshalJSON implements the [json.Marshaler] interface.
+   * 
+   * Only the data exported by `PublicExport()` will be serialized.
+   */
+  marshalJSON(): string|Array<number>
+ }
+ interface Record {
+  /**
+   * UnmarshalJSON implements the [json.Unmarshaler] interface.
+   */
+  unmarshalJSON(data: string|Array<number>): void
+ }
+ interface Record {
+  /**
+   * ReplaceModifers returns a new map with applied modifier
+   * values based on the current record and the specified data.
+   * 
+   * The resolved modifier keys will be removed.
+   * 
+   * Multiple modifiers will be applied one after another,
+   * while reusing the previous base key value result (eg. 1; -5; +2 => -2).
+   * 
+   * Example usage:
+   * 
+   * ```
+   * 	 newData := record.ReplaceModifers(data)
+   * 		// record:  {"field": 10}
+   * 		// data:    {"field+": 5}
+   * 		// newData: {"field": 15}
+   * ```
+   */
+  replaceModifers(data: _TygojaDict): _TygojaDict
+ }
+ interface Record {
+  /**
+   * Username returns the "username" auth record data value.
+   */
+  username(): string
+ }
+ interface Record {
+  /**
+   * SetUsername sets the "username" auth record data value.
+   * 
+   * This method doesn't check whether the provided value is a valid username.
+   * 
+   * Returns an error if the record is not from an auth collection.
+   */
+  setUsername(username: string): void
+ }
+ interface Record {
+  /**
+   * Email returns the "email" auth record data value.
+   */
+  email(): string
+ }
+ interface Record {
+  /**
+   * SetEmail sets the "email" auth record data value.
+   * 
+   * This method doesn't check whether the provided value is a valid email.
+   * 
+   * Returns an error if the record is not from an auth collection.
+   */
+  setEmail(email: string): void
+ }
+ interface Record {
+  /**
+   * Verified returns the "emailVisibility" auth record data value.
+   */
+  emailVisibility(): boolean
+ }
+ interface Record {
+  /**
+   * SetEmailVisibility sets the "emailVisibility" auth record data value.
+   * 
+   * Returns an error if the record is not from an auth collection.
+   */
+  setEmailVisibility(visible: boolean): void
+ }
+ interface Record {
+  /**
+   * Verified returns the "verified" auth record data value.
+   */
+  verified(): boolean
+ }
+ interface Record {
+  /**
+   * SetVerified sets the "verified" auth record data value.
+   * 
+   * Returns an error if the record is not from an auth collection.
+   */
+  setVerified(verified: boolean): void
+ }
+ interface Record {
+  /**
+   * TokenKey returns the "tokenKey" auth record data value.
+   */
+  tokenKey(): string
+ }
+ interface Record {
+  /**
+   * SetTokenKey sets the "tokenKey" auth record data value.
+   * 
+   * Returns an error if the record is not from an auth collection.
+   */
+  setTokenKey(key: string): void
+ }
+ interface Record {
+  /**
+   * RefreshTokenKey generates and sets new random auth record "tokenKey".
+   * 
+   * Returns an error if the record is not from an auth collection.
+   */
+  refreshTokenKey(): void
+ }
+ interface Record {
+  /**
+   * LastResetSentAt returns the "lastResentSentAt" auth record data value.
+   */
+  lastResetSentAt(): types.DateTime
+ }
+ interface Record {
+  /**
+   * SetLastResetSentAt sets the "lastResentSentAt" auth record data value.
+   * 
+   * Returns an error if the record is not from an auth collection.
+   */
+  setLastResetSentAt(dateTime: types.DateTime): void
+ }
+ interface Record {
+  /**
+   * LastVerificationSentAt returns the "lastVerificationSentAt" auth record data value.
+   */
+  lastVerificationSentAt(): types.DateTime
+ }
+ interface Record {
+  /**
+   * SetLastVerificationSentAt sets an "lastVerificationSentAt" auth record data value.
+   * 
+   * Returns an error if the record is not from an auth collection.
+   */
+  setLastVerificationSentAt(dateTime: types.DateTime): void
+ }
+ interface Record {
+  /**
+   * PasswordHash returns the "passwordHash" auth record data value.
+   */
+  passwordHash(): string
+ }
+ interface Record {
+  /**
+   * ValidatePassword validates a plain password against the auth record password.
+   * 
+   * Returns false if the password is incorrect or record is not from an auth collection.
+   */
+  validatePassword(password: string): boolean
+ }
+ interface Record {
+  /**
+   * SetPassword sets cryptographically secure string to the auth record "password" field.
+   * This method also resets the "lastResetSentAt" and the "tokenKey" fields.
+   * 
+   * Returns an error if the record is not from an auth collection or
+   * an empty password is provided.
+   */
+  setPassword(password: string): void
+ }
+ /**
+  * RequestInfo defines a HTTP request data struct, usually used
+  * as part of the `@request.*` filter resolver.
+  */
+ interface RequestInfo {
+  query: _TygojaDict
+  data: _TygojaDict
+  headers: _TygojaDict
+  authRecord?: Record
+  admin?: Admin
+  method: string
+ }
+ interface RequestInfo {
+  /**
+   * HasModifierDataKeys loosely checks if the current struct has any modifier Data keys.
+   */
+  hasModifierDataKeys(): boolean
+ }
+}
+
+/**
+ * Package daos handles common PocketBase DB model manipulations.
+ * 
+ * Think of daos as DB repository and service layer in one.
+ */
+namespace daos {
+ interface Dao {
+  /**
+   * AdminQuery returns a new Admin select query.
+   */
+  adminQuery(): (dbx.SelectQuery)
+ }
+ interface Dao {
+  /**
+   * FindAdminById finds the admin with the provided id.
+   */
+  findAdminById(id: string): (models.Admin)
+ }
+ interface Dao {
+  /**
+   * FindAdminByEmail finds the admin with the provided email address.
+   */
+  findAdminByEmail(email: string): (models.Admin)
+ }
+ interface Dao {
+  /**
+   * FindAdminByToken finds the admin associated with the provided JWT.
+   * 
+   * Returns an error if the JWT is invalid or expired.
+   */
+  findAdminByToken(token: string, baseTokenKey: string): (models.Admin)
+ }
+ interface Dao {
+  /**
+   * TotalAdmins returns the number of existing admin records.
+   */
+  totalAdmins(): number
+ }
+ interface Dao {
+  /**
+   * IsAdminEmailUnique checks if the provided email address is not
+   * already in use by other admins.
+   */
+  isAdminEmailUnique(email: string, ...excludeIds: string[]): boolean
+ }
+ interface Dao {
+  /**
+   * DeleteAdmin deletes the provided Admin model.
+   * 
+   * Returns an error if there is only 1 admin.
+   */
+  deleteAdmin(admin: models.Admin): void
+ }
+ interface Dao {
+  /**
+   * SaveAdmin upserts the provided Admin model.
+   */
+  saveAdmin(admin: models.Admin): void
+ }
+ /**
+  * Dao handles various db operations.
+  * 
+  * You can think of Dao as a repository and service layer in one.
+  */
+ interface Dao {
+  /**
+   * MaxLockRetries specifies the default max "database is locked" auto retry attempts.
+   */
+  maxLockRetries: number
+  /**
+   * ModelQueryTimeout is the default max duration of a running ModelQuery().
+   * 
+   * This field has no effect if an explicit query context is already specified.
+   */
+  modelQueryTimeout: time.Duration
+  /**
+   * write hooks
+   */
+  beforeCreateFunc: (eventDao: Dao, m: models.Model, action: () => void) => void
+  afterCreateFunc: (eventDao: Dao, m: models.Model) => void
+  beforeUpdateFunc: (eventDao: Dao, m: models.Model, action: () => void) => void
+  afterUpdateFunc: (eventDao: Dao, m: models.Model) => void
+  beforeDeleteFunc: (eventDao: Dao, m: models.Model, action: () => void) => void
+  afterDeleteFunc: (eventDao: Dao, m: models.Model) => void
+ }
+ interface Dao {
+  /**
+   * DB returns the default dao db builder (*dbx.DB or *dbx.TX).
+   * 
+   * Currently the default db builder is dao.concurrentDB but that may change in the future.
+   */
+  db(): dbx.Builder
+ }
+ interface Dao {
+  /**
+   * ConcurrentDB returns the dao concurrent (aka. multiple open connections)
+   * db builder (*dbx.DB or *dbx.TX).
+   * 
+   * In a transaction the concurrentDB and nonconcurrentDB refer to the same *dbx.TX instance.
+   */
+  concurrentDB(): dbx.Builder
+ }
+ interface Dao {
+  /**
+   * NonconcurrentDB returns the dao nonconcurrent (aka. single open connection)
+   * db builder (*dbx.DB or *dbx.TX).
+   * 
+   * In a transaction the concurrentDB and nonconcurrentDB refer to the same *dbx.TX instance.
+   */
+  nonconcurrentDB(): dbx.Builder
+ }
+ interface Dao {
+  /**
+   * Clone returns a new Dao with the same configuration options as the current one.
+   */
+  clone(): (Dao)
+ }
+ interface Dao {
+  /**
+   * WithoutHooks returns a new Dao with the same configuration options
+   * as the current one, but without create/update/delete hooks.
+   */
+  withoutHooks(): (Dao)
+ }
+ interface Dao {
+  /**
+   * ModelQuery creates a new preconfigured select query with preset
+   * SELECT, FROM and other common fields based on the provided model.
+   */
+  modelQuery(m: models.Model): (dbx.SelectQuery)
+ }
+ interface Dao {
+  /**
+   * FindById finds a single db record with the specified id and
+   * scans the result into m.
+   */
+  findById(m: models.Model, id: string): void
+ }
+ interface Dao {
+  /**
+   * RunInTransaction wraps fn into a transaction.
+   * 
+   * It is safe to nest RunInTransaction calls as long as you use the txDao.
+   */
+  runInTransaction(fn: (txDao: Dao) => void): void
+ }
+ interface Dao {
+  /**
+   * Delete deletes the provided model.
+   */
+  delete(m: models.Model): void
+ }
+ interface Dao {
+  /**
+   * Save persists the provided model in the database.
+   * 
+   * If m.IsNew() is true, the method will perform a create, otherwise an update.
+   * To explicitly mark a model for update you can use m.MarkAsNotNew().
+   */
+  save(m: models.Model): void
+ }
+ interface Dao {
+  /**
+   * CollectionQuery returns a new Collection select query.
+   */
+  collectionQuery(): (dbx.SelectQuery)
+ }
+ interface Dao {
+  /**
+   * FindCollectionsByType finds all collections by the given type.
+   */
+  findCollectionsByType(collectionType: string): Array<(models.Collection | undefined)>
+ }
+ interface Dao {
+  /**
+   * FindCollectionByNameOrId finds a single collection by its name (case insensitive) or id.
+   */
+  findCollectionByNameOrId(nameOrId: string): (models.Collection)
+ }
+ interface Dao {
+  /**
+   * IsCollectionNameUnique checks that there is no existing collection
+   * with the provided name (case insensitive!).
+   * 
+   * Note: case insensitive check because the name is used also as a table name for the records.
+   */
+  isCollectionNameUnique(name: string, ...excludeIds: string[]): boolean
+ }
+ interface Dao {
+  /**
+   * FindCollectionReferences returns information for all
+   * relation schema fields referencing the provided collection.
+   * 
+   * If the provided collection has reference to itself then it will be
+   * also included in the result. To exclude it, pass the collection id
+   * as the excludeId argument.
+   */
+  findCollectionReferences(collection: models.Collection, ...excludeIds: string[]): _TygojaDict
+ }
+ interface Dao {
+  /**
+   * DeleteCollection deletes the provided Collection model.
+   * This method automatically deletes the related collection records table.
+   * 
+   * NB! The collection cannot be deleted, if:
+   * - is system collection (aka. collection.System is true)
+   * - is referenced as part of a relation field in another collection
+   */
+  deleteCollection(collection: models.Collection): void
+ }
+ interface Dao {
+  /**
+   * SaveCollection persists the provided Collection model and updates
+   * its related records table schema.
+   * 
+   * If collection.IsNew() is true, the method will perform a create, otherwise an update.
+   * To explicitly mark a collection for update you can use collection.MarkAsNotNew().
+   */
+  saveCollection(collection: models.Collection): void
+ }
+ interface Dao {
+  /**
+   * ImportCollections imports the provided collections list within a single transaction.
+   * 
+   * NB1! If deleteMissing is set, all local collections and schema fields, that are not present
+   * in the imported configuration, WILL BE DELETED (including their related records data).
+   * 
+   * NB2! This method doesn't perform validations on the imported collections data!
+   * If you need validations, use [forms.CollectionsImport].
+   */
+  importCollections(importedCollections: Array<(models.Collection | undefined)>, deleteMissing: boolean, afterSync: (txDao: Dao, mappedImported: _TygojaDict, mappedExisting: _TygojaDict) => void): void
+ }
+ interface Dao {
+  /**
+   * ExternalAuthQuery returns a new ExternalAuth select query.
+   */
+  externalAuthQuery(): (dbx.SelectQuery)
+ }
+ interface Dao {
+  /**
+   * FindAllExternalAuthsByRecord returns all ExternalAuth models
+   * linked to the provided auth record.
+   */
+  findAllExternalAuthsByRecord(authRecord: models.Record): Array<(models.ExternalAuth | undefined)>
+ }
+ interface Dao {
+  /**
+   * FindExternalAuthByRecordAndProvider returns the first available
+   * ExternalAuth model for the specified record data and provider.
+   */
+  findExternalAuthByRecordAndProvider(authRecord: models.Record, provider: string): (models.ExternalAuth)
+ }
+ interface Dao {
+  /**
+   * FindFirstExternalAuthByExpr returns the first available
+   * ExternalAuth model that satisfies the non-nil expression.
+   */
+  findFirstExternalAuthByExpr(expr: dbx.Expression): (models.ExternalAuth)
+ }
+ interface Dao {
+  /**
+   * SaveExternalAuth upserts the provided ExternalAuth model.
+   */
+  saveExternalAuth(model: models.ExternalAuth): void
+ }
+ interface Dao {
+  /**
+   * DeleteExternalAuth deletes the provided ExternalAuth model.
+   */
+  deleteExternalAuth(model: models.ExternalAuth): void
+ }
+ interface Dao {
+  /**
+   * LogQuery returns a new Log select query.
+   */
+  logQuery(): (dbx.SelectQuery)
+ }
+ interface Dao {
+  /**
+   * FindLogById finds a single Log entry by its id.
+   */
+  findLogById(id: string): (models.Log)
+ }
+ interface Dao {
+  /**
+   * LogsStats returns hourly grouped requests logs statistics.
+   */
+  logsStats(expr: dbx.Expression): Array<(LogsStatsItem | undefined)>
+ }
+ interface Dao {
+  /**
+   * DeleteOldLogs delete all requests that are created before createdBefore.
+   */
+  deleteOldLogs(createdBefore: time.Time): void
+ }
+ interface Dao {
+  /**
+   * SaveLog upserts the provided Log model.
+   */
+  saveLog(log: models.Log): void
+ }
+ interface Dao {
+  /**
+   * ParamQuery returns a new Param select query.
+   */
+  paramQuery(): (dbx.SelectQuery)
+ }
+ interface Dao {
+  /**
+   * FindParamByKey finds the first Param model with the provided key.
+   */
+  findParamByKey(key: string): (models.Param)
+ }
+ interface Dao {
+  /**
+   * SaveParam creates or updates a Param model by the provided key-value pair.
+   * The value argument will be encoded as json string.
+   * 
+   * If `optEncryptionKey` is provided it will encrypt the value before storing it.
+   */
+  saveParam(key: string, value: any, ...optEncryptionKey: string[]): void
+ }
+ interface Dao {
+  /**
+   * DeleteParam deletes the provided Param model.
+   */
+  deleteParam(param: models.Param): void
+ }
+ interface Dao {
+  /**
+   * RecordQuery returns a new Record select query from a collection model, id or name.
+   * 
+   * In case a collection id or name is provided and that collection doesn't
+   * actually exists, the generated query will be created with a cancelled context
+   * and will fail once an executor (Row(), One(), All(), etc.) is called.
+   */
+  recordQuery(collectionModelOrIdentifier: any): (dbx.SelectQuery)
+ }
+ interface Dao {
+  /**
+   * FindRecordById finds the Record model by its id.
+   */
+  findRecordById(collectionNameOrId: string, recordId: string, ...optFilters: ((q: dbx.SelectQuery) => void)[]): (models.Record)
+ }
+ interface Dao {
+  /**
+   * FindRecordsByIds finds all Record models by the provided ids.
+   * If no records are found, returns an empty slice.
+   */
+  findRecordsByIds(collectionNameOrId: string, recordIds: Array<string>, ...optFilters: ((q: dbx.SelectQuery) => void)[]): Array<(models.Record | undefined)>
+ }
+ interface Dao {
+  /**
+   * @todo consider to depricate as it may be easier to just use dao.RecordQuery()
+   * 
+   * FindRecordsByExpr finds all records by the specified db expression.
+   * 
+   * Returns all collection records if no expressions are provided.
+   * 
+   * Returns an empty slice if no records are found.
+   * 
+   * Example:
+   * 
+   * ```
+   * 	expr1 := dbx.HashExp{"email": "test@example.com"}
+   * 	expr2 := dbx.NewExp("LOWER(username) = {:username}", dbx.Params{"username": "test"})
+   * 	dao.FindRecordsByExpr("example", expr1, expr2)
+   * ```
+   */
+  findRecordsByExpr(collectionNameOrId: string, ...exprs: dbx.Expression[]): Array<(models.Record | undefined)>
+ }
+ interface Dao {
+  /**
+   * FindFirstRecordByData returns the first found record matching
+   * the provided key-value pair.
+   */
+  findFirstRecordByData(collectionNameOrId: string, key: string, value: any): (models.Record)
+ }
+ interface Dao {
+  /**
+   * FindRecordsByFilter returns limit number of records matching the
+   * provided string filter.
+   * 
+   * NB! Use the last "params" argument to bind untrusted user variables!
+   * 
+   * The sort argument is optional and can be empty string OR the same format
+   * used in the web APIs, eg. "-created,title".
+   * 
+   * If the limit argument is <= 0, no limit is applied to the query and
+   * all matching records are returned.
+   * 
+   * Example:
+   * 
+   * ```
+   * 	dao.FindRecordsByFilter(
+   * 		"posts",
+   * 		"title ~ {:title} && visible = {:visible}",
+   * 		"-created",
+   * 		10,
+   * 		0,
+   * 		dbx.Params{"title": "lorem ipsum", "visible": true}
+   * 	)
+   * ```
+   */
+  findRecordsByFilter(collectionNameOrId: string, filter: string, sort: string, limit: number, offset: number, ...params: dbx.Params[]): Array<(models.Record | undefined)>
+ }
+ interface Dao {
+  /**
+   * FindFirstRecordByFilter returns the first available record matching the provided filter.
+   * 
+   * NB! Use the last params argument to bind untrusted user variables!
+   * 
+   * Example:
+   * 
+   * ```
+   * 	dao.FindFirstRecordByFilter("posts", "slug={:slug} && status='public'", dbx.Params{"slug": "test"})
+   * ```
+   */
+  findFirstRecordByFilter(collectionNameOrId: string, filter: string, ...params: dbx.Params[]): (models.Record)
+ }
+ interface Dao {
+  /**
+   * IsRecordValueUnique checks if the provided key-value pair is a unique Record value.
+   * 
+   * For correctness, if the collection is "auth" and the key is "username",
+   * the unique check will be case insensitive.
+   * 
+   * NB! Array values (eg. from multiple select fields) are matched
+   * as a serialized json strings (eg. `["a","b"]`), so the value uniqueness
+   * depends on the elements order. Or in other words the following values
+   * are considered different: `[]string{"a","b"}` and `[]string{"b","a"}`
+   */
+  isRecordValueUnique(collectionNameOrId: string, key: string, value: any, ...excludeIds: string[]): boolean
+ }
+ interface Dao {
+  /**
+   * FindAuthRecordByToken finds the auth record associated with the provided JWT.
+   * 
+   * Returns an error if the JWT is invalid, expired or not associated to an auth collection record.
+   */
+  findAuthRecordByToken(token: string, baseTokenKey: string): (models.Record)
+ }
+ interface Dao {
+  /**
+   * FindAuthRecordByEmail finds the auth record associated with the provided email.
+   * 
+   * Returns an error if it is not an auth collection or the record is not found.
+   */
+  findAuthRecordByEmail(collectionNameOrId: string, email: string): (models.Record)
+ }
+ interface Dao {
+  /**
+   * FindAuthRecordByUsername finds the auth record associated with the provided username (case insensitive).
+   * 
+   * Returns an error if it is not an auth collection or the record is not found.
+   */
+  findAuthRecordByUsername(collectionNameOrId: string, username: string): (models.Record)
+ }
+ interface Dao {
+  /**
+   * SuggestUniqueAuthRecordUsername checks if the provided username is unique
+   * and return a new "unique" username with appended random numeric part
+   * (eg. "existingName" -> "existingName583").
+   * 
+   * The same username will be returned if the provided string is already unique.
+   */
+  suggestUniqueAuthRecordUsername(collectionNameOrId: string, baseUsername: string, ...excludeIds: string[]): string
+ }
+ interface Dao {
+  /**
+   * CanAccessRecord checks if a record is allowed to be accessed by the
+   * specified requestInfo and accessRule.
+   * 
+   * Rule and db checks are ignored in case requestInfo.Admin is set.
+   * 
+   * The returned error indicate that something unexpected happened during
+   * the check (eg. invalid rule or db error).
+   * 
+   * The method always return false on invalid access rule or db error.
+   * 
+   * Example:
+   * 
+   * ```
+   * 	requestInfo := apis.RequestInfo(c /* echo.Context *\/)
+   * 	record, _ := dao.FindRecordById("example", "RECORD_ID")
+   * 	rule := types.Pointer("@request.auth.id != '' || status = 'public'")
+   * 	// ... or use one of the record collection's rule, eg. record.Collection().ViewRule
+   * 
+   * 	if ok, _ := dao.CanAccessRecord(record, requestInfo, rule); ok { ... }
+   * ```
+   */
+  canAccessRecord(record: models.Record, requestInfo: models.RequestInfo, accessRule: string): boolean
+ }
+ interface Dao {
+  /**
+   * SaveRecord persists the provided Record model in the database.
+   * 
+   * If record.IsNew() is true, the method will perform a create, otherwise an update.
+   * To explicitly mark a record for update you can use record.MarkAsNotNew().
+   */
+  saveRecord(record: models.Record): void
+ }
+ interface Dao {
+  /**
+   * DeleteRecord deletes the provided Record model.
+   * 
+   * This method will also cascade the delete operation to all linked
+   * relational records (delete or unset, depending on the rel settings).
+   * 
+   * The delete operation may fail if the record is part of a required
+   * reference in another record (aka. cannot be deleted or unset).
+   */
+  deleteRecord(record: models.Record): void
+ }
+ interface Dao {
+  /**
+   * ExpandRecord expands the relations of a single Record model.
+   * 
+   * If optFetchFunc is not set, then a default function will be used
+   * that returns all relation records.
+   * 
+   * Returns a map with the failed expand parameters and their errors.
+   */
+  expandRecord(record: models.Record, expands: Array<string>, optFetchFunc: ExpandFetchFunc): _TygojaDict
+ }
+ interface Dao {
+  /**
+   * ExpandRecords expands the relations of the provided Record models list.
+   * 
+   * If optFetchFunc is not set, then a default function will be used
+   * that returns all relation records.
+   * 
+   * Returns a map with the failed expand parameters and their errors.
+   */
+  expandRecords(records: Array<(models.Record | undefined)>, expands: Array<string>, optFetchFunc: ExpandFetchFunc): _TygojaDict
+ }
+ // @ts-ignore
+ import validation = ozzo_validation
+ interface Dao {
+  /**
+   * SyncRecordTableSchema compares the two provided collections
+   * and applies the necessary related record table changes.
+   * 
+   * If `oldCollection` is null, then only `newCollection` is used to create the record table.
+   */
+  syncRecordTableSchema(newCollection: models.Collection, oldCollection: models.Collection): void
+ }
+ interface Dao {
+  /**
+   * FindSettings returns and decode the serialized app settings param value.
+   * 
+   * The method will first try to decode the param value without decryption.
+   * If it fails and optEncryptionKey is set, it will try again by first
+   * decrypting the value and then decode it again.
+   * 
+   * Returns an error if it fails to decode the stored serialized param value.
+   */
+  findSettings(...optEncryptionKey: string[]): (settings.Settings)
+ }
+ interface Dao {
+  /**
+   * SaveSettings persists the specified settings configuration.
+   * 
+   * If optEncryptionKey is set, then the stored serialized value will be encrypted with it.
+   */
+  saveSettings(newSettings: settings.Settings, ...optEncryptionKey: string[]): void
+ }
+ interface Dao {
+  /**
+   * HasTable checks if a table (or view) with the provided name exists (case insensitive).
+   */
+  hasTable(tableName: string): boolean
+ }
+ interface Dao {
+  /**
+   * TableColumns returns all column names of a single table by its name.
+   */
+  tableColumns(tableName: string): Array<string>
+ }
+ interface Dao {
+  /**
+   * TableInfo returns the `table_info` pragma result for the specified table.
+   */
+  tableInfo(tableName: string): Array<(models.TableInfoRow | undefined)>
+ }
+ interface Dao {
+  /**
+   * TableIndexes returns a name grouped map with all non empty index of the specified table.
+   * 
+   * Note: This method doesn't return an error on nonexisting table.
+   */
+  tableIndexes(tableName: string): _TygojaDict
+ }
+ interface Dao {
+  /**
+   * DeleteTable drops the specified table.
+   * 
+   * This method is a no-op if a table with the provided name doesn't exist.
+   * 
+   * Be aware that this method is vulnerable to SQL injection and the
+   * "tableName" argument must come only from trusted input!
+   */
+  deleteTable(tableName: string): void
+ }
+ interface Dao {
+  /**
+   * Vacuum executes VACUUM on the current dao.DB() instance in order to
+   * reclaim unused db disk space.
+   */
+  vacuum(): void
+ }
+ interface Dao {
+  /**
+   * DeleteView drops the specified view name.
+   * 
+   * This method is a no-op if a view with the provided name doesn't exist.
+   * 
+   * Be aware that this method is vulnerable to SQL injection and the
+   * "name" argument must come only from trusted input!
+   */
+  deleteView(name: string): void
+ }
+ interface Dao {
+  /**
+   * SaveView creates (or updates already existing) persistent SQL view.
+   * 
+   * Be aware that this method is vulnerable to SQL injection and the
+   * "selectQuery" argument must come only from trusted input!
+   */
+  saveView(name: string, selectQuery: string): void
+ }
+ interface Dao {
+  /**
+   * CreateViewSchema creates a new view schema from the provided select query.
+   * 
+   * There are some caveats:
+   * - The select query must have an "id" column.
+   * - Wildcard ("*") columns are not supported to avoid accidentally leaking sensitive data.
+   */
+  createViewSchema(selectQuery: string): schema.Schema
+ }
+ interface Dao {
+  /**
+   * FindRecordByViewFile returns the original models.Record of the
+   * provided view collection file.
+   */
+  findRecordByViewFile(viewCollectionNameOrId: string, fileFieldName: string, filename: string): (models.Record)
  }
 }
 
@@ -12333,1196 +13571,33 @@ namespace cobra {
  }
 }
 
-/**
- * Package models implements all PocketBase DB models and DTOs.
- */
-namespace models {
- type _subhbQRB = BaseModel
- interface Admin extends _subhbQRB {
-  avatar: number
-  email: string
-  tokenKey: string
-  passwordHash: string
-  lastResetSentAt: types.DateTime
- }
- interface Admin {
-  /**
-   * TableName returns the Admin model SQL table name.
-   */
-  tableName(): string
- }
- interface Admin {
-  /**
-   * ValidatePassword validates a plain password against the model's password.
-   */
-  validatePassword(password: string): boolean
- }
- interface Admin {
-  /**
-   * SetPassword sets cryptographically secure string to `model.Password`.
-   * 
-   * Additionally this method also resets the LastResetSentAt and the TokenKey fields.
-   */
-  setPassword(password: string): void
- }
- interface Admin {
-  /**
-   * RefreshTokenKey generates and sets new random token key.
-   */
-  refreshTokenKey(): void
- }
- // @ts-ignore
- import validation = ozzo_validation
- type _subQNzgP = BaseModel
- interface Collection extends _subQNzgP {
-  name: string
-  type: string
-  system: boolean
-  schema: schema.Schema
-  indexes: types.JsonArray<string>
-  /**
-   * rules
-   */
-  listRule?: string
-  viewRule?: string
-  createRule?: string
-  updateRule?: string
-  deleteRule?: string
-  options: types.JsonMap
- }
- interface Collection {
-  /**
-   * TableName returns the Collection model SQL table name.
-   */
-  tableName(): string
- }
- interface Collection {
-  /**
-   * BaseFilesPath returns the storage dir path used by the collection.
-   */
-  baseFilesPath(): string
- }
- interface Collection {
-  /**
-   * IsBase checks if the current collection has "base" type.
-   */
-  isBase(): boolean
- }
- interface Collection {
-  /**
-   * IsAuth checks if the current collection has "auth" type.
-   */
-  isAuth(): boolean
- }
- interface Collection {
-  /**
-   * IsView checks if the current collection has "view" type.
-   */
-  isView(): boolean
- }
- interface Collection {
-  /**
-   * MarshalJSON implements the [json.Marshaler] interface.
-   */
-  marshalJSON(): string|Array<number>
- }
- interface Collection {
-  /**
-   * BaseOptions decodes the current collection options and returns them
-   * as new [CollectionBaseOptions] instance.
-   */
-  baseOptions(): CollectionBaseOptions
- }
- interface Collection {
-  /**
-   * AuthOptions decodes the current collection options and returns them
-   * as new [CollectionAuthOptions] instance.
-   */
-  authOptions(): CollectionAuthOptions
- }
- interface Collection {
-  /**
-   * ViewOptions decodes the current collection options and returns them
-   * as new [CollectionViewOptions] instance.
-   */
-  viewOptions(): CollectionViewOptions
- }
- interface Collection {
-  /**
-   * NormalizeOptions updates the current collection options with a
-   * new normalized state based on the collection type.
-   */
-  normalizeOptions(): void
- }
- interface Collection {
-  /**
-   * DecodeOptions decodes the current collection options into the
-   * provided "result" (must be a pointer).
-   */
-  decodeOptions(result: any): void
- }
- interface Collection {
-  /**
-   * SetOptions normalizes and unmarshals the specified options into m.Options.
-   */
-  setOptions(typedOptions: any): void
- }
- type _subAEKhu = BaseModel
- interface ExternalAuth extends _subAEKhu {
-  collectionId: string
-  recordId: string
-  provider: string
-  providerId: string
- }
- interface ExternalAuth {
-  tableName(): string
- }
- type _subYGZYv = BaseModel
- interface Record extends _subYGZYv {
- }
- interface Record {
-  /**
-   * TableName returns the table name associated to the current Record model.
-   */
-  tableName(): string
- }
- interface Record {
-  /**
-   * Collection returns the Collection model associated to the current Record model.
-   */
-  collection(): (Collection)
- }
- interface Record {
-  /**
-   * OriginalCopy returns a copy of the current record model populated
-   * with its ORIGINAL data state (aka. the initially loaded) and
-   * everything else reset to the defaults.
-   */
-  originalCopy(): (Record)
- }
- interface Record {
-  /**
-   * CleanCopy returns a copy of the current record model populated only
-   * with its LATEST data state and everything else reset to the defaults.
-   */
-  cleanCopy(): (Record)
- }
- interface Record {
-  /**
-   * Expand returns a shallow copy of the current Record model expand data.
-   */
-  expand(): _TygojaDict
- }
- interface Record {
-  /**
-   * SetExpand shallow copies the provided data to the current Record model's expand.
-   */
-  setExpand(expand: _TygojaDict): void
- }
- interface Record {
-  /**
-   * MergeExpand merges recursively the provided expand data into
-   * the current model's expand (if any).
-   * 
-   * Note that if an expanded prop with the same key is a slice (old or new expand)
-   * then both old and new records will be merged into a new slice (aka. a :merge: [b,c] => [a,b,c]).
-   * Otherwise the "old" expanded record will be replace with the "new" one (aka. a :merge: aNew => aNew).
-   */
-  mergeExpand(expand: _TygojaDict): void
- }
- interface Record {
-  /**
-   * SchemaData returns a shallow copy ONLY of the defined record schema fields data.
-   */
-  schemaData(): _TygojaDict
- }
- interface Record {
-  /**
-   * UnknownData returns a shallow copy ONLY of the unknown record fields data,
-   * aka. fields that are neither one of the base and special system ones,
-   * nor defined by the collection schema.
-   */
-  unknownData(): _TygojaDict
- }
- interface Record {
-  /**
-   * IgnoreEmailVisibility toggles the flag to ignore the auth record email visibility check.
-   */
-  ignoreEmailVisibility(state: boolean): void
- }
- interface Record {
-  /**
-   * WithUnknownData toggles the export/serialization of unknown data fields
-   * (false by default).
-   */
-  withUnknownData(state: boolean): void
- }
- interface Record {
-  /**
-   * Set sets the provided key-value data pair for the current Record model.
-   * 
-   * If the record collection has field with name matching the provided "key",
-   * the value will be further normalized according to the field rules.
-   */
-  set(key: string, value: any): void
- }
- interface Record {
-  /**
-   * Get returns a normalized single record model data value for "key".
-   */
-  get(key: string): any
- }
- interface Record {
-  /**
-   * GetBool returns the data value for "key" as a bool.
-   */
-  getBool(key: string): boolean
- }
- interface Record {
-  /**
-   * GetString returns the data value for "key" as a string.
-   */
-  getString(key: string): string
- }
- interface Record {
-  /**
-   * GetInt returns the data value for "key" as an int.
-   */
-  getInt(key: string): number
- }
- interface Record {
-  /**
-   * GetFloat returns the data value for "key" as a float64.
-   */
-  getFloat(key: string): number
- }
- interface Record {
-  /**
-   * GetTime returns the data value for "key" as a [time.Time] instance.
-   */
-  getTime(key: string): time.Time
- }
- interface Record {
-  /**
-   * GetDateTime returns the data value for "key" as a DateTime instance.
-   */
-  getDateTime(key: string): types.DateTime
- }
- interface Record {
-  /**
-   * GetStringSlice returns the data value for "key" as a slice of unique strings.
-   */
-  getStringSlice(key: string): Array<string>
- }
- interface Record {
-  /**
-   * ExpandedOne retrieves a single relation Record from the already
-   * loaded expand data of the current model.
-   * 
-   * If the requested expand relation is multiple, this method returns
-   * only first available Record from the expanded relation.
-   * 
-   * Returns nil if there is no such expand relation loaded.
-   */
-  expandedOne(relField: string): (Record)
- }
- interface Record {
-  /**
-   * ExpandedAll retrieves a slice of relation Records from the already
-   * loaded expand data of the current model.
-   * 
-   * If the requested expand relation is single, this method normalizes
-   * the return result and will wrap the single model as a slice.
-   * 
-   * Returns nil slice if there is no such expand relation loaded.
-   */
-  expandedAll(relField: string): Array<(Record | undefined)>
- }
- interface Record {
-  /**
-   * Retrieves the "key" json field value and unmarshals it into "result".
-   * 
-   * Example
-   * 
-   * ```
-   * 	result := struct {
-   * 	    FirstName string `json:"first_name"`
-   * 	}{}
-   * 	err := m.UnmarshalJSONField("my_field_name", &result)
-   * ```
-   */
-  unmarshalJSONField(key: string, result: any): void
- }
- interface Record {
-  /**
-   * BaseFilesPath returns the storage dir path used by the record.
-   */
-  baseFilesPath(): string
- }
- interface Record {
-  /**
-   * FindFileFieldByFile returns the first file type field for which
-   * any of the record's data contains the provided filename.
-   */
-  findFileFieldByFile(filename: string): (schema.SchemaField)
- }
- interface Record {
-  /**
-   * Load bulk loads the provided data into the current Record model.
-   */
-  load(data: _TygojaDict): void
- }
- interface Record {
-  /**
-   * ColumnValueMap implements [ColumnValueMapper] interface.
-   */
-  columnValueMap(): _TygojaDict
- }
- interface Record {
-  /**
-   * PublicExport exports only the record fields that are safe to be public.
-   * 
-   * For auth records, to force the export of the email field you need to set
-   * `m.IgnoreEmailVisibility(true)`.
-   */
-  publicExport(): _TygojaDict
- }
- interface Record {
-  /**
-   * MarshalJSON implements the [json.Marshaler] interface.
-   * 
-   * Only the data exported by `PublicExport()` will be serialized.
-   */
-  marshalJSON(): string|Array<number>
- }
- interface Record {
-  /**
-   * UnmarshalJSON implements the [json.Unmarshaler] interface.
-   */
-  unmarshalJSON(data: string|Array<number>): void
- }
- interface Record {
-  /**
-   * ReplaceModifers returns a new map with applied modifier
-   * values based on the current record and the specified data.
-   * 
-   * The resolved modifier keys will be removed.
-   * 
-   * Multiple modifiers will be applied one after another,
-   * while reusing the previous base key value result (eg. 1; -5; +2 => -2).
-   * 
-   * Example usage:
-   * 
-   * ```
-   * 	 newData := record.ReplaceModifers(data)
-   * 		// record:  {"field": 10}
-   * 		// data:    {"field+": 5}
-   * 		// newData: {"field": 15}
-   * ```
-   */
-  replaceModifers(data: _TygojaDict): _TygojaDict
- }
- interface Record {
-  /**
-   * Username returns the "username" auth record data value.
-   */
-  username(): string
- }
- interface Record {
-  /**
-   * SetUsername sets the "username" auth record data value.
-   * 
-   * This method doesn't check whether the provided value is a valid username.
-   * 
-   * Returns an error if the record is not from an auth collection.
-   */
-  setUsername(username: string): void
- }
- interface Record {
-  /**
-   * Email returns the "email" auth record data value.
-   */
-  email(): string
- }
- interface Record {
-  /**
-   * SetEmail sets the "email" auth record data value.
-   * 
-   * This method doesn't check whether the provided value is a valid email.
-   * 
-   * Returns an error if the record is not from an auth collection.
-   */
-  setEmail(email: string): void
- }
- interface Record {
-  /**
-   * Verified returns the "emailVisibility" auth record data value.
-   */
-  emailVisibility(): boolean
- }
- interface Record {
-  /**
-   * SetEmailVisibility sets the "emailVisibility" auth record data value.
-   * 
-   * Returns an error if the record is not from an auth collection.
-   */
-  setEmailVisibility(visible: boolean): void
- }
- interface Record {
-  /**
-   * Verified returns the "verified" auth record data value.
-   */
-  verified(): boolean
- }
- interface Record {
-  /**
-   * SetVerified sets the "verified" auth record data value.
-   * 
-   * Returns an error if the record is not from an auth collection.
-   */
-  setVerified(verified: boolean): void
- }
- interface Record {
-  /**
-   * TokenKey returns the "tokenKey" auth record data value.
-   */
-  tokenKey(): string
- }
- interface Record {
-  /**
-   * SetTokenKey sets the "tokenKey" auth record data value.
-   * 
-   * Returns an error if the record is not from an auth collection.
-   */
-  setTokenKey(key: string): void
- }
- interface Record {
-  /**
-   * RefreshTokenKey generates and sets new random auth record "tokenKey".
-   * 
-   * Returns an error if the record is not from an auth collection.
-   */
-  refreshTokenKey(): void
- }
- interface Record {
-  /**
-   * LastResetSentAt returns the "lastResentSentAt" auth record data value.
-   */
-  lastResetSentAt(): types.DateTime
- }
- interface Record {
-  /**
-   * SetLastResetSentAt sets the "lastResentSentAt" auth record data value.
-   * 
-   * Returns an error if the record is not from an auth collection.
-   */
-  setLastResetSentAt(dateTime: types.DateTime): void
- }
- interface Record {
-  /**
-   * LastVerificationSentAt returns the "lastVerificationSentAt" auth record data value.
-   */
-  lastVerificationSentAt(): types.DateTime
- }
- interface Record {
-  /**
-   * SetLastVerificationSentAt sets an "lastVerificationSentAt" auth record data value.
-   * 
-   * Returns an error if the record is not from an auth collection.
-   */
-  setLastVerificationSentAt(dateTime: types.DateTime): void
- }
- interface Record {
-  /**
-   * PasswordHash returns the "passwordHash" auth record data value.
-   */
-  passwordHash(): string
- }
- interface Record {
-  /**
-   * ValidatePassword validates a plain password against the auth record password.
-   * 
-   * Returns false if the password is incorrect or record is not from an auth collection.
-   */
-  validatePassword(password: string): boolean
- }
- interface Record {
-  /**
-   * SetPassword sets cryptographically secure string to the auth record "password" field.
-   * This method also resets the "lastResetSentAt" and the "tokenKey" fields.
-   * 
-   * Returns an error if the record is not from an auth collection or
-   * an empty password is provided.
-   */
-  setPassword(password: string): void
- }
+namespace migrate {
  /**
-  * RequestInfo defines a HTTP request data struct, usually used
-  * as part of the `@request.*` filter resolver.
+  * MigrationsList defines a list with migration definitions
   */
- interface RequestInfo {
-  query: _TygojaDict
-  data: _TygojaDict
-  headers: _TygojaDict
-  authRecord?: Record
-  admin?: Admin
-  method: string
+ interface MigrationsList {
  }
- interface RequestInfo {
+ interface MigrationsList {
   /**
-   * HasModifierDataKeys loosely checks if the current struct has any modifier Data keys.
+   * Item returns a single migration from the list by its index.
    */
-  hasModifierDataKeys(): boolean
+  item(index: number): (Migration)
  }
-}
-
-/**
- * Package daos handles common PocketBase DB model manipulations.
- * 
- * Think of daos as DB repository and service layer in one.
- */
-namespace daos {
- interface Dao {
+ interface MigrationsList {
   /**
-   * AdminQuery returns a new Admin select query.
+   * Items returns the internal migrations list slice.
    */
-  adminQuery(): (dbx.SelectQuery)
+  items(): Array<(Migration | undefined)>
  }
- interface Dao {
+ interface MigrationsList {
   /**
-   * FindAdminById finds the admin with the provided id.
-   */
-  findAdminById(id: string): (models.Admin)
- }
- interface Dao {
-  /**
-   * FindAdminByEmail finds the admin with the provided email address.
-   */
-  findAdminByEmail(email: string): (models.Admin)
- }
- interface Dao {
-  /**
-   * FindAdminByToken finds the admin associated with the provided JWT.
+   * Register adds new migration definition to the list.
    * 
-   * Returns an error if the JWT is invalid or expired.
-   */
-  findAdminByToken(token: string, baseTokenKey: string): (models.Admin)
- }
- interface Dao {
-  /**
-   * TotalAdmins returns the number of existing admin records.
-   */
-  totalAdmins(): number
- }
- interface Dao {
-  /**
-   * IsAdminEmailUnique checks if the provided email address is not
-   * already in use by other admins.
-   */
-  isAdminEmailUnique(email: string, ...excludeIds: string[]): boolean
- }
- interface Dao {
-  /**
-   * DeleteAdmin deletes the provided Admin model.
+   * If `optFilename` is not provided, it will try to get the name from its .go file.
    * 
-   * Returns an error if there is only 1 admin.
+   * The list will be sorted automatically based on the migrations file name.
    */
-  deleteAdmin(admin: models.Admin): void
- }
- interface Dao {
-  /**
-   * SaveAdmin upserts the provided Admin model.
-   */
-  saveAdmin(admin: models.Admin): void
- }
- /**
-  * Dao handles various db operations.
-  * 
-  * You can think of Dao as a repository and service layer in one.
-  */
- interface Dao {
-  /**
-   * MaxLockRetries specifies the default max "database is locked" auto retry attempts.
-   */
-  maxLockRetries: number
-  /**
-   * ModelQueryTimeout is the default max duration of a running ModelQuery().
-   * 
-   * This field has no effect if an explicit query context is already specified.
-   */
-  modelQueryTimeout: time.Duration
-  /**
-   * write hooks
-   */
-  beforeCreateFunc: (eventDao: Dao, m: models.Model, action: () => void) => void
-  afterCreateFunc: (eventDao: Dao, m: models.Model) => void
-  beforeUpdateFunc: (eventDao: Dao, m: models.Model, action: () => void) => void
-  afterUpdateFunc: (eventDao: Dao, m: models.Model) => void
-  beforeDeleteFunc: (eventDao: Dao, m: models.Model, action: () => void) => void
-  afterDeleteFunc: (eventDao: Dao, m: models.Model) => void
- }
- interface Dao {
-  /**
-   * DB returns the default dao db builder (*dbx.DB or *dbx.TX).
-   * 
-   * Currently the default db builder is dao.concurrentDB but that may change in the future.
-   */
-  db(): dbx.Builder
- }
- interface Dao {
-  /**
-   * ConcurrentDB returns the dao concurrent (aka. multiple open connections)
-   * db builder (*dbx.DB or *dbx.TX).
-   * 
-   * In a transaction the concurrentDB and nonconcurrentDB refer to the same *dbx.TX instance.
-   */
-  concurrentDB(): dbx.Builder
- }
- interface Dao {
-  /**
-   * NonconcurrentDB returns the dao nonconcurrent (aka. single open connection)
-   * db builder (*dbx.DB or *dbx.TX).
-   * 
-   * In a transaction the concurrentDB and nonconcurrentDB refer to the same *dbx.TX instance.
-   */
-  nonconcurrentDB(): dbx.Builder
- }
- interface Dao {
-  /**
-   * Clone returns a new Dao with the same configuration options as the current one.
-   */
-  clone(): (Dao)
- }
- interface Dao {
-  /**
-   * WithoutHooks returns a new Dao with the same configuration options
-   * as the current one, but without create/update/delete hooks.
-   */
-  withoutHooks(): (Dao)
- }
- interface Dao {
-  /**
-   * ModelQuery creates a new preconfigured select query with preset
-   * SELECT, FROM and other common fields based on the provided model.
-   */
-  modelQuery(m: models.Model): (dbx.SelectQuery)
- }
- interface Dao {
-  /**
-   * FindById finds a single db record with the specified id and
-   * scans the result into m.
-   */
-  findById(m: models.Model, id: string): void
- }
- interface Dao {
-  /**
-   * RunInTransaction wraps fn into a transaction.
-   * 
-   * It is safe to nest RunInTransaction calls as long as you use the txDao.
-   */
-  runInTransaction(fn: (txDao: Dao) => void): void
- }
- interface Dao {
-  /**
-   * Delete deletes the provided model.
-   */
-  delete(m: models.Model): void
- }
- interface Dao {
-  /**
-   * Save persists the provided model in the database.
-   * 
-   * If m.IsNew() is true, the method will perform a create, otherwise an update.
-   * To explicitly mark a model for update you can use m.MarkAsNotNew().
-   */
-  save(m: models.Model): void
- }
- interface Dao {
-  /**
-   * CollectionQuery returns a new Collection select query.
-   */
-  collectionQuery(): (dbx.SelectQuery)
- }
- interface Dao {
-  /**
-   * FindCollectionsByType finds all collections by the given type.
-   */
-  findCollectionsByType(collectionType: string): Array<(models.Collection | undefined)>
- }
- interface Dao {
-  /**
-   * FindCollectionByNameOrId finds a single collection by its name (case insensitive) or id.
-   */
-  findCollectionByNameOrId(nameOrId: string): (models.Collection)
- }
- interface Dao {
-  /**
-   * IsCollectionNameUnique checks that there is no existing collection
-   * with the provided name (case insensitive!).
-   * 
-   * Note: case insensitive check because the name is used also as a table name for the records.
-   */
-  isCollectionNameUnique(name: string, ...excludeIds: string[]): boolean
- }
- interface Dao {
-  /**
-   * FindCollectionReferences returns information for all
-   * relation schema fields referencing the provided collection.
-   * 
-   * If the provided collection has reference to itself then it will be
-   * also included in the result. To exclude it, pass the collection id
-   * as the excludeId argument.
-   */
-  findCollectionReferences(collection: models.Collection, ...excludeIds: string[]): _TygojaDict
- }
- interface Dao {
-  /**
-   * DeleteCollection deletes the provided Collection model.
-   * This method automatically deletes the related collection records table.
-   * 
-   * NB! The collection cannot be deleted, if:
-   * - is system collection (aka. collection.System is true)
-   * - is referenced as part of a relation field in another collection
-   */
-  deleteCollection(collection: models.Collection): void
- }
- interface Dao {
-  /**
-   * SaveCollection persists the provided Collection model and updates
-   * its related records table schema.
-   * 
-   * If collecction.IsNew() is true, the method will perform a create, otherwise an update.
-   * To explicitly mark a collection for update you can use collecction.MarkAsNotNew().
-   */
-  saveCollection(collection: models.Collection): void
- }
- interface Dao {
-  /**
-   * ImportCollections imports the provided collections list within a single transaction.
-   * 
-   * NB1! If deleteMissing is set, all local collections and schema fields, that are not present
-   * in the imported configuration, WILL BE DELETED (including their related records data).
-   * 
-   * NB2! This method doesn't perform validations on the imported collections data!
-   * If you need validations, use [forms.CollectionsImport].
-   */
-  importCollections(importedCollections: Array<(models.Collection | undefined)>, deleteMissing: boolean, afterSync: (txDao: Dao, mappedImported: _TygojaDict, mappedExisting: _TygojaDict) => void): void
- }
- interface Dao {
-  /**
-   * ExternalAuthQuery returns a new ExternalAuth select query.
-   */
-  externalAuthQuery(): (dbx.SelectQuery)
- }
- interface Dao {
-  /**
-   * FindAllExternalAuthsByRecord returns all ExternalAuth models
-   * linked to the provided auth record.
-   */
-  findAllExternalAuthsByRecord(authRecord: models.Record): Array<(models.ExternalAuth | undefined)>
- }
- interface Dao {
-  /**
-   * FindExternalAuthByRecordAndProvider returns the first available
-   * ExternalAuth model for the specified record data and provider.
-   */
-  findExternalAuthByRecordAndProvider(authRecord: models.Record, provider: string): (models.ExternalAuth)
- }
- interface Dao {
-  /**
-   * FindFirstExternalAuthByExpr returns the first available
-   * ExternalAuth model that satisfies the non-nil expression.
-   */
-  findFirstExternalAuthByExpr(expr: dbx.Expression): (models.ExternalAuth)
- }
- interface Dao {
-  /**
-   * SaveExternalAuth upserts the provided ExternalAuth model.
-   */
-  saveExternalAuth(model: models.ExternalAuth): void
- }
- interface Dao {
-  /**
-   * DeleteExternalAuth deletes the provided ExternalAuth model.
-   */
-  deleteExternalAuth(model: models.ExternalAuth): void
- }
- interface Dao {
-  /**
-   * LogQuery returns a new Log select query.
-   */
-  logQuery(): (dbx.SelectQuery)
- }
- interface Dao {
-  /**
-   * FindLogById finds a single Log entry by its id.
-   */
-  findLogById(id: string): (models.Log)
- }
- interface Dao {
-  /**
-   * LogsStats returns hourly grouped requests logs statistics.
-   */
-  logsStats(expr: dbx.Expression): Array<(LogsStatsItem | undefined)>
- }
- interface Dao {
-  /**
-   * DeleteOldLogs delete all requests that are created before createdBefore.
-   */
-  deleteOldLogs(createdBefore: time.Time): void
- }
- interface Dao {
-  /**
-   * SaveLog upserts the provided Log model.
-   */
-  saveLog(log: models.Log): void
- }
- interface Dao {
-  /**
-   * ParamQuery returns a new Param select query.
-   */
-  paramQuery(): (dbx.SelectQuery)
- }
- interface Dao {
-  /**
-   * FindParamByKey finds the first Param model with the provided key.
-   */
-  findParamByKey(key: string): (models.Param)
- }
- interface Dao {
-  /**
-   * SaveParam creates or updates a Param model by the provided key-value pair.
-   * The value argument will be encoded as json string.
-   * 
-   * If `optEncryptionKey` is provided it will encrypt the value before storing it.
-   */
-  saveParam(key: string, value: any, ...optEncryptionKey: string[]): void
- }
- interface Dao {
-  /**
-   * DeleteParam deletes the provided Param model.
-   */
-  deleteParam(param: models.Param): void
- }
- interface Dao {
-  /**
-   * RecordQuery returns a new Record select query from a collection model, id or name.
-   * 
-   * In case a collection id or name is provided and that collection doesn't
-   * actually exists, the generated query will be created with a cancelled context
-   * and will fail once an executor (Row(), One(), All(), etc.) is called.
-   */
-  recordQuery(collectionModelOrIdentifier: any): (dbx.SelectQuery)
- }
- interface Dao {
-  /**
-   * FindRecordById finds the Record model by its id.
-   */
-  findRecordById(collectionNameOrId: string, recordId: string, ...optFilters: ((q: dbx.SelectQuery) => void)[]): (models.Record)
- }
- interface Dao {
-  /**
-   * FindRecordsByIds finds all Record models by the provided ids.
-   * If no records are found, returns an empty slice.
-   */
-  findRecordsByIds(collectionNameOrId: string, recordIds: Array<string>, ...optFilters: ((q: dbx.SelectQuery) => void)[]): Array<(models.Record | undefined)>
- }
- interface Dao {
-  /**
-   * @todo consider to depricate as it may be easier to just use dao.RecordQuery()
-   * 
-   * FindRecordsByExpr finds all records by the specified db expression.
-   * 
-   * Returns all collection records if no expressions are provided.
-   * 
-   * Returns an empty slice if no records are found.
-   * 
-   * Example:
-   * 
-   * ```
-   * 	expr1 := dbx.HashExp{"email": "test@example.com"}
-   * 	expr2 := dbx.NewExp("LOWER(username) = {:username}", dbx.Params{"username": "test"})
-   * 	dao.FindRecordsByExpr("example", expr1, expr2)
-   * ```
-   */
-  findRecordsByExpr(collectionNameOrId: string, ...exprs: dbx.Expression[]): Array<(models.Record | undefined)>
- }
- interface Dao {
-  /**
-   * FindFirstRecordByData returns the first found record matching
-   * the provided key-value pair.
-   */
-  findFirstRecordByData(collectionNameOrId: string, key: string, value: any): (models.Record)
- }
- interface Dao {
-  /**
-   * FindRecordsByFilter returns limit number of records matching the
-   * provided string filter.
-   * 
-   * NB! Use the last "params" argument to bind untrusted user variables!
-   * 
-   * The sort argument is optional and can be empty string OR the same format
-   * used in the web APIs, eg. "-created,title".
-   * 
-   * If the limit argument is <= 0, no limit is applied to the query and
-   * all matching records are returned.
-   * 
-   * Example:
-   * 
-   * ```
-   * 	dao.FindRecordsByFilter(
-   * 		"posts",
-   * 		"title ~ {:title} && visible = {:visible}",
-   * 		"-created",
-   * 		10,
-   * 		0,
-   * 		dbx.Params{"title": "lorem ipsum", "visible": true}
-   * 	)
-   * ```
-   */
-  findRecordsByFilter(collectionNameOrId: string, filter: string, sort: string, limit: number, offset: number, ...params: dbx.Params[]): Array<(models.Record | undefined)>
- }
- interface Dao {
-  /**
-   * FindFirstRecordByFilter returns the first available record matching the provided filter.
-   * 
-   * NB! Use the last params argument to bind untrusted user variables!
-   * 
-   * Example:
-   * 
-   * ```
-   * 	dao.FindFirstRecordByFilter("posts", "slug={:slug} && status='public'", dbx.Params{"slug": "test"})
-   * ```
-   */
-  findFirstRecordByFilter(collectionNameOrId: string, filter: string, ...params: dbx.Params[]): (models.Record)
- }
- interface Dao {
-  /**
-   * IsRecordValueUnique checks if the provided key-value pair is a unique Record value.
-   * 
-   * For correctness, if the collection is "auth" and the key is "username",
-   * the unique check will be case insensitive.
-   * 
-   * NB! Array values (eg. from multiple select fields) are matched
-   * as a serialized json strings (eg. `["a","b"]`), so the value uniqueness
-   * depends on the elements order. Or in other words the following values
-   * are considered different: `[]string{"a","b"}` and `[]string{"b","a"}`
-   */
-  isRecordValueUnique(collectionNameOrId: string, key: string, value: any, ...excludeIds: string[]): boolean
- }
- interface Dao {
-  /**
-   * FindAuthRecordByToken finds the auth record associated with the provided JWT.
-   * 
-   * Returns an error if the JWT is invalid, expired or not associated to an auth collection record.
-   */
-  findAuthRecordByToken(token: string, baseTokenKey: string): (models.Record)
- }
- interface Dao {
-  /**
-   * FindAuthRecordByEmail finds the auth record associated with the provided email.
-   * 
-   * Returns an error if it is not an auth collection or the record is not found.
-   */
-  findAuthRecordByEmail(collectionNameOrId: string, email: string): (models.Record)
- }
- interface Dao {
-  /**
-   * FindAuthRecordByUsername finds the auth record associated with the provided username (case insensitive).
-   * 
-   * Returns an error if it is not an auth collection or the record is not found.
-   */
-  findAuthRecordByUsername(collectionNameOrId: string, username: string): (models.Record)
- }
- interface Dao {
-  /**
-   * SuggestUniqueAuthRecordUsername checks if the provided username is unique
-   * and return a new "unique" username with appended random numeric part
-   * (eg. "existingName" -> "existingName583").
-   * 
-   * The same username will be returned if the provided string is already unique.
-   */
-  suggestUniqueAuthRecordUsername(collectionNameOrId: string, baseUsername: string, ...excludeIds: string[]): string
- }
- interface Dao {
-  /**
-   * CanAccessRecord checks if a record is allowed to be accessed by the
-   * specified requestInfo and accessRule.
-   * 
-   * Rule and db checks are ignored in case requestInfo.Admin is set.
-   * 
-   * The returned error indicate that something unexpected happened during
-   * the check (eg. invalid rule or db error).
-   * 
-   * The method always return false on invalid access rule or db error.
-   * 
-   * Example:
-   * 
-   * ```
-   * 	requestInfo := apis.RequestInfo(c /* echo.Context *\/)
-   * 	record, _ := dao.FindRecordById("example", "RECORD_ID")
-   * 	rule := types.Pointer("@request.auth.id != '' || status = 'public'")
-   * 	// ... or use one of the record collection's rule, eg. record.Collection().ViewRule
-   * 
-   * 	if ok, _ := dao.CanAccessRecord(record, requestInfo, rule); ok { ... }
-   * ```
-   */
-  canAccessRecord(record: models.Record, requestInfo: models.RequestInfo, accessRule: string): boolean
- }
- interface Dao {
-  /**
-   * SaveRecord persists the provided Record model in the database.
-   * 
-   * If record.IsNew() is true, the method will perform a create, otherwise an update.
-   * To explicitly mark a record for update you can use record.MarkAsNotNew().
-   */
-  saveRecord(record: models.Record): void
- }
- interface Dao {
-  /**
-   * DeleteRecord deletes the provided Record model.
-   * 
-   * This method will also cascade the delete operation to all linked
-   * relational records (delete or unset, depending on the rel settings).
-   * 
-   * The delete operation may fail if the record is part of a required
-   * reference in another record (aka. cannot be deleted or unset).
-   */
-  deleteRecord(record: models.Record): void
- }
- interface Dao {
-  /**
-   * ExpandRecord expands the relations of a single Record model.
-   * 
-   * If optFetchFunc is not set, then a default function will be used
-   * that returns all relation records.
-   * 
-   * Returns a map with the failed expand parameters and their errors.
-   */
-  expandRecord(record: models.Record, expands: Array<string>, optFetchFunc: ExpandFetchFunc): _TygojaDict
- }
- interface Dao {
-  /**
-   * ExpandRecords expands the relations of the provided Record models list.
-   * 
-   * If optFetchFunc is not set, then a default function will be used
-   * that returns all relation records.
-   * 
-   * Returns a map with the failed expand parameters and their errors.
-   */
-  expandRecords(records: Array<(models.Record | undefined)>, expands: Array<string>, optFetchFunc: ExpandFetchFunc): _TygojaDict
- }
- // @ts-ignore
- import validation = ozzo_validation
- interface Dao {
-  /**
-   * SyncRecordTableSchema compares the two provided collections
-   * and applies the necessary related record table changes.
-   * 
-   * If `oldCollection` is null, then only `newCollection` is used to create the record table.
-   */
-  syncRecordTableSchema(newCollection: models.Collection, oldCollection: models.Collection): void
- }
- interface Dao {
-  /**
-   * FindSettings returns and decode the serialized app settings param value.
-   * 
-   * The method will first try to decode the param value without decryption.
-   * If it fails and optEncryptionKey is set, it will try again by first
-   * decrypting the value and then decode it again.
-   * 
-   * Returns an error if it fails to decode the stored serialized param value.
-   */
-  findSettings(...optEncryptionKey: string[]): (settings.Settings)
- }
- interface Dao {
-  /**
-   * SaveSettings persists the specified settings configuration.
-   * 
-   * If optEncryptionKey is set, then the stored serialized value will be encrypted with it.
-   */
-  saveSettings(newSettings: settings.Settings, ...optEncryptionKey: string[]): void
- }
- interface Dao {
-  /**
-   * HasTable checks if a table (or view) with the provided name exists (case insensitive).
-   */
-  hasTable(tableName: string): boolean
- }
- interface Dao {
-  /**
-   * TableColumns returns all column names of a single table by its name.
-   */
-  tableColumns(tableName: string): Array<string>
- }
- interface Dao {
-  /**
-   * TableInfo returns the `table_info` pragma result for the specified table.
-   */
-  tableInfo(tableName: string): Array<(models.TableInfoRow | undefined)>
- }
- interface Dao {
-  /**
-   * TableIndexes returns a name grouped map with all non empty index of the specified table.
-   * 
-   * Note: This method doesn't return an error on nonexisting table.
-   */
-  tableIndexes(tableName: string): _TygojaDict
- }
- interface Dao {
-  /**
-   * DeleteTable drops the specified table.
-   * 
-   * This method is a no-op if a table with the provided name doesn't exist.
-   * 
-   * Be aware that this method is vulnerable to SQL injection and the
-   * "tableName" argument must come only from trusted input!
-   */
-  deleteTable(tableName: string): void
- }
- interface Dao {
-  /**
-   * Vacuum executes VACUUM on the current dao.DB() instance in order to
-   * reclaim unused db disk space.
-   */
-  vacuum(): void
- }
- interface Dao {
-  /**
-   * DeleteView drops the specified view name.
-   * 
-   * This method is a no-op if a view with the provided name doesn't exist.
-   * 
-   * Be aware that this method is vulnerable to SQL injection and the
-   * "name" argument must come only from trusted input!
-   */
-  deleteView(name: string): void
- }
- interface Dao {
-  /**
-   * SaveView creates (or updates already existing) persistent SQL view.
-   * 
-   * Be aware that this method is vulnerable to SQL injection and the
-   * "selectQuery" argument must come only from trusted input!
-   */
-  saveView(name: string, selectQuery: string): void
- }
- interface Dao {
-  /**
-   * CreateViewSchema creates a new view schema from the provided select query.
-   * 
-   * There are some caveats:
-   * - The select query must have an "id" column.
-   * - Wildcard ("*") columns are not supported to avoid accidentally leaking sensitive data.
-   */
-  createViewSchema(selectQuery: string): schema.Schema
- }
- interface Dao {
-  /**
-   * FindRecordByViewFile returns the original models.Record of the
-   * provided view collection file.
-   */
-  findRecordByViewFile(viewCollectionNameOrId: string, fileFieldName: string, filename: string): (models.Record)
+  register(up: (db: dbx.Builder) => void, down: (db: dbx.Builder) => void, ...optFilename: string[]): void
  }
 }
 
@@ -14406,36 +14481,6 @@ namespace core {
  }
 }
 
-namespace migrate {
- /**
-  * MigrationsList defines a list with migration definitions
-  */
- interface MigrationsList {
- }
- interface MigrationsList {
-  /**
-   * Item returns a single migration from the list by its index.
-   */
-  item(index: number): (Migration)
- }
- interface MigrationsList {
-  /**
-   * Items returns the internal migrations list slice.
-   */
-  items(): Array<(Migration | undefined)>
- }
- interface MigrationsList {
-  /**
-   * Register adds new migration definition to the list.
-   * 
-   * If `optFilename` is not provided, it will try to get the name from its .go file.
-   * 
-   * The list will be sorted automatically based on the migrations file name.
-   */
-  register(up: (db: dbx.Builder) => void, down: (db: dbx.Builder) => void, ...optFilename: string[]): void
- }
-}
-
 /**
  * Package io provides basic interfaces to I/O primitives.
  * Its primary job is to wrap existing implementations of such primitives,
@@ -14651,6 +14696,14 @@ namespace time {
 }
 
 /**
+ * Package fs defines basic interfaces to a file system.
+ * A file system can be provided by the host operating system
+ * but also by other packages.
+ */
+namespace fs {
+}
+
+/**
  * Package context defines the Context type, which carries deadlines,
  * cancellation signals, and other request-scoped values across API boundaries
  * and between processes.
@@ -14704,14 +14757,6 @@ namespace time {
  * Contexts.
  */
 namespace context {
-}
-
-/**
- * Package fs defines basic interfaces to a file system.
- * A file system can be provided by the host operating system
- * but also by other packages.
- */
-namespace fs {
 }
 
 /**
@@ -14890,6 +14935,148 @@ namespace net {
    * Addr returns the listener's network address.
    */
   addr(): Addr
+ }
+}
+
+/**
+ * Package textproto implements generic support for text-based request/response
+ * protocols in the style of HTTP, NNTP, and SMTP.
+ * 
+ * The package provides:
+ * 
+ * Error, which represents a numeric error response from
+ * a server.
+ * 
+ * Pipeline, to manage pipelined requests and responses
+ * in a client.
+ * 
+ * Reader, to read numeric response code lines,
+ * key: value headers, lines wrapped with leading spaces
+ * on continuation lines, and whole text blocks ending
+ * with a dot on a line by itself.
+ * 
+ * Writer, to write dot-encoded text blocks.
+ * 
+ * Conn, a convenient packaging of Reader, Writer, and Pipeline for use
+ * with a single network connection.
+ */
+namespace textproto {
+ /**
+  * A MIMEHeader represents a MIME-style header mapping
+  * keys to sets of values.
+  */
+ interface MIMEHeader extends _TygojaDict{}
+ interface MIMEHeader {
+  /**
+   * Add adds the key, value pair to the header.
+   * It appends to any existing values associated with key.
+   */
+  add(key: string, value: string): void
+ }
+ interface MIMEHeader {
+  /**
+   * Set sets the header entries associated with key to
+   * the single element value. It replaces any existing
+   * values associated with key.
+   */
+  set(key: string, value: string): void
+ }
+ interface MIMEHeader {
+  /**
+   * Get gets the first value associated with the given key.
+   * It is case insensitive; CanonicalMIMEHeaderKey is used
+   * to canonicalize the provided key.
+   * If there are no values associated with the key, Get returns "".
+   * To use non-canonical keys, access the map directly.
+   */
+  get(key: string): string
+ }
+ interface MIMEHeader {
+  /**
+   * Values returns all values associated with the given key.
+   * It is case insensitive; CanonicalMIMEHeaderKey is
+   * used to canonicalize the provided key. To use non-canonical
+   * keys, access the map directly.
+   * The returned slice is not a copy.
+   */
+  values(key: string): Array<string>
+ }
+ interface MIMEHeader {
+  /**
+   * Del deletes the values associated with key.
+   */
+  del(key: string): void
+ }
+}
+
+namespace store {
+ /**
+  * Store defines a concurrent safe in memory key-value data store.
+  */
+ interface Store<T> {
+ }
+ interface Store<T> {
+  /**
+   * Reset clears the store and replaces the store data with a
+   * shallow copy of the provided newData.
+   */
+  reset(newData: _TygojaDict): void
+ }
+ interface Store<T> {
+  /**
+   * Length returns the current number of elements in the store.
+   */
+  length(): number
+ }
+ interface Store<T> {
+  /**
+   * RemoveAll removes all the existing store entries.
+   */
+  removeAll(): void
+ }
+ interface Store<T> {
+  /**
+   * Remove removes a single entry from the store.
+   * 
+   * Remove does nothing if key doesn't exist in the store.
+   */
+  remove(key: string): void
+ }
+ interface Store<T> {
+  /**
+   * Has checks if element with the specified key exist or not.
+   */
+  has(key: string): boolean
+ }
+ interface Store<T> {
+  /**
+   * Get returns a single element value from the store.
+   * 
+   * If key is not set, the zero T value is returned.
+   */
+  get(key: string): T
+ }
+ interface Store<T> {
+  /**
+   * GetAll returns a shallow copy of the current store data.
+   */
+  getAll(): _TygojaDict
+ }
+ interface Store<T> {
+  /**
+   * Set sets (or overwrite if already exist) a new value for key.
+   */
+  set(key: string, value: T): void
+ }
+ interface Store<T> {
+  /**
+   * SetIfLessThanLimit sets (or overwrite if already exist) a new value for key.
+   * 
+   * This method is similar to Set() but **it will skip adding new elements**
+   * to the store if the store length has reached the specified limit.
+   * false is returned if maxAllowedElements limit is reached.
+   */
+  setIfLessThanLimit(key: string, value: T, maxAllowedElements: number): boolean
  }
 }
 
@@ -15125,55 +15312,6 @@ namespace url {
 }
 
 /**
- * Package cobra is a commander providing a simple interface to create powerful modern CLI interfaces.
- * In addition to providing an interface, Cobra simultaneously provides a controller to organize your application code.
- */
-namespace cobra {
- interface PositionalArgs {(cmd: Command, args: Array<string>): void }
- // @ts-ignore
- import flag = pflag
- /**
-  * FParseErrWhitelist configures Flag parse errors to be ignored
-  */
- interface FParseErrWhitelist extends _TygojaAny{}
- /**
-  * Group Structure to manage groups for commands
-  */
- interface Group {
-  id: string
-  title: string
- }
- /**
-  * ShellCompDirective is a bit map representing the different behaviors the shell
-  * can be instructed to have once completions have been provided.
-  */
- interface ShellCompDirective extends Number{}
- /**
-  * CompletionOptions are the options to control shell completion
-  */
- interface CompletionOptions {
-  /**
-   * DisableDefaultCmd prevents Cobra from creating a default 'completion' command
-   */
-  disableDefaultCmd: boolean
-  /**
-   * DisableNoDescFlag prevents Cobra from creating the '--no-descriptions' flag
-   * for shells that support completion descriptions
-   */
-  disableNoDescFlag: boolean
-  /**
-   * DisableDescriptions turns off all completion descriptions for shells
-   * that support them
-   */
-  disableDescriptions: boolean
-  /**
-   * HiddenDefaultCmd makes the default 'completion' command hidden
-   */
-  hiddenDefaultCmd: boolean
- }
-}
-
-/**
  * Package sql provides a generic interface around SQL (or SQL-like)
  * databases.
  * 
@@ -15386,77 +15524,6 @@ namespace sql {
    * If this error is not nil, this error will also be returned from Scan.
    */
   err(): void
- }
-}
-
-/**
- * Package textproto implements generic support for text-based request/response
- * protocols in the style of HTTP, NNTP, and SMTP.
- * 
- * The package provides:
- * 
- * Error, which represents a numeric error response from
- * a server.
- * 
- * Pipeline, to manage pipelined requests and responses
- * in a client.
- * 
- * Reader, to read numeric response code lines,
- * key: value headers, lines wrapped with leading spaces
- * on continuation lines, and whole text blocks ending
- * with a dot on a line by itself.
- * 
- * Writer, to write dot-encoded text blocks.
- * 
- * Conn, a convenient packaging of Reader, Writer, and Pipeline for use
- * with a single network connection.
- */
-namespace textproto {
- /**
-  * A MIMEHeader represents a MIME-style header mapping
-  * keys to sets of values.
-  */
- interface MIMEHeader extends _TygojaDict{}
- interface MIMEHeader {
-  /**
-   * Add adds the key, value pair to the header.
-   * It appends to any existing values associated with key.
-   */
-  add(key: string, value: string): void
- }
- interface MIMEHeader {
-  /**
-   * Set sets the header entries associated with key to
-   * the single element value. It replaces any existing
-   * values associated with key.
-   */
-  set(key: string, value: string): void
- }
- interface MIMEHeader {
-  /**
-   * Get gets the first value associated with the given key.
-   * It is case insensitive; CanonicalMIMEHeaderKey is used
-   * to canonicalize the provided key.
-   * If there are no values associated with the key, Get returns "".
-   * To use non-canonical keys, access the map directly.
-   */
-  get(key: string): string
- }
- interface MIMEHeader {
-  /**
-   * Values returns all values associated with the given key.
-   * It is case insensitive; CanonicalMIMEHeaderKey is
-   * used to canonicalize the provided key. To use non-canonical
-   * keys, access the map directly.
-   * The returned slice is not a copy.
-   */
-  values(key: string): Array<string>
- }
- interface MIMEHeader {
-  /**
-   * Del deletes the values associated with key.
-   */
-  del(key: string): void
  }
 }
 
@@ -15984,181 +16051,327 @@ namespace http {
 }
 
 /**
- * Package oauth2 provides support for making
- * OAuth2 authorized and authenticated HTTP requests,
- * as specified in RFC 6749.
- * It can additionally grant authorization with Bearer JWT.
+ * Package types implements some commonly used db serializable types
+ * like datetime, json, etc.
  */
+namespace types {
+ /**
+  * DateTime represents a [time.Time] instance in UTC that is wrapped
+  * and serialized using the app default date layout.
+  */
+ interface DateTime {
+ }
+ interface DateTime {
+  /**
+   * Time returns the internal [time.Time] instance.
+   */
+  time(): time.Time
+ }
+ interface DateTime {
+  /**
+   * IsZero checks whether the current DateTime instance has zero time value.
+   */
+  isZero(): boolean
+ }
+ interface DateTime {
+  /**
+   * String serializes the current DateTime instance into a formatted
+   * UTC date string.
+   * 
+   * The zero value is serialized to an empty string.
+   */
+  string(): string
+ }
+ interface DateTime {
+  /**
+   * MarshalJSON implements the [json.Marshaler] interface.
+   */
+  marshalJSON(): string|Array<number>
+ }
+ interface DateTime {
+  /**
+   * UnmarshalJSON implements the [json.Unmarshaler] interface.
+   */
+  unmarshalJSON(b: string|Array<number>): void
+ }
+ interface DateTime {
+  /**
+   * Value implements the [driver.Valuer] interface.
+   */
+  value(): any
+ }
+ interface DateTime {
+  /**
+   * Scan implements [sql.Scanner] interface to scan the provided value
+   * into the current DateTime instance.
+   */
+  scan(value: any): void
+ }
+}
+
 /**
- * Copyright 2023 The Go Authors. All rights reserved.
- * Use of this source code is governed by a BSD-style
- * license that can be found in the LICENSE file.
+ * Package schema implements custom Schema and SchemaField datatypes
+ * for handling the Collection schema definitions.
  */
-namespace oauth2 {
+namespace schema {
+ // @ts-ignore
+ import validation = ozzo_validation
  /**
-  * An AuthCodeOption is passed to Config.AuthCodeURL.
+  * SchemaField defines a single schema field structure.
   */
- interface AuthCodeOption {
-  [key:string]: any;
+ interface SchemaField {
+  system: boolean
+  id: string
+  name: string
+  type: string
+  required: boolean
+  /**
+   * Presentable indicates whether the field is suitable for
+   * visualization purposes (eg. in the Admin UI relation views).
+   */
+  presentable: boolean
+  /**
+   * Deprecated: This field is no-op and will be removed in future versions.
+   * Please use the collection.Indexes field to define a unique constraint.
+   */
+  unique: boolean
+  options: any
  }
- /**
-  * Token represents the credentials used to authorize
-  * the requests to access protected resources on the OAuth 2.0
-  * provider's backend.
-  * 
-  * Most users of this package should not access fields of Token
-  * directly. They're exported mostly for use by related packages
-  * implementing derivative OAuth2 flows.
-  */
- interface Token {
+ interface SchemaField {
   /**
-   * AccessToken is the token that authorizes and authenticates
-   * the requests.
+   * ColDefinition returns the field db column type definition as string.
    */
-  accessToken: string
+  colDefinition(): string
+ }
+ interface SchemaField {
   /**
-   * TokenType is the type of token.
-   * The Type method returns either this or "Bearer", the default.
+   * String serializes and returns the current field as string.
    */
-  tokenType: string
+  string(): string
+ }
+ interface SchemaField {
   /**
-   * RefreshToken is a token that's used by the application
-   * (as opposed to the user) to refresh the access token
-   * if it expires.
+   * MarshalJSON implements the [json.Marshaler] interface.
    */
-  refreshToken: string
+  marshalJSON(): string|Array<number>
+ }
+ interface SchemaField {
   /**
-   * Expiry is the optional expiration time of the access token.
+   * UnmarshalJSON implements the [json.Unmarshaler] interface.
    * 
-   * If zero, TokenSource implementations will reuse the same
-   * token forever and RefreshToken or equivalent
-   * mechanisms for that TokenSource will not be used.
+   * The schema field options are auto initialized on success.
    */
-  expiry: time.Time
+  unmarshalJSON(data: string|Array<number>): void
  }
- interface Token {
+ interface SchemaField {
   /**
-   * Type returns t.TokenType if non-empty, else "Bearer".
+   * Validate makes `SchemaField` validatable by implementing [validation.Validatable] interface.
    */
-  type(): string
+  validate(): void
  }
- interface Token {
+ interface SchemaField {
   /**
-   * SetAuthHeader sets the Authorization header to r using the access
-   * token in t.
+   * InitOptions initializes the current field options based on its type.
    * 
-   * This method is unnecessary when using Transport or an HTTP Client
-   * returned by this package.
+   * Returns error on unknown field type.
    */
-  setAuthHeader(r: http.Request): void
+  initOptions(): void
  }
- interface Token {
+ interface SchemaField {
   /**
-   * WithExtra returns a new Token that's a clone of t, but using the
-   * provided raw extra map. This is only intended for use by packages
-   * implementing derivative OAuth2 flows.
+   * PrepareValue returns normalized and properly formatted field value.
    */
-  withExtra(extra: {
-   }): (Token)
+  prepareValue(value: any): any
  }
- interface Token {
+ interface SchemaField {
   /**
-   * Extra returns an extra field.
-   * Extra fields are key-value pairs returned by the server as a
-   * part of the token retrieval response.
+   * PrepareValueWithModifier returns normalized and properly formatted field value
+   * by "merging" baseValue with the modifierValue based on the specified modifier (+ or -).
    */
-  extra(key: string): {
- }
- }
- interface Token {
-  /**
-   * Valid reports whether t is non-nil, has an AccessToken, and is not expired.
-   */
-  valid(): boolean
+  prepareValueWithModifier(baseValue: any, modifier: string, modifierValue: any): any
  }
 }
 
-namespace store {
+/**
+ * Package models implements all PocketBase DB models and DTOs.
+ */
+namespace models {
  /**
-  * Store defines a concurrent safe in memory key-value data store.
+  * Model defines an interface with common methods that all db models should have.
   */
- interface Store<T> {
- }
- interface Store<T> {
-  /**
-   * Reset clears the store and replaces the store data with a
-   * shallow copy of the provided newData.
-   */
-  reset(newData: _TygojaDict): void
- }
- interface Store<T> {
-  /**
-   * Length returns the current number of elements in the store.
-   */
-  length(): number
- }
- interface Store<T> {
-  /**
-   * RemoveAll removes all the existing store entries.
-   */
-  removeAll(): void
- }
- interface Store<T> {
-  /**
-   * Remove removes a single entry from the store.
-   * 
-   * Remove does nothing if key doesn't exist in the store.
-   */
-  remove(key: string): void
- }
- interface Store<T> {
-  /**
-   * Has checks if element with the specified key exist or not.
-   */
-  has(key: string): boolean
- }
- interface Store<T> {
-  /**
-   * Get returns a single element value from the store.
-   * 
-   * If key is not set, the zero T value is returned.
-   */
-  get(key: string): T
- }
- interface Store<T> {
-  /**
-   * GetAll returns a shallow copy of the current store data.
-   */
-  getAll(): _TygojaDict
- }
- interface Store<T> {
-  /**
-   * Set sets (or overwrite if already exist) a new value for key.
-   */
-  set(key: string, value: T): void
- }
- interface Store<T> {
-  /**
-   * SetIfLessThanLimit sets (or overwrite if already exist) a new value for key.
-   * 
-   * This method is similar to Set() but **it will skip adding new elements**
-   * to the store if the store length has reached the specified limit.
-   * false is returned if maxAllowedElements limit is reached.
-   */
-  setIfLessThanLimit(key: string, value: T, maxAllowedElements: number): boolean
- }
-}
-
-namespace mailer {
- /**
-  * Mailer defines a base mail client interface.
-  */
- interface Mailer {
+ interface Model {
   [key:string]: any;
+  tableName(): string
+  isNew(): boolean
+  markAsNew(): void
+  markAsNotNew(): void
+  hasId(): boolean
+  getId(): string
+  setId(id: string): void
+  getCreated(): types.DateTime
+  getUpdated(): types.DateTime
+  refreshId(): void
+  refreshCreated(): void
+  refreshUpdated(): void
+ }
+ /**
+  * BaseModel defines common fields and methods used by all other models.
+  */
+ interface BaseModel {
+  id: string
+  created: types.DateTime
+  updated: types.DateTime
+ }
+ interface BaseModel {
   /**
-   * Send sends an email with the provided Message.
+   * HasId returns whether the model has a nonzero id.
    */
-  send(message: Message): void
+  hasId(): boolean
+ }
+ interface BaseModel {
+  /**
+   * GetId returns the model id.
+   */
+  getId(): string
+ }
+ interface BaseModel {
+  /**
+   * SetId sets the model id to the provided string value.
+   */
+  setId(id: string): void
+ }
+ interface BaseModel {
+  /**
+   * MarkAsNew marks the model as "new" (aka. enforces m.IsNew() to be true).
+   */
+  markAsNew(): void
+ }
+ interface BaseModel {
+  /**
+   * MarkAsNotNew marks the model as "not new" (aka. enforces m.IsNew() to be false)
+   */
+  markAsNotNew(): void
+ }
+ interface BaseModel {
+  /**
+   * IsNew indicates what type of db query (insert or update)
+   * should be used with the model instance.
+   */
+  isNew(): boolean
+ }
+ interface BaseModel {
+  /**
+   * GetCreated returns the model Created datetime.
+   */
+  getCreated(): types.DateTime
+ }
+ interface BaseModel {
+  /**
+   * GetUpdated returns the model Updated datetime.
+   */
+  getUpdated(): types.DateTime
+ }
+ interface BaseModel {
+  /**
+   * RefreshId generates and sets a new model id.
+   * 
+   * The generated id is a cryptographically random 15 characters length string.
+   */
+  refreshId(): void
+ }
+ interface BaseModel {
+  /**
+   * RefreshCreated updates the model Created field with the current datetime.
+   */
+  refreshCreated(): void
+ }
+ interface BaseModel {
+  /**
+   * RefreshUpdated updates the model Updated field with the current datetime.
+   */
+  refreshUpdated(): void
+ }
+ interface BaseModel {
+  /**
+   * PostScan implements the [dbx.PostScanner] interface.
+   * 
+   * It is executed right after the model was populated with the db row values.
+   */
+  postScan(): void
+ }
+ // @ts-ignore
+ import validation = ozzo_validation
+ /**
+  * CollectionBaseOptions defines the "base" Collection.Options fields.
+  */
+ interface CollectionBaseOptions {
+ }
+ interface CollectionBaseOptions {
+  /**
+   * Validate implements [validation.Validatable] interface.
+   */
+  validate(): void
+ }
+ /**
+  * CollectionAuthOptions defines the "auth" Collection.Options fields.
+  */
+ interface CollectionAuthOptions {
+  manageRule?: string
+  allowOAuth2Auth: boolean
+  allowUsernameAuth: boolean
+  allowEmailAuth: boolean
+  requireEmail: boolean
+  exceptEmailDomains: Array<string>
+  onlyVerified: boolean
+  onlyEmailDomains: Array<string>
+  minPasswordLength: number
+ }
+ interface CollectionAuthOptions {
+  /**
+   * Validate implements [validation.Validatable] interface.
+   */
+  validate(): void
+ }
+ /**
+  * CollectionViewOptions defines the "view" Collection.Options fields.
+  */
+ interface CollectionViewOptions {
+  query: string
+ }
+ interface CollectionViewOptions {
+  /**
+   * Validate implements [validation.Validatable] interface.
+   */
+  validate(): void
+ }
+ type _subysAQe = BaseModel
+ interface Log extends _subysAQe {
+  data: types.JsonMap
+  message: string
+  level: number
+ }
+ interface Log {
+  tableName(): string
+ }
+ type _subiUgUR = BaseModel
+ interface Param extends _subiUgUR {
+  key: string
+  value: types.JsonRaw
+ }
+ interface Param {
+  tableName(): string
+ }
+ interface TableInfoRow {
+  /**
+   * the `db:"pk"` tag has special semantic so we cannot rename
+   * the original field without specifying a custom mapper
+   */
+  pk: number
+  index: number
+  name: string
+  type: string
+  notNull: boolean
+  defaultValue: types.JsonRaw
  }
 }
 
@@ -16619,327 +16832,110 @@ namespace echo {
 }
 
 /**
- * Package types implements some commonly used db serializable types
- * like datetime, json, etc.
+ * Package oauth2 provides support for making
+ * OAuth2 authorized and authenticated HTTP requests,
+ * as specified in RFC 6749.
+ * It can additionally grant authorization with Bearer JWT.
  */
-namespace types {
- /**
-  * DateTime represents a [time.Time] instance in UTC that is wrapped
-  * and serialized using the app default date layout.
-  */
- interface DateTime {
- }
- interface DateTime {
-  /**
-   * Time returns the internal [time.Time] instance.
-   */
-  time(): time.Time
- }
- interface DateTime {
-  /**
-   * IsZero checks whether the current DateTime instance has zero time value.
-   */
-  isZero(): boolean
- }
- interface DateTime {
-  /**
-   * String serializes the current DateTime instance into a formatted
-   * UTC date string.
-   * 
-   * The zero value is serialized to an empty string.
-   */
-  string(): string
- }
- interface DateTime {
-  /**
-   * MarshalJSON implements the [json.Marshaler] interface.
-   */
-  marshalJSON(): string|Array<number>
- }
- interface DateTime {
-  /**
-   * UnmarshalJSON implements the [json.Unmarshaler] interface.
-   */
-  unmarshalJSON(b: string|Array<number>): void
- }
- interface DateTime {
-  /**
-   * Value implements the [driver.Valuer] interface.
-   */
-  value(): any
- }
- interface DateTime {
-  /**
-   * Scan implements [sql.Scanner] interface to scan the provided value
-   * into the current DateTime instance.
-   */
-  scan(value: any): void
- }
-}
-
 /**
- * Package schema implements custom Schema and SchemaField datatypes
- * for handling the Collection schema definitions.
+ * Copyright 2023 The Go Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style
+ * license that can be found in the LICENSE file.
  */
-namespace schema {
- // @ts-ignore
- import validation = ozzo_validation
+namespace oauth2 {
  /**
-  * SchemaField defines a single schema field structure.
+  * An AuthCodeOption is passed to Config.AuthCodeURL.
   */
- interface SchemaField {
-  system: boolean
-  id: string
-  name: string
-  type: string
-  required: boolean
-  /**
-   * Presentable indicates whether the field is suitable for
-   * visualization purposes (eg. in the Admin UI relation views).
-   */
-  presentable: boolean
-  /**
-   * Deprecated: This field is no-op and will be removed in future versions.
-   * Please use the collection.Indexes field to define a unique constraint.
-   */
-  unique: boolean
-  options: any
- }
- interface SchemaField {
-  /**
-   * ColDefinition returns the field db column type definition as string.
-   */
-  colDefinition(): string
- }
- interface SchemaField {
-  /**
-   * String serializes and returns the current field as string.
-   */
-  string(): string
- }
- interface SchemaField {
-  /**
-   * MarshalJSON implements the [json.Marshaler] interface.
-   */
-  marshalJSON(): string|Array<number>
- }
- interface SchemaField {
-  /**
-   * UnmarshalJSON implements the [json.Unmarshaler] interface.
-   * 
-   * The schema field options are auto initialized on success.
-   */
-  unmarshalJSON(data: string|Array<number>): void
- }
- interface SchemaField {
-  /**
-   * Validate makes `SchemaField` validatable by implementing [validation.Validatable] interface.
-   */
-  validate(): void
- }
- interface SchemaField {
-  /**
-   * InitOptions initializes the current field options based on its type.
-   * 
-   * Returns error on unknown field type.
-   */
-  initOptions(): void
- }
- interface SchemaField {
-  /**
-   * PrepareValue returns normalized and properly formatted field value.
-   */
-  prepareValue(value: any): any
- }
- interface SchemaField {
-  /**
-   * PrepareValueWithModifier returns normalized and properly formatted field value
-   * by "merging" baseValue with the modifierValue based on the specified modifier (+ or -).
-   */
-  prepareValueWithModifier(baseValue: any, modifier: string, modifierValue: any): any
- }
-}
-
-/**
- * Package models implements all PocketBase DB models and DTOs.
- */
-namespace models {
- /**
-  * Model defines an interface with common methods that all db models should have.
-  */
- interface Model {
+ interface AuthCodeOption {
   [key:string]: any;
-  tableName(): string
-  isNew(): boolean
-  markAsNew(): void
-  markAsNotNew(): void
-  hasId(): boolean
-  getId(): string
-  setId(id: string): void
-  getCreated(): types.DateTime
-  getUpdated(): types.DateTime
-  refreshId(): void
-  refreshCreated(): void
-  refreshUpdated(): void
  }
  /**
-  * BaseModel defines common fields and methods used by all other models.
+  * Token represents the credentials used to authorize
+  * the requests to access protected resources on the OAuth 2.0
+  * provider's backend.
+  * 
+  * Most users of this package should not access fields of Token
+  * directly. They're exported mostly for use by related packages
+  * implementing derivative OAuth2 flows.
   */
- interface BaseModel {
-  id: string
-  created: types.DateTime
-  updated: types.DateTime
- }
- interface BaseModel {
+ interface Token {
   /**
-   * HasId returns whether the model has a nonzero id.
+   * AccessToken is the token that authorizes and authenticates
+   * the requests.
    */
-  hasId(): boolean
- }
- interface BaseModel {
+  accessToken: string
   /**
-   * GetId returns the model id.
+   * TokenType is the type of token.
+   * The Type method returns either this or "Bearer", the default.
    */
-  getId(): string
- }
- interface BaseModel {
+  tokenType: string
   /**
-   * SetId sets the model id to the provided string value.
+   * RefreshToken is a token that's used by the application
+   * (as opposed to the user) to refresh the access token
+   * if it expires.
    */
-  setId(id: string): void
- }
- interface BaseModel {
+  refreshToken: string
   /**
-   * MarkAsNew marks the model as "new" (aka. enforces m.IsNew() to be true).
-   */
-  markAsNew(): void
- }
- interface BaseModel {
-  /**
-   * MarkAsNotNew marks the model as "not new" (aka. enforces m.IsNew() to be false)
-   */
-  markAsNotNew(): void
- }
- interface BaseModel {
-  /**
-   * IsNew indicates what type of db query (insert or update)
-   * should be used with the model instance.
-   */
-  isNew(): boolean
- }
- interface BaseModel {
-  /**
-   * GetCreated returns the model Created datetime.
-   */
-  getCreated(): types.DateTime
- }
- interface BaseModel {
-  /**
-   * GetUpdated returns the model Updated datetime.
-   */
-  getUpdated(): types.DateTime
- }
- interface BaseModel {
-  /**
-   * RefreshId generates and sets a new model id.
+   * Expiry is the optional expiration time of the access token.
    * 
-   * The generated id is a cryptographically random 15 characters length string.
+   * If zero, TokenSource implementations will reuse the same
+   * token forever and RefreshToken or equivalent
+   * mechanisms for that TokenSource will not be used.
    */
-  refreshId(): void
+  expiry: time.Time
  }
- interface BaseModel {
+ interface Token {
   /**
-   * RefreshCreated updates the model Created field with the current datetime.
+   * Type returns t.TokenType if non-empty, else "Bearer".
    */
-  refreshCreated(): void
+  type(): string
  }
- interface BaseModel {
+ interface Token {
   /**
-   * RefreshUpdated updates the model Updated field with the current datetime.
-   */
-  refreshUpdated(): void
- }
- interface BaseModel {
-  /**
-   * PostScan implements the [dbx.PostScanner] interface.
+   * SetAuthHeader sets the Authorization header to r using the access
+   * token in t.
    * 
-   * It is executed right after the model was populated with the db row values.
+   * This method is unnecessary when using Transport or an HTTP Client
+   * returned by this package.
    */
-  postScan(): void
+  setAuthHeader(r: http.Request): void
  }
- // @ts-ignore
- import validation = ozzo_validation
+ interface Token {
+  /**
+   * WithExtra returns a new Token that's a clone of t, but using the
+   * provided raw extra map. This is only intended for use by packages
+   * implementing derivative OAuth2 flows.
+   */
+  withExtra(extra: {
+   }): (Token)
+ }
+ interface Token {
+  /**
+   * Extra returns an extra field.
+   * Extra fields are key-value pairs returned by the server as a
+   * part of the token retrieval response.
+   */
+  extra(key: string): {
+ }
+ }
+ interface Token {
+  /**
+   * Valid reports whether t is non-nil, has an AccessToken, and is not expired.
+   */
+  valid(): boolean
+ }
+}
+
+namespace mailer {
  /**
-  * CollectionBaseOptions defines the "base" Collection.Options fields.
+  * Mailer defines a base mail client interface.
   */
- interface CollectionBaseOptions {
- }
- interface CollectionBaseOptions {
+ interface Mailer {
+  [key:string]: any;
   /**
-   * Validate implements [validation.Validatable] interface.
+   * Send sends an email with the provided Message.
    */
-  validate(): void
- }
- /**
-  * CollectionAuthOptions defines the "auth" Collection.Options fields.
-  */
- interface CollectionAuthOptions {
-  manageRule?: string
-  allowOAuth2Auth: boolean
-  allowUsernameAuth: boolean
-  allowEmailAuth: boolean
-  requireEmail: boolean
-  exceptEmailDomains: Array<string>
-  onlyVerified: boolean
-  onlyEmailDomains: Array<string>
-  minPasswordLength: number
- }
- interface CollectionAuthOptions {
-  /**
-   * Validate implements [validation.Validatable] interface.
-   */
-  validate(): void
- }
- /**
-  * CollectionViewOptions defines the "view" Collection.Options fields.
-  */
- interface CollectionViewOptions {
-  query: string
- }
- interface CollectionViewOptions {
-  /**
-   * Validate implements [validation.Validatable] interface.
-   */
-  validate(): void
- }
- type _subnUrtS = BaseModel
- interface Log extends _subnUrtS {
-  data: types.JsonMap
-  message: string
-  level: number
- }
- interface Log {
-  tableName(): string
- }
- type _subdLzAU = BaseModel
- interface Param extends _subdLzAU {
-  key: string
-  value: types.JsonRaw
- }
- interface Param {
-  tableName(): string
- }
- interface TableInfoRow {
-  /**
-   * the `db:"pk"` tag has special semantic so we cannot rename
-   * the original field without specifying a custom mapper
-   */
-  pk: number
-  index: number
-  name: string
-  type: string
-  notNull: boolean
-  defaultValue: types.JsonRaw
+  send(message: Message): void
  }
 }
 
@@ -17164,8 +17160,8 @@ namespace hook {
   * TaggedHook defines a proxy hook which register handlers that are triggered only
   * if the TaggedHook.tags are empty or includes at least one of the event data tag(s).
   */
- type _subTOYka<T> = mainHook<T>
- interface TaggedHook<T> extends _subTOYka<T> {
+ type _submCBAW<T> = mainHook<T>
+ interface TaggedHook<T> extends _submCBAW<T> {
  }
  interface TaggedHook<T> {
   /**
@@ -17740,12 +17736,12 @@ namespace core {
   httpContext: echo.Context
   error: Error
  }
- type _subNQrCe = BaseModelEvent
- interface ModelEvent extends _subNQrCe {
+ type _subQrhMh = BaseModelEvent
+ interface ModelEvent extends _subQrhMh {
   dao?: daos.Dao
  }
- type _subQNCFY = BaseCollectionEvent
- interface MailerRecordEvent extends _subQNCFY {
+ type _subavaCn = BaseCollectionEvent
+ interface MailerRecordEvent extends _subavaCn {
   mailClient: mailer.Mailer
   message?: mailer.Message
   record?: models.Record
@@ -17785,50 +17781,50 @@ namespace core {
   oldSettings?: settings.Settings
   newSettings?: settings.Settings
  }
- type _subYXSib = BaseCollectionEvent
- interface RecordsListEvent extends _subYXSib {
+ type _subywGRX = BaseCollectionEvent
+ interface RecordsListEvent extends _subywGRX {
   httpContext: echo.Context
   records: Array<(models.Record | undefined)>
   result?: search.Result
  }
- type _subuseGG = BaseCollectionEvent
- interface RecordViewEvent extends _subuseGG {
+ type _submBGkN = BaseCollectionEvent
+ interface RecordViewEvent extends _submBGkN {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subTJuHy = BaseCollectionEvent
- interface RecordCreateEvent extends _subTJuHy {
-  httpContext: echo.Context
-  record?: models.Record
-  uploadedFiles: _TygojaDict
- }
- type _subveafs = BaseCollectionEvent
- interface RecordUpdateEvent extends _subveafs {
+ type _subEouaH = BaseCollectionEvent
+ interface RecordCreateEvent extends _subEouaH {
   httpContext: echo.Context
   record?: models.Record
   uploadedFiles: _TygojaDict
  }
- type _subkKqGs = BaseCollectionEvent
- interface RecordDeleteEvent extends _subkKqGs {
+ type _sublUTuy = BaseCollectionEvent
+ interface RecordUpdateEvent extends _sublUTuy {
+  httpContext: echo.Context
+  record?: models.Record
+  uploadedFiles: _TygojaDict
+ }
+ type _subzgEeC = BaseCollectionEvent
+ interface RecordDeleteEvent extends _subzgEeC {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subugRHv = BaseCollectionEvent
- interface RecordAuthEvent extends _subugRHv {
+ type _subYlouM = BaseCollectionEvent
+ interface RecordAuthEvent extends _subYlouM {
   httpContext: echo.Context
   record?: models.Record
   token: string
   meta: any
  }
- type _subnXLya = BaseCollectionEvent
- interface RecordAuthWithPasswordEvent extends _subnXLya {
+ type _subkqYJk = BaseCollectionEvent
+ interface RecordAuthWithPasswordEvent extends _subkqYJk {
   httpContext: echo.Context
   record?: models.Record
   identity: string
   password: string
  }
- type _subIehXQ = BaseCollectionEvent
- interface RecordAuthWithOAuth2Event extends _subIehXQ {
+ type _subhfgUR = BaseCollectionEvent
+ interface RecordAuthWithOAuth2Event extends _subhfgUR {
   httpContext: echo.Context
   providerName: string
   providerClient: auth.Provider
@@ -17836,49 +17832,49 @@ namespace core {
   oAuth2User?: auth.AuthUser
   isNewRecord: boolean
  }
- type _subxHyLV = BaseCollectionEvent
- interface RecordAuthRefreshEvent extends _subxHyLV {
+ type _subsQkkK = BaseCollectionEvent
+ interface RecordAuthRefreshEvent extends _subsQkkK {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subbtWDd = BaseCollectionEvent
- interface RecordRequestPasswordResetEvent extends _subbtWDd {
+ type _subtdyhg = BaseCollectionEvent
+ interface RecordRequestPasswordResetEvent extends _subtdyhg {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subRzZck = BaseCollectionEvent
- interface RecordConfirmPasswordResetEvent extends _subRzZck {
+ type _subCzzbu = BaseCollectionEvent
+ interface RecordConfirmPasswordResetEvent extends _subCzzbu {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subVvyaL = BaseCollectionEvent
- interface RecordRequestVerificationEvent extends _subVvyaL {
+ type _subHhLvj = BaseCollectionEvent
+ interface RecordRequestVerificationEvent extends _subHhLvj {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subKQkbv = BaseCollectionEvent
- interface RecordConfirmVerificationEvent extends _subKQkbv {
+ type _subeFYsw = BaseCollectionEvent
+ interface RecordConfirmVerificationEvent extends _subeFYsw {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subpnbCa = BaseCollectionEvent
- interface RecordRequestEmailChangeEvent extends _subpnbCa {
+ type _subUyBXi = BaseCollectionEvent
+ interface RecordRequestEmailChangeEvent extends _subUyBXi {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subMJecA = BaseCollectionEvent
- interface RecordConfirmEmailChangeEvent extends _subMJecA {
+ type _subUxjGd = BaseCollectionEvent
+ interface RecordConfirmEmailChangeEvent extends _subUxjGd {
   httpContext: echo.Context
   record?: models.Record
  }
- type _subjaFSG = BaseCollectionEvent
- interface RecordListExternalAuthsEvent extends _subjaFSG {
+ type _subKCwuo = BaseCollectionEvent
+ interface RecordListExternalAuthsEvent extends _subKCwuo {
   httpContext: echo.Context
   record?: models.Record
   externalAuths: Array<(models.ExternalAuth | undefined)>
  }
- type _subhQQfa = BaseCollectionEvent
- interface RecordUnlinkExternalAuthEvent extends _subhQQfa {
+ type _subPPZsU = BaseCollectionEvent
+ interface RecordUnlinkExternalAuthEvent extends _subPPZsU {
   httpContext: echo.Context
   record?: models.Record
   externalAuth?: models.ExternalAuth
@@ -17932,33 +17928,33 @@ namespace core {
   collections: Array<(models.Collection | undefined)>
   result?: search.Result
  }
- type _subrxwBl = BaseCollectionEvent
- interface CollectionViewEvent extends _subrxwBl {
+ type _subZhCDD = BaseCollectionEvent
+ interface CollectionViewEvent extends _subZhCDD {
   httpContext: echo.Context
  }
- type _subMwAAP = BaseCollectionEvent
- interface CollectionCreateEvent extends _subMwAAP {
+ type _subgPSDi = BaseCollectionEvent
+ interface CollectionCreateEvent extends _subgPSDi {
   httpContext: echo.Context
  }
- type _subQbDbQ = BaseCollectionEvent
- interface CollectionUpdateEvent extends _subQbDbQ {
+ type _subYZMTX = BaseCollectionEvent
+ interface CollectionUpdateEvent extends _subYZMTX {
   httpContext: echo.Context
  }
- type _subjlpJP = BaseCollectionEvent
- interface CollectionDeleteEvent extends _subjlpJP {
+ type _subVDeMd = BaseCollectionEvent
+ interface CollectionDeleteEvent extends _subVDeMd {
   httpContext: echo.Context
  }
  interface CollectionsImportEvent {
   httpContext: echo.Context
   collections: Array<(models.Collection | undefined)>
  }
- type _subybfJj = BaseModelEvent
- interface FileTokenEvent extends _subybfJj {
+ type _subibhqM = BaseModelEvent
+ interface FileTokenEvent extends _subibhqM {
   httpContext: echo.Context
   token: string
  }
- type _subzzPVC = BaseCollectionEvent
- interface FileDownloadEvent extends _subzzPVC {
+ type _subrQnDD = BaseCollectionEvent
+ interface FileDownloadEvent extends _subrQnDD {
   httpContext: echo.Context
   record?: models.Record
   fileField?: schema.SchemaField
@@ -17975,7 +17971,53 @@ namespace migrate {
  }
 }
 
-namespace store {
+/**
+ * Package cobra is a commander providing a simple interface to create powerful modern CLI interfaces.
+ * In addition to providing an interface, Cobra simultaneously provides a controller to organize your application code.
+ */
+namespace cobra {
+ interface PositionalArgs {(cmd: Command, args: Array<string>): void }
+ // @ts-ignore
+ import flag = pflag
+ /**
+  * FParseErrWhitelist configures Flag parse errors to be ignored
+  */
+ interface FParseErrWhitelist extends _TygojaAny{}
+ /**
+  * Group Structure to manage groups for commands
+  */
+ interface Group {
+  id: string
+  title: string
+ }
+ /**
+  * ShellCompDirective is a bit map representing the different behaviors the shell
+  * can be instructed to have once completions have been provided.
+  */
+ interface ShellCompDirective extends Number{}
+ /**
+  * CompletionOptions are the options to control shell completion
+  */
+ interface CompletionOptions {
+  /**
+   * DisableDefaultCmd prevents Cobra from creating a default 'completion' command
+   */
+  disableDefaultCmd: boolean
+  /**
+   * DisableNoDescFlag prevents Cobra from creating the '--no-descriptions' flag
+   * for shells that support completion descriptions
+   */
+  disableNoDescFlag: boolean
+  /**
+   * DisableDescriptions turns off all completion descriptions for shells
+   * that support them
+   */
+  disableDescriptions: boolean
+  /**
+   * HiddenDefaultCmd makes the default 'completion' command hidden
+   */
+  hiddenDefaultCmd: boolean
+ }
 }
 
 /**
@@ -17988,8 +18030,8 @@ namespace bufio {
   * ReadWriter stores pointers to a Reader and a Writer.
   * It implements io.ReadWriter.
   */
- type _subeSATI = Reader&Writer
- interface ReadWriter extends _subeSATI {
+ type _subptgpX = Reader&Writer
+ interface ReadWriter extends _subptgpX {
  }
 }
 
@@ -18326,23 +18368,6 @@ namespace http {
  import urlpkg = url
 }
 
-namespace mailer {
- /**
-  * Message defines a generic email message struct.
-  */
- interface Message {
-  from: mail.Address
-  to: Array<mail.Address>
-  bcc: Array<mail.Address>
-  cc: Array<mail.Address>
-  subject: string
-  html: string
-  text: string
-  headers: _TygojaDict
-  attachments: _TygojaDict
- }
-}
-
 /**
  * Package echo implements high performance, minimalist Go web framework.
  * 
@@ -18458,6 +18483,9 @@ namespace echo {
  }
 }
 
+namespace store {
+}
+
 /**
  * Package types implements some commonly used db serializable types
  * like datetime, json, etc.
@@ -18500,6 +18528,23 @@ namespace types {
  }
 }
 
+namespace mailer {
+ /**
+  * Message defines a generic email message struct.
+  */
+ interface Message {
+  from: mail.Address
+  to: Array<mail.Address>
+  bcc: Array<mail.Address>
+  cc: Array<mail.Address>
+  subject: string
+  html: string
+  text: string
+  headers: _TygojaDict
+  attachments: _TygojaDict
+ }
+}
+
 namespace search {
  /**
   * Result defines the returned search result structure.
@@ -18520,6 +18565,7 @@ namespace settings {
   body: string
   subject: string
   actionUrl: string
+  hidden: boolean
  }
  interface EmailTemplate {
   /**
@@ -18544,8 +18590,8 @@ namespace hook {
  /**
   * wrapped local Hook embedded struct to limit the public API surface.
   */
- type _subukcYa<T> = Hook<T>
- interface mainHook<T> extends _subukcYa<T> {
+ type _subrzKbw<T> = Hook<T>
+ interface mainHook<T> extends _subrzKbw<T> {
  }
 }
 
@@ -19187,6 +19233,13 @@ namespace core {
 }
 
 /**
+ * Package types implements some commonly used db serializable types
+ * like datetime, json, etc.
+ */
+namespace types {
+}
+
+/**
  * Package bufio implements buffered I/O. It wraps an io.Reader or io.Writer
  * object, creating another object (Reader or Writer) that also implements
  * the interface but provides buffering and some help for textual I/O.
@@ -19452,10 +19505,39 @@ namespace bufio {
 }
 
 /**
- * Package types implements some commonly used db serializable types
- * like datetime, json, etc.
+ * Package mail implements parsing of mail messages.
+ * 
+ * For the most part, this package follows the syntax as specified by RFC 5322 and
+ * extended by RFC 6532.
+ * Notable divergences:
+ * ```
+ *   - Obsolete address formats are not parsed, including addresses with
+ *     embedded route information.
+ *   - The full range of spacing (the CFWS syntax element) is not supported,
+ *     such as breaking addresses across lines.
+ *   - No unicode normalization is performed.
+ *   - The special characters ()[]:;@\, are allowed to appear unquoted in names.
+ *   - A leading From line is permitted, as in mbox format (RFC 4155).
+ * ```
  */
-namespace types {
+namespace mail {
+ /**
+  * Address represents a single mail address.
+  * An address such as "Barry Gibbs <bg@example.com>" is represented
+  * as Address{Name: "Barry Gibbs", Address: "bg@example.com"}.
+  */
+ interface Address {
+  name: string // Proper name; may be empty.
+  address: string // user@domain
+ }
+ interface Address {
+  /**
+   * String formats the address as a valid RFC 5322 address.
+   * If the address's name contains non-ASCII characters
+   * the name will be rendered according to RFC 2047.
+   */
+  string(): string
+ }
 }
 
 namespace search {
@@ -20005,42 +20087,6 @@ namespace slog {
 }
 
 namespace subscriptions {
-}
-
-/**
- * Package mail implements parsing of mail messages.
- * 
- * For the most part, this package follows the syntax as specified by RFC 5322 and
- * extended by RFC 6532.
- * Notable divergences:
- * ```
- *   - Obsolete address formats are not parsed, including addresses with
- *     embedded route information.
- *   - The full range of spacing (the CFWS syntax element) is not supported,
- *     such as breaking addresses across lines.
- *   - No unicode normalization is performed.
- *   - The special characters ()[]:;@\, are allowed to appear unquoted in names.
- *   - A leading From line is permitted, as in mbox format (RFC 4155).
- * ```
- */
-namespace mail {
- /**
-  * Address represents a single mail address.
-  * An address such as "Barry Gibbs <bg@example.com>" is represented
-  * as Address{Name: "Barry Gibbs", Address: "bg@example.com"}.
-  */
- interface Address {
-  name: string // Proper name; may be empty.
-  address: string // user@domain
- }
- interface Address {
-  /**
-   * String formats the address as a valid RFC 5322 address.
-   * If the address's name contains non-ASCII characters
-   * the name will be rendered according to RFC 2047.
-   */
-  string(): string
- }
 }
 
 /**
