@@ -64,13 +64,13 @@ const NavBar = () => {
               <Link href="/dashboard/loans">Loans</Link>
             </li>
             <li>
-              <Link href="/rooms">Rooms</Link>
+              <Link href="/dashboard/rooms">Rooms</Link>
             </li>
             <li>
-              <Link href="/distribution">Distribution</Link>
+              <Link href="/dashboard/distribution">Distribution</Link>
             </li>
             <li>
-              <Link href="/inventory">Inventory</Link>
+              <Link href="/dashboard/inventory">Inventory</Link>
             </li>
           </ul>
         </div>
