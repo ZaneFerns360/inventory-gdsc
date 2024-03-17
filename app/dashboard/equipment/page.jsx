@@ -4,6 +4,7 @@ import { getEquipment } from './getEquipement'
 import { PiPlusCircleBold } from 'react-icons/pi'
 import { GrLinkPrevious, GrLinkNext } from 'react-icons/gr'
 import { FaExchangeAlt, FaRegTrashAlt } from 'react-icons/fa'
+import { IoOpenOutline } from "react-icons/io5";
 import Link from 'next/link'
 
 const Page = () => {
@@ -68,14 +69,24 @@ const Page = () => {
             className="my-2 rounded-xl border-2 px-4 py-2"
           />
         </div>
-        <div className="px-4 py-2 sm:mr-4">
+        <div className="px-4 py-2 sm:mr-4 flex">
           <input
             type="text"
             placeholder="Search by Department"
             onChange={(e) => setDepartment(e.target.value)}
-            className="my-2 rounded-xl border-2 px-4 py-2"
+            className="my-2 rounded-xl border-2 px-4 py-2 "
           />
-          <button onClick={fetchEquipment}>Fetch Equipment</button>
+          
+        </div>
+        <div className="px-4 py-2">
+          <button
+            className="flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600"
+            onClick={fetchEquipment}
+          >
+            {/* Heroicons - Plus Solid */}
+            <IoOpenOutline className="h-5 w-5 text-white" />
+            <span>Fetch Equipment</span>
+          </button>
         </div>
         <div className="px-4 py-2">
           <Link
