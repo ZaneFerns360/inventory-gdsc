@@ -6,9 +6,9 @@ import { PiPrinterFill } from "react-icons/pi";
 
 const Cards = () => {
   return (
-    <div className='p-8 flex justify-center items-center'>
+    <div className='px-2 flex justify-center items-center'>
       {/* Grid Container */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-20 p-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-20 px-2">
         {/* Card 1 */}
         <div className="w-full md:w-72 bg-[#0B3568] text-slate-100 rounded-lg p-8">
           <div className="card-body flex-1">

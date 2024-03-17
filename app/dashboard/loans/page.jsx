@@ -35,55 +35,60 @@ export default async function Page({ currentPage }) {
   const type = await getUserType()
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-center pt-8">
-        {/* <p>User ID: {pb_auth.value}</p> */}
-        <p>User ID: {model_id}</p>
-        <p>User Department: {dep}</p>
-        <p>User Type: {type}</p>
-
-        {/* <button
-          onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
-          className="mr-3 flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      <div className="grid grid-cols-3 justify-center py-4 gap-4 px-2">
+      <p className='text-base'>User ID: <span className='text-wrap text-sm'>{model_id}</span></p>
+      <p className='text-base'>User Department: {dep}</p>
+      <p className='text-base'>User Type: {type}</p>
+    
+      {/* Previous button */}
+      {/* Uncomment and customize as needed */}
+      {/* <button
+        onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
+        className="mr-3 h-10 justify-self-end rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        <svg
+          className="mr-2 h-3.5 w-3.5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 14 10"
         >
-          <svg
-            className="mr-2 h-3.5 w-3.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 10"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 5H1m0 0 4 4M1 5l4-4"
-            />
-          </svg>
-          Previous
-        </button> */}
-        {/* <button
-          onClick={() => setCurrentPage((old) => Math.min(old + 1, numPages))}
-          className="flex h-10 items-center justify-center rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M13 5H1m0 0 4 4M1 5l4-4"
+          />
+        </svg>
+        Previous
+      </button> */}
+    
+      {/* Next button */}
+      {/* Uncomment and customize as needed */}
+      {/* <button
+        onClick={() => setCurrentPage((old) => Math.min(old + 1, numPages))}
+        className="h-10 justify-self-start rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+      >
+        Next
+        <svg
+          className="ml-2 h-3.5 w-3.5"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 14 10"
         >
-          Next
-          <svg
-            className="ml-2 h-3.5 w-3.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 10"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M1 5h12m0 0L9 1m4 4L9 9"
-            />
-          </svg>
-        </button> */}
+          <path
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M1 5h12m0 0L9 1m4 4L9 9"
+          />
+        </svg>
+      </button> */}
       </div>
+  
 
       <div className="flex flex-row items-center justify-center">
         {/* <div className="pr-8 pt-4">
@@ -110,7 +115,7 @@ export default async function Page({ currentPage }) {
             className="mb-4 rounded border-2 p-2"
           />
         </div> */}
-        <div className="py-4 pl-4">
+        <div className="py-4 px-2">
           {' '}
           <Link
             className="flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-gray-50 hover:bg-indigo-600"
