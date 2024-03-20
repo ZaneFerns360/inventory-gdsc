@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { returnLoan } from '../api/returnLoan'
 import revalYourLoans from '../api/reval-your'
 import Link from 'next/link'
+import { deletePending } from '../api/deletePending'
 
 export default function Page({ params }) {
   const { id } = params
@@ -23,6 +24,7 @@ export default function Page({ params }) {
     await deletePending(id)
     setLoan(null) // Clear the loan data after deleting
     revalYourLoans()
+
     router.push('/dashboard/your-loans')
   }
 
