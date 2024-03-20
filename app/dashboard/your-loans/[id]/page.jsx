@@ -25,7 +25,7 @@ export default function Page({ params }) {
     setLoan(null) // Clear the loan data after deleting
     revalYourLoans()
 
-    router.push('/dashboard/your-loans')
+    router.push('/dashboard/equipment')
   }
 
   if (!loan) {
