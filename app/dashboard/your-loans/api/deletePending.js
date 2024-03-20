@@ -38,6 +38,21 @@ export async function deletePending(id) {
     throw new Error('Failed to create duplicate loan')
   }
 
+  // Update isLoaned in the equipment collection
+  const equipmentResponse = await fetch(
+    `http://127.0.0.1:8090/api/collections/equipment/records/${loanItem.equipment}`,
+    {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ isLoaned: false }),
+    }
+  )
+
+  // Check if isLoaned update was successful
+  if (!equipmentResponse.ok) {
+    throw new Error('Failed to update isLoaned in equipment record')
+  }
+
   // Now proceed with deleting the original loan
   const response = await fetch(
     `http://127.0.0.1:8090/api/collections/loan/records/${id}`,
