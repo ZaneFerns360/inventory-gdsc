@@ -5,6 +5,7 @@ import { getUserDepartment } from '@app/api/userDepartment'
 
 export default async function Page({ currentPage }) {
   const dep = await getUserDepartment()
+  console.log(dep)
   const equipmentList = await getOwnPendingLoans(dep)
 
   return (
