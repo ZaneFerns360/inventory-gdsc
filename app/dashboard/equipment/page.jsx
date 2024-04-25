@@ -4,7 +4,7 @@ import { getEquipment } from './getEquipement'
 import { PiPlusCircleBold } from 'react-icons/pi'
 import { GrLinkPrevious, GrLinkNext } from 'react-icons/gr'
 import { FaExchangeAlt, FaRegTrashAlt } from 'react-icons/fa'
-import { IoOpenOutline } from "react-icons/io5";
+import { IoOpenOutline } from 'react-icons/io5'
 import Link from 'next/link'
 
 const Page = () => {
@@ -69,14 +69,13 @@ const Page = () => {
             className="my-2 rounded-xl border-2 px-4 py-2"
           />
         </div>
-        <div className="px-4 py-2 sm:mr-4 flex">
+        <div className="flex px-4 py-2 sm:mr-4">
           <input
             type="text"
             placeholder="Search by Department"
             onChange={(e) => setDepartment(e.target.value)}
             className="my-2 rounded-xl border-2 px-4 py-2 "
           />
-          
         </div>
         <div className="px-4 py-2">
           <button
@@ -147,14 +146,17 @@ const Page = () => {
               </p>
             </div>
             <div className="flex items-center">
-              <Link
-                href={`/dashboard/loans/${equipment.id}`}
-                className="bg-072140 flex items-center rounded border border-black bg-blue-700 px-4 py-1 font-bold text-white hover:bg-blue-500"
-              >
-                <FaExchangeAlt className="mx-2" />
-                Loan
-              </Link>
-              <button className="bg-072140 ml-4 flex items-center rounded border border-black bg-red-600 px-4 py-1 font-bold text-white hover:bg-red-700">
+              {!equipment.isLoaned ? (
+                <Link
+                  href={`/dashboard/loans/${equipment.id}`}
+                  className="bg-072140 mr-4 flex items-center rounded border  border-black bg-blue-700 px-4 py-1 font-bold text-white hover:bg-blue-500"
+                >
+                  <FaExchangeAlt className="mx-2" />
+                  Loan
+                </Link>
+              ) : null}
+
+              <button className="bg-072140 flex items-center rounded border border-black bg-red-600 px-4 py-1 font-bold text-white hover:bg-red-700">
                 <FaRegTrashAlt className="mx-2" />
                 Scrap
               </button>

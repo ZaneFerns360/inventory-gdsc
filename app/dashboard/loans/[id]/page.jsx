@@ -129,7 +129,7 @@ export default function Page({ params }) {
           </div>
           <div className="flex justify-center">
             <button
-              className="bg-072140 mt-4 rounded border border-black bg-blue-600 px-4 py-2 font-bold hover:bg-blue-700"
+              className="bg-072140 mt-4 rounded border text-white border-black bg-blue-600 px-4 py-2 font-bold hover:bg-blue-700"
               type="submit"
             >
               Submit
