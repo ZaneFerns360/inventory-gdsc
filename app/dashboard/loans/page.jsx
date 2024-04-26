@@ -32,17 +32,20 @@ export default async function Page({ currentPage }) {
 
   const dep = await getUserDepartment()
   const equipmentList = await getLoans(dep)
+  // console.log(dep)
   const type = await getUserType()
   return (
     <div className="flex flex-col">
-      <div className="grid grid-cols-3 justify-center py-4 gap-4 px-2">
-      <p className='text-base'>User ID: <span className='text-wrap text-sm'>{model_id}</span></p>
-      <p className='text-base'>User Department: {dep}</p>
-      <p className='text-base'>User Type: {type}</p>
-    
-      {/* Previous button */}
-      {/* Uncomment and customize as needed */}
-      {/* <button
+      <div className="grid grid-cols-3 justify-center gap-4 px-2 py-4">
+        <p className="text-base">
+          User ID: <span className="text-wrap text-sm">{model_id}</span>
+        </p>
+        <p className="text-base">User Department: {dep}</p>
+        <p className="text-base">User Type: {type}</p>
+
+        {/* Previous button */}
+        {/* Uncomment and customize as needed */}
+        {/* <button
         onClick={() => setCurrentPage((old) => Math.max(old - 1, 1))}
         className="mr-3 h-10 justify-self-end rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
       >
@@ -63,10 +66,10 @@ export default async function Page({ currentPage }) {
         </svg>
         Previous
       </button> */}
-    
-      {/* Next button */}
-      {/* Uncomment and customize as needed */}
-      {/* <button
+
+        {/* Next button */}
+        {/* Uncomment and customize as needed */}
+        {/* <button
         onClick={() => setCurrentPage((old) => Math.min(old + 1, numPages))}
         className="h-10 justify-self-start rounded-lg border border-gray-300 bg-white px-4 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
       >
@@ -88,7 +91,6 @@ export default async function Page({ currentPage }) {
         </svg>
       </button> */}
       </div>
-  
 
       <div className="flex flex-row items-center justify-center">
         {/* <div className="pr-8 pt-4">
@@ -115,7 +117,7 @@ export default async function Page({ currentPage }) {
             className="mb-4 rounded border-2 p-2"
           />
         </div> */}
-        <div className="py-4 px-2">
+        <div className="px-2 py-4">
           {' '}
           <Link
             className="flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-gray-50 hover:bg-indigo-600"
@@ -138,7 +140,9 @@ export default async function Page({ currentPage }) {
           </Link>
         </div>
       </div>
-
+      <div className="w-full items-center text-center font-bold">
+        Loans from {dep}
+      </div>
       {equipmentList.map((equip) => (
         <div key={equip.id} className="mb-2 flex flex-col rounded border-2 p-2">
           <h2 className="mb-2 text-lg font-bold">

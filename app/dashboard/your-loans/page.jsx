@@ -8,9 +8,10 @@ const ITEMS_PER_PAGE = 20
 async function getOwnLoans(dep) {
   const res = await fetch(
     `http://127.0.0.1:8090/api/collections/loan/records?sort=created&expand=from,to,equipment,equipment.room,equipment.room.department&filter=(to.department.dep_name='${dep}')`,
-    { next: { revalidate: 300 } }
+    { next: { revalidate: 1 } }
   )
   const data = await res.json()
+  console.log(data)
 
   if (!res.ok) {
     throw new Error('Failed to fetch data')
